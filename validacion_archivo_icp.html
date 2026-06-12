@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Validación Archivo ICP - PROQUINAL</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Inter,Arial,sans-serif;background:#f3f6fa;color:#1f2937;min-height:100vh}
+    .app{display:grid;grid-template-columns:270px 1fr;min-height:100vh}
+    .sidebar{background:linear-gradient(180deg,#071f3f,#0b3f75);color:#fff;padding:28px 22px;display:flex;flex-direction:column;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:34px}
+    .brand-mark{width:42px;height:42px;border-radius:14px;background:#fff;color:#0b3f75;display:grid;place-items:center;font-weight:900;font-size:20px}
+    .brand strong{display:block;font-size:17px;letter-spacing:.5px}
+    .brand span{font-size:12px;color:#bfdbfe}
+    .nav{display:grid;gap:8px}
+    .nav a{color:#dbeafe;text-decoration:none;padding:13px 14px;border-radius:14px;font-size:14px;font-weight:700;transition:.2s;display:flex;gap:10px;align-items:center}
+    .nav a.active,.nav a:hover{background:rgba(255,255,255,.14);color:#fff}
+    .sidebar-footer{background:rgba(255,255,255,.1);border-radius:18px;padding:16px;color:#dbeafe;font-size:13px;line-height:1.5}
+    .main{padding:30px}
+    .topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:24px}
+    .page-title h1{color:#071f3f;font-size:30px;margin-bottom:8px}
+    .page-title p{color:#64748b;font-size:15px;line-height:1.5;max-width:900px}
+    .status-badge{background:#fffbeb;color:#92400e;border:1px solid #fde68a;padding:10px 14px;border-radius:999px;font-size:13px;font-weight:900;white-space:nowrap}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:24px;padding:24px;box-shadow:0 10px 30px rgba(15,23,42,.05);margin-bottom:24px}
+    .section-title{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:20px}
+    .section-title h2{color:#071f3f;font-size:21px;margin-bottom:5px}
+    .section-title p{color:#64748b;font-size:13px;line-height:1.5}
+    .grid{display:grid;gap:16px}
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    .grid-4{grid-template-columns:repeat(4,1fr)}
+    .layout{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:start}
+    .field label{display:flex;justify-content:space-between;font-size:13px;font-weight:900;color:#374151;margin-bottom:8px}
+    .required{color:#dc2626}
+    .field input,.field select,.field textarea{width:100%;border:1px solid #d1d5db;border-radius:14px;padding:0 14px;height:46px;outline:none;font-size:14px;background:#fff;color:#1f2937;transition:.2s}
+    .field textarea{height:86px;padding-top:12px;resize:vertical}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:#0b4f8a;box-shadow:0 0 0 4px rgba(11,79,138,.1)}
+    .field input.error,.field select.error{border-color:#dc2626;box-shadow:0 0 0 4px rgba(220,38,38,.08)}
+    .hint{margin-top:7px;color:#64748b;font-size:12px;line-height:1.4}
+    .error-message{display:none;margin-top:7px;color:#dc2626;font-size:12px;font-weight:800}
+    .error-message.visible{display:block}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+    .kpi{background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:18px;box-shadow:0 10px 26px rgba(15,23,42,.045)}
+    .kpi span{display:block;font-size:12px;font-weight:900;color:#64748b;margin-bottom:8px}
+    .kpi strong{color:#071f3f;font-size:26px}
+    .badge{display:inline-flex;align-items:center;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;white-space:nowrap}
+    .badge.green{background:#ecfdf5;color:#166534}
+    .badge.yellow{background:#fffbeb;color:#92400e}
+    .badge.red{background:#fef2f2;color:#991b1b}
+    .badge.blue{background:#e8f2ff;color:#0b4f8a}
+    .badge.gray{background:#f1f5f9;color:#475569}
+    .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+    .btn{border:none;border-radius:14px;height:46px;padding:0 18px;font-weight:900;cursor:pointer;transition:.2s;font-size:14px}
+    .btn:hover:not(:disabled){transform:translateY(-1px)}
+    .btn:disabled{cursor:not-allowed;opacity:.6}
+    .btn-primary{background:linear-gradient(135deg,#0b4f8a,#0d6fb8);color:#fff;box-shadow:0 10px 22px rgba(11,79,138,.18)}
+    .btn-secondary{background:#eef2f7;color:#334155}
+    .btn-success{background:#16a34a;color:#fff}
+    .btn-danger{background:#dc2626;color:#fff}
+    .btn-outline{background:#fff;color:#0b4f8a;border:1px solid #bfdbfe}
+    .table-wrap{overflow-x:auto}
+    table{width:100%;min-width:850px;border-collapse:collapse}
+    th{text-align:left;background:#f8fafc;color:#64748b;padding:13px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #e5e7eb}
+    td{padding:14px 13px;border-bottom:1px solid #edf2f7;color:#374151;font-size:14px;vertical-align:middle}
+    td strong{color:#111827}
+    .mini-btn{border:1px solid #dbeafe;background:#fff;color:#0b4f8a;border-radius:10px;padding:8px 10px;font-size:12px;font-weight:900;cursor:pointer}
+    .validation-list{display:grid;gap:13px}
+    .validation-item{display:grid;grid-template-columns:38px 1fr auto;gap:12px;align-items:center;border:1px solid #e5e7eb;border-radius:17px;padding:13px;background:#fff}
+    .check-icon{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;font-weight:900}
+    .check-icon.ok{background:#dcfce7;color:#166534}
+    .check-icon.warn{background:#fef3c7;color:#92400e}
+    .check-icon.err{background:#fee2e2;color:#991b1b}
+    .validation-info strong{display:block;color:#111827;font-size:14px;margin-bottom:4px}
+    .validation-info span{display:block;color:#64748b;font-size:12px;line-height:1.4}
+    .progress-box{background:#f8fafc;border:1px solid #e5e7eb;border-radius:20px;padding:18px}
+    .progress-label{display:flex;justify-content:space-between;margin-bottom:10px;color:#334155;font-weight:900;font-size:13px}
+    .progress{height:12px;background:#e5e7eb;border-radius:999px;overflow:hidden}
+    .progress-bar{height:100%;width:0;background:linear-gradient(135deg,#0b4f8a,#16a34a);transition:width .4s}
+    .process{display:grid;gap:14px}
+    .step{display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start}
+    .step-number{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#e8f2ff;color:#0b4f8a;font-weight:900;font-size:13px}
+    .step.ok .step-number{background:#dcfce7;color:#166534}
+    .step.warn .step-number{background:#fef3c7;color:#92400e}
+    .step.err .step-number{background:#fee2e2;color:#991b1b}
+    .step-content{border-bottom:1px solid #e5e7eb;padding-bottom:14px}
+    .step-content strong{display:block;color:#111827;font-size:14px;margin-bottom:5px}
+    .step-content span{color:#64748b;font-size:13px;line-height:1.5}
+    .feedback{display:none;border-radius:16px;padding:14px 16px;font-size:14px;font-weight:800;line-height:1.5;margin-bottom:18px}
+    .feedback.visible{display:block}
+    .feedback.success{background:#ecfdf5;color:#166534;border:1px solid #bbf7d0}
+    .feedback.error{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+    .feedback.warning{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+    .modal-backdrop{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(15,23,42,.45);z-index:30}
+    .modal-backdrop.visible{display:flex}
+    .modal{width:100%;max-width:760px;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 28px 80px rgba(15,23,42,.32)}
+    .modal-header{padding:24px;background:linear-gradient(135deg,#071f3f,#0b4f8a);color:#fff;display:flex;justify-content:space-between;gap:16px}
+    .modal-header h3{font-size:22px;margin-bottom:6px}
+    .modal-header p{color:#dbeafe;font-size:14px}
+    .close{width:38px;height:38px;border:none;border-radius:12px;background:rgba(255,255,255,.16);color:#fff;cursor:pointer;font-size:20px}
+    .modal-body{padding:24px}
+    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{display:none}.layout{grid-template-columns:1fr}.kpis,.grid-4{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:760px){.main{padding:18px}.topbar,.section-title{flex-direction:column;align-items:stretch}.grid-2,.grid-3,.grid-4,.kpis{grid-template-columns:1fr}.btn-row{flex-direction:column}.btn{width:100%}.status-badge{width:fit-content}}
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar">
+    <div>
+      <div class="brand">
+        <div class="brand-mark">P</div>
+        <div>
+          <strong>PROQUINAL</strong>
+          <span>Agente Intercompany</span>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="#">▣ Dashboard</a>
+        <a href="#">▤ Recepción ICP</a>
+        <a href="#" class="active">▧ Validación archivo</a>
+        <a href="#">▨ Tipo de cambio</a>
+        <a href="#">▦ Conciliación</a>
+        <a href="#">⚠ Diferencias</a>
+        <a href="#">✓ Aprobaciones</a>
+        <a href="#">▥ Repositorio</a>
+        <a href="#">☰ Bitácora</a>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer">
+      Control de estructura, hojas, columnas, fechas, cuentas contables y datos mínimos antes de iniciar la conciliación.
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="page-title">
+        <h1>Validación de Archivo ICP</h1>
+        <p>
+          Pantalla para controlar si el archivo recibido cumple con la estructura requerida, hojas esperadas, columnas obligatorias, fechas válidas y reglas mínimas de procesamiento.
+        </p>
+      </div>
+      <div class="status-badge" id="estadoGeneral">● Pendiente de validación</div>
+    </header>
+
+    <section class="kpis">
+      <div class="kpi">
+        <span>Validaciones ejecutadas</span>
+        <strong id="kpiEjecutadas">0</strong>
+      </div>
+      <div class="kpi">
+        <span>Validaciones correctas</span>
+        <strong id="kpiCorrectas">0</strong>
+      </div>
+      <div class="kpi">
+        <span>Advertencias</span>
+        <strong id="kpiAdvertencias">0</strong>
+      </div>
+      <div class="kpi">
+        <span>Errores críticos</span>
+        <strong id="kpiErrores">0</strong>
+      </div>
+    </section>
+
+    <div id="feedback" class="feedback"></div>
+
+    <section class="layout">
+      <div>
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Archivo a validar</h2>
+              <p>Seleccione el archivo ICP recibido y defina el tipo de análisis que debe ejecutar el robot.</p>
+            </div>
+            <span class="badge blue">Control pre-conciliación</span>
+          </div>
+
+          <form id="formValidacion" novalidate>
+            <div class="grid grid-2">
+              <div class="field">
+                <label for="archivo">Archivo ICP <span class="required">*</span></label>
+                <select id="archivo">
+                  <option value="">Seleccione archivo</option>
+                  <option>ICP_Proquinal_CR_2026_05.xlsx</option>
+                  <option>ICP_Spradling_2026_05_V2.xlsx</option>
+                  <option>ICP_Calipso_2026_05_V2.xlsx</option>
+                </select>
+                <div class="error-message" id="errorArchivo">Debe seleccionar un archivo.</div>
+              </div>
+
+              <div class="field">
+                <label for="tipoArchivo">Tipo de archivo <span class="required">*</span></label>
+                <select id="tipoArchivo">
+                  <option value="">Seleccione tipo</option>
+                  <option value="vendedora">Compañía vendedora</option>
+                  <option value="compradora">Compañía compradora</option>
+                  <option value="base_general">Base consolidada / todas las compañías</option>
+                </select>
+                <div class="error-message" id="errorTipoArchivo">Debe seleccionar el tipo.</div>
+              </div>
+
+              <div class="field">
+                <label for="periodo">Período esperado <span class="required">*</span></label>
+                <input type="month" id="periodo" value="2026-05">
+                <div class="error-message" id="errorPeriodo">Debe seleccionar período.</div>
+              </div>
+
+              <div class="field">
+                <label for="moneda">Moneda principal</label>
+                <select id="moneda">
+                  <option>USD</option>
+                  <option>COP</option>
+                  <option>CRC</option>
+                  <option>MXN</option>
+                </select>
+                <div class="hint">La moneda se utilizará como referencia para controles de consistencia.</div>
+              </div>
+            </div>
+
+            <div class="btn-row">
+              <button type="submit" class="btn btn-primary" id="btnEjecutar">Ejecutar validaciones</button>
+              <button type="button" class="btn btn-success" id="btnAprobar" disabled>Enviar a conciliación</button>
+              <button type="button" class="btn btn-danger" id="btnRechazar" disabled>Marcar como observado</button>
+              <button type="button" class="btn btn-secondary" id="btnLimpiar">Limpiar</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Resultado de validaciones</h2>
+              <p>Detalle de controles ejecutados sobre el archivo antes de permitir su procesamiento.</p>
+            </div>
+            <span class="badge gray" id="badgeResultado">Sin ejecutar</span>
+          </div>
+
+          <div class="progress-box">
+            <div class="progress-label">
+              <span>Avance de validación</span>
+              <span id="porcentaje">0%</span>
+            </div>
+            <div class="progress">
+              <div class="progress-bar" id="progressBar"></div>
+            </div>
+          </div>
+
+          <div class="validation-list" id="listaValidaciones" style="margin-top:18px;">
+            <div class="validation-item">
+              <div class="check-icon warn">!</div>
+              <div class="validation-info">
+                <strong>Validaciones pendientes</strong>
+                <span>Seleccione archivo y ejecute el control para visualizar resultados.</span>
+              </div>
+              <span class="badge yellow">Pendiente</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Observaciones detectadas</h2>
+              <p>Errores o advertencias que el robot debe registrar para trazabilidad y posible notificación.</p>
+            </div>
+            <button class="btn btn-outline" id="btnExportar">Exportar observaciones</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tipo</th>
+                  <th>Hoja</th>
+                  <th>Campo / regla</th>
+                  <th>Descripción</th>
+                  <th>Severidad</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="tablaObservaciones">
+                <tr>
+                  <td colspan="6">Sin observaciones ejecutadas.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <aside>
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Controles aplicados</h2>
+              <p>Reglas principales de validación previa.</p>
+            </div>
+          </div>
+
+          <div class="process">
+            <div class="step ok">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <strong>Existencia de hojas esperadas</strong>
+                <span>El archivo debe contener las hojas requeridas para ventas, compras, gastos, cuentas por cobrar o pagar según corresponda.</span>
+              </div>
+            </div>
+
+            <div class="step ok">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <strong>Columnas obligatorias</strong>
+                <span>Se controlan columnas mínimas: compañía, contraparte, cuenta, factura, fecha, moneda y monto.</span>
+              </div>
+            </div>
+
+            <div class="step warn">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <strong>Fechas del mes vencido</strong>
+                <span>Para cuentas de resultado se valida la fecha de contabilización o fecha factura del período correspondiente.</span>
+              </div>
+            </div>
+
+            <div class="step warn">
+              <div class="step-number">4</div>
+              <div class="step-content">
+                <strong>Normalización de fechas</strong>
+                <span>Si las fechas vienen como texto, el robot debe normalizarlas a formato dd/MM/yyyy antes de filtrar.</span>
+              </div>
+            </div>
+
+            <div class="step err">
+              <div class="step-number">5</div>
+              <div class="step-content">
+                <strong>Cuentas vacías o en cero</strong>
+                <span>Las cuentas corporativas no deben estar vacías ni tener valor 0. Se registran como excepción.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Decisión del proceso</h2>
+              <p>Resultado esperado luego de validar.</p>
+            </div>
+          </div>
+
+          <div class="validation-list">
+            <div class="validation-item">
+              <div class="check-icon ok">✓</div>
+              <div class="validation-info">
+                <strong>Sin errores críticos</strong>
+                <span>El archivo queda disponible para conciliación.</span>
+              </div>
+              <span class="badge green">Continúa</span>
+            </div>
+
+            <div class="validation-item">
+              <div class="check-icon warn">!</div>
+              <div class="validation-info">
+                <strong>Solo advertencias</strong>
+                <span>Puede continuar con revisión funcional.</span>
+              </div>
+              <span class="badge yellow">Revisar</span>
+            </div>
+
+            <div class="validation-item">
+              <div class="check-icon err">×</div>
+              <div class="validation-info">
+                <strong>Errores críticos</strong>
+                <span>El archivo se observa y requiere corrección.</span>
+              </div>
+              <span class="badge red">Detiene</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+
+<div class="modal-backdrop" id="modalDetalle">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h3 id="modalTitulo">Detalle de observación</h3>
+        <p>Información para revisión funcional o técnica.</p>
+      </div>
+      <button class="close" onclick="cerrarDetalle()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="grid grid-2">
+        <div class="field">
+          <label>Hoja</label>
+          <input type="text" id="modalHoja" readonly>
+        </div>
+        <div class="field">
+          <label>Severidad</label>
+          <input type="text" id="modalSeveridad" readonly>
+        </div>
+        <div class="field">
+          <label>Regla</label>
+          <input type="text" id="modalRegla" readonly>
+        </div>
+        <div class="field">
+          <label>Acción requerida</label>
+          <input type="text" id="modalAccion" readonly>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:16px;">
+        <label>Comentario del robot</label>
+        <textarea id="modalComentario" readonly></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary">Generar evidencia</button>
+        <button class="btn btn-secondary" onclick="cerrarDetalle()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const formValidacion = document.getElementById("formValidacion");
+  const archivo = document.getElementById("archivo");
+  const tipoArchivo = document.getElementById("tipoArchivo");
+  const periodo = document.getElementById("periodo");
+  const feedback = document.getElementById("feedback");
+  const btnAprobar = document.getElementById("btnAprobar");
+  const btnRechazar = document.getElementById("btnRechazar");
+  const listaValidaciones = document.getElementById("listaValidaciones");
+  const tablaObservaciones = document.getElementById("tablaObservaciones");
+  const progressBar = document.getElementById("progressBar");
+  const porcentaje = document.getElementById("porcentaje");
+  const badgeResultado = document.getElementById("badgeResultado");
+  const estadoGeneral = document.getElementById("estadoGeneral");
+
+  const kpiEjecutadas = document.getElementById("kpiEjecutadas");
+  const kpiCorrectas = document.getElementById("kpiCorrectas");
+  const kpiAdvertencias = document.getElementById("kpiAdvertencias");
+  const kpiErrores = document.getElementById("kpiErrores");
+
+  const modalDetalle = document.getElementById("modalDetalle");
+  const modalTitulo = document.getElementById("modalTitulo");
+  const modalHoja = document.getElementById("modalHoja");
+  const modalSeveridad = document.getElementById("modalSeveridad");
+  const modalRegla = document.getElementById("modalRegla");
+  const modalAccion = document.getElementById("modalAccion");
+  const modalComentario = document.getElementById("modalComentario");
+
+  function mostrarFeedback(tipo, mensaje) {
+    feedback.className = "feedback visible " + tipo;
+    feedback.textContent = mensaje;
+    setTimeout(() => {
+      feedback.className = "feedback";
+      feedback.textContent = "";
+    }, 3600);
+  }
+
+  function validarCampo(campo, errorId) {
+    const error = document.getElementById(errorId);
+    if (!campo.value.trim()) {
+      campo.classList.add("error");
+      error.classList.add("visible");
+      return false;
+    }
+    campo.classList.remove("error");
+    error.classList.remove("visible");
+    return true;
+  }
+
+  function setProgress(valor) {
+    progressBar.style.width = valor + "%";
+    porcentaje.textContent = valor + "%";
+  }
+
+  function ejecutarEscenario(tipo) {
+    const validacionesBase = [
+      {estado:"ok", titulo:"Archivo Excel válido", desc:"Formato aceptado para procesamiento ICP.", badge:"Correcto"},
+      {estado:"ok", titulo:"Hojas esperadas detectadas", desc:"Se encontraron hojas principales según el tipo de archivo.", badge:"Correcto"},
+      {estado:"ok", titulo:"Columnas obligatorias", desc:"Se detectaron columnas mínimas para compañía, contraparte, cuenta, factura, fecha, moneda y monto.", badge:"Correcto"},
+      {estado:"warn", titulo:"Fechas como texto", desc:"Se encontraron fechas con formato texto. El robot las normalizará a dd/MM/yyyy.", badge:"Advertencia"},
+      {estado:"ok", titulo:"Período consistente", desc:"Los registros corresponden al período esperado.", badge:"Correcto"},
+      {estado:"err", titulo:"Cuenta corporativa incompleta", desc:"Se detectaron registros con cuenta vacía o igual a 0.", badge:"Error"}
+    ];
+
+    if (tipo === "compradora") {
+      validacionesBase[1].desc = "Se encontraron hojas de compras y gastos para la compañía compradora.";
+      validacionesBase[5] = {estado:"warn", titulo:"Cuenta corporativa en revisión", desc:"Existen cuentas que requieren validación funcional, pero no detienen el proceso.", badge:"Advertencia"};
+    }
+
+    if (tipo === "base_general") {
+      validacionesBase[3] = {estado:"ok", titulo:"Fechas normalizadas", desc:"Las fechas de la base consolidada cumplen el formato esperado.", badge:"Correcto"};
+      validacionesBase[5] = {estado:"ok", titulo:"Cuentas corporativas completas", desc:"No se detectaron cuentas vacías ni en cero.", badge:"Correcto"};
+    }
+
+    return validacionesBase;
+  }
+
+  function renderValidaciones(items) {
+    listaValidaciones.innerHTML = "";
+    items.forEach(item => {
+      const icono = item.estado === "ok" ? "✓" : item.estado === "warn" ? "!" : "×";
+      const badgeClass = item.estado === "ok" ? "green" : item.estado === "warn" ? "yellow" : "red";
+      const iconClass = item.estado === "ok" ? "ok" : item.estado === "warn" ? "warn" : "err";
+
+      listaValidaciones.innerHTML += `
+        <div class="validation-item">
+          <div class="check-icon ${iconClass}">${icono}</div>
+          <div class="validation-info">
+            <strong>${item.titulo}</strong>
+            <span>${item.desc}</span>
+          </div>
+          <span class="badge ${badgeClass}">${item.badge}</span>
+        </div>
+      `;
+    });
+  }
+
+  function renderObservaciones(items) {
+    const observaciones = items.filter(i => i.estado !== "ok");
+
+    if (!observaciones.length) {
+      tablaObservaciones.innerHTML = `
+        <tr>
+          <td colspan="6">No se detectaron observaciones. El archivo puede continuar a conciliación.</td>
+        </tr>
+      `;
+      return;
+    }
+
+    tablaObservaciones.innerHTML = "";
+    observaciones.forEach((obs, index) => {
+      const severidad = obs.estado === "warn" ? "Advertencia" : "Crítica";
+      const clase = obs.estado === "warn" ? "yellow" : "red";
+      const hoja = index === 0 ? "Sheet 1 / 4 / 5" : "MR / Cuenta corporativa";
+      const regla = obs.titulo;
+
+      tablaObservaciones.innerHTML += `
+        <tr>
+          <td>${obs.estado === "warn" ? "Validación" : "Excepción"}</td>
+          <td>${hoja}</td>
+          <td>${regla}</td>
+          <td>${obs.desc}</td>
+          <td><span class="badge ${clase}">${severidad}</span></td>
+          <td><button class="mini-btn" onclick="abrirDetalle('${hoja}','${severidad}','${regla}','${obs.desc}')">Ver</button></td>
+        </tr>
+      `;
+    });
+  }
+
+  formValidacion.addEventListener("submit", e => {
+    e.preventDefault();
+
+    const okArchivo = validarCampo(archivo, "errorArchivo");
+    const okTipo = validarCampo(tipoArchivo, "errorTipoArchivo");
+    const okPeriodo = validarCampo(periodo, "errorPeriodo");
+
+    if (!okArchivo || !okTipo || !okPeriodo) {
+      mostrarFeedback("error", "Debe completar los campos obligatorios antes de ejecutar validaciones.");
+      return;
+    }
+
+    setProgress(20);
+    badgeResultado.className = "badge blue";
+    badgeResultado.textContent = "Ejecutando";
+    estadoGeneral.textContent = "● Validando archivo";
+    estadoGeneral.style.background = "#e8f2ff";
+    estadoGeneral.style.color = "#0b4f8a";
+    estadoGeneral.style.borderColor = "#bfdbfe";
+
+    setTimeout(() => {
+      const items = ejecutarEscenario(tipoArchivo.value);
+      renderValidaciones(items);
+      renderObservaciones(items);
+
+      const total = items.length;
+      const correctas = items.filter(i => i.estado === "ok").length;
+      const advertencias = items.filter(i => i.estado === "warn").length;
+      const errores = items.filter(i => i.estado === "err").length;
+
+      kpiEjecutadas.textContent = total;
+      kpiCorrectas.textContent = correctas;
+      kpiAdvertencias.textContent = advertencias;
+      kpiErrores.textContent = errores;
+
+      setProgress(100);
+
+      if (errores > 0) {
+        badgeResultado.className = "badge red";
+        badgeResultado.textContent = "Observado";
+        estadoGeneral.textContent = "● Archivo observado";
+        estadoGeneral.style.background = "#fef2f2";
+        estadoGeneral.style.color = "#991b1b";
+        estadoGeneral.style.borderColor = "#fecaca";
+        btnAprobar.disabled = true;
+        btnRechazar.disabled = false;
+        mostrarFeedback("error", "Validación finalizada con errores críticos. El archivo debe observarse o corregirse.");
+      } else if (advertencias > 0) {
+        badgeResultado.className = "badge yellow";
+        badgeResultado.textContent = "Con advertencias";
+        estadoGeneral.textContent = "● Requiere revisión";
+        estadoGeneral.style.background = "#fffbeb";
+        estadoGeneral.style.color = "#92400e";
+        estadoGeneral.style.borderColor = "#fde68a";
+        btnAprobar.disabled = false;
+        btnRechazar.disabled = false;
+        mostrarFeedback("warning", "Validación finalizada con advertencias. Puede continuar con revisión funcional.");
+      } else {
+        badgeResultado.className = "badge green";
+        badgeResultado.textContent = "Aprobado";
+        estadoGeneral.textContent = "● Archivo validado";
+        estadoGeneral.style.background = "#ecfdf5";
+        estadoGeneral.style.color = "#166534";
+        estadoGeneral.style.borderColor = "#bbf7d0";
+        btnAprobar.disabled = false;
+        btnRechazar.disabled = true;
+        mostrarFeedback("success", "Archivo validado correctamente. Puede enviarse a conciliación.");
+      }
+    }, 900);
+  });
+
+  btnAprobar.addEventListener("click", () => {
+    mostrarFeedback("success", "Archivo enviado a la etapa de conciliación automática.");
+  });
+
+  btnRechazar.addEventListener("click", () => {
+    mostrarFeedback("warning", "Archivo marcado como observado. Se deberá solicitar corrección al responsable.");
+  });
+
+  document.getElementById("btnLimpiar").addEventListener("click", () => {
+    formValidacion.reset();
+    periodo.value = "2026-05";
+    listaValidaciones.innerHTML = `
+      <div class="validation-item">
+        <div class="check-icon warn">!</div>
+        <div class="validation-info">
+          <strong>Validaciones pendientes</strong>
+          <span>Seleccione archivo y ejecute el control para visualizar resultados.</span>
+        </div>
+        <span class="badge yellow">Pendiente</span>
+      </div>
+    `;
+    tablaObservaciones.innerHTML = `<tr><td colspan="6">Sin observaciones ejecutadas.</td></tr>`;
+    setProgress(0);
+    kpiEjecutadas.textContent = "0";
+    kpiCorrectas.textContent = "0";
+    kpiAdvertencias.textContent = "0";
+    kpiErrores.textContent = "0";
+    badgeResultado.className = "badge gray";
+    badgeResultado.textContent = "Sin ejecutar";
+    estadoGeneral.textContent = "● Pendiente de validación";
+    estadoGeneral.style.background = "#fffbeb";
+    estadoGeneral.style.color = "#92400e";
+    estadoGeneral.style.borderColor = "#fde68a";
+    btnAprobar.disabled = true;
+    btnRechazar.disabled = true;
+    document.querySelectorAll(".error").forEach(el => el.classList.remove("error"));
+    document.querySelectorAll(".error-message").forEach(el => el.classList.remove("visible"));
+    mostrarFeedback("warning", "Pantalla reiniciada.");
+  });
+
+  document.getElementById("btnExportar").addEventListener("click", () => {
+    mostrarFeedback("success", "Exportación simulada de observaciones generada correctamente.");
+  });
+
+  function abrirDetalle(hoja, severidad, regla, comentario) {
+    modalTitulo.textContent = "Detalle de observación";
+    modalHoja.value = hoja;
+    modalSeveridad.value = severidad;
+    modalRegla.value = regla;
+    modalAccion.value = severidad === "Crítica" ? "Detener proceso y solicitar corrección" : "Revisar antes de continuar";
+    modalComentario.value = comentario;
+    modalDetalle.classList.add("visible");
+  }
+
+  function cerrarDetalle() {
+    modalDetalle.classList.remove("visible");
+  }
+
+  modalDetalle.addEventListener("click", e => {
+    if (e.target === modalDetalle) cerrarDetalle();
+  });
+</script>
+
+</body>
+</html>

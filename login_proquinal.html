@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login PROQUINAL - Conciliación Intercompany</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, Arial, sans-serif;
+      background: linear-gradient(135deg, #071f3f 0%, #0b3f75 55%, #eef4f9 55%, #ffffff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      color: #1f2937;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 1080px;
+      display: grid;
+      grid-template-columns: 1fr 430px;
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 28px;
+      box-shadow: 0 24px 70px rgba(7, 31, 63, 0.25);
+      overflow: hidden;
+    }
+
+    .brand-panel {
+      background: linear-gradient(160deg, #071f3f, #0b4f8a);
+      padding: 56px;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 620px;
+    }
+
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      font-size: 22px;
+    }
+
+    .logo-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #ffffff, #dbeafe);
+      color: #0b3f75;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+
+    .brand-content h1 {
+      font-size: 42px;
+      line-height: 1.1;
+      margin-bottom: 18px;
+    }
+
+    .brand-content p {
+      color: #dbeafe;
+      font-size: 17px;
+      line-height: 1.7;
+      max-width: 460px;
+    }
+
+    .status-card {
+      margin-top: 32px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 20px;
+      padding: 22px;
+      backdrop-filter: blur(8px);
+    }
+
+    .status-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .status-card span {
+      color: #dbeafe;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .login-panel {
+      padding: 52px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .login-header {
+      margin-bottom: 32px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #e8f2ff;
+      color: #0b4f8a;
+      border-radius: 999px;
+      padding: 8px 13px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .badge::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #16a34a;
+    }
+
+    .login-header h2 {
+      font-size: 30px;
+      color: #071f3f;
+      margin-bottom: 10px;
+    }
+
+    .login-header p {
+      color: #6b7280;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    .field label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .required {
+      color: #dc2626;
+    }
+
+    .field input {
+      width: 100%;
+      height: 50px;
+      border: 1px solid #d1d5db;
+      border-radius: 14px;
+      padding: 0 15px;
+      font-size: 15px;
+      outline: none;
+      background: #ffffff;
+      transition: 0.2s ease;
+    }
+
+    .field input:focus {
+      border-color: #0b4f8a;
+      box-shadow: 0 0 0 4px rgba(11, 79, 138, 0.12);
+    }
+
+    .field input.error {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.09);
+    }
+
+    .field input.success {
+      border-color: #16a34a;
+      box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.09);
+    }
+
+    .error-message {
+      display: none;
+      margin-top: 7px;
+      color: #dc2626;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .error-message.visible {
+      display: block;
+    }
+
+    .password-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 4px 0 24px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #4b5563;
+      cursor: pointer;
+    }
+
+    .check input {
+      accent-color: #0b4f8a;
+    }
+
+    .forgot-link {
+      color: #0b4f8a;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .forgot-link:hover {
+      text-decoration: underline;
+    }
+
+    .btn {
+      width: 100%;
+      height: 52px;
+      border: none;
+      border-radius: 15px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0b4f8a, #0d6fb8);
+      color: #ffffff;
+      box-shadow: 0 12px 24px rgba(11, 79, 138, 0.22);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 28px rgba(11, 79, 138, 0.28);
+    }
+
+    .btn-primary:disabled {
+      background: #cbd5e1;
+      color: #64748b;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .feedback {
+      display: none;
+      margin-top: 22px;
+      border-radius: 15px;
+      padding: 14px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .feedback.visible {
+      display: block;
+    }
+
+    .feedback.error {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .feedback.success {
+      background: #ecfdf5;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .feedback.warning {
+      background: #fffbeb;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .security-note {
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px solid #e5e7eb;
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 900px) {
+      body {
+        padding: 18px;
+        background: #eef4f9;
+      }
+
+      .login-container {
+        grid-template-columns: 1fr;
+      }
+
+      .brand-panel {
+        min-height: auto;
+        padding: 34px;
+      }
+
+      .brand-content h1 {
+        font-size: 32px;
+        margin-top: 32px;
+      }
+
+      .login-panel {
+        padding: 34px 26px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .brand-content h1 {
+        font-size: 27px;
+      }
+
+      .login-header h2 {
+        font-size: 25px;
+      }
+
+      .password-options {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="login-container">
+    <section class="brand-panel">
+      <div class="brand-logo">
+        <div class="logo-mark">P</div>
+        <span>PROQUINAL</span>
+      </div>
+
+      <div class="brand-content">
+        <h1>Conciliación Intercompany</h1>
+        <p>
+          Plataforma empresarial para gestionar, controlar y monitorear el proceso
+          de conciliación entre compañías de forma segura, trazable y eficiente.
+        </p>
+
+        <div class="status-card">
+          <strong>Acceso seguro corporativo</strong>
+          <span>
+            Ingrese con su usuario autorizado para acceder al módulo de conciliación,
+            consulta de archivos, validaciones y seguimiento del proceso.
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section class="login-panel">
+      <div class="login-header">
+        <div class="badge">Sistema Intercompany</div>
+        <h2>Iniciar sesión</h2>
+        <p>Ingrese con su usuario corporativo para acceder al módulo de conciliación intercompany.</p>
+      </div>
+
+      <form id="formLogin" novalidate>
+        <div class="field">
+          <label for="usuario">
+            Usuario / Correo electrónico <span class="required">*</span>
+          </label>
+          <input type="email" id="usuario" name="usuario" placeholder="usuario@proquinal.com">
+          <div class="error-message" id="errorUsuario">Ingrese un correo electrónico válido.</div>
+        </div>
+
+        <div class="field">
+          <label for="clave">
+            Contraseña <span class="required">*</span>
+          </label>
+          <input type="password" id="clave" name="clave" placeholder="Ingrese su contraseña">
+          <div class="error-message" id="errorClave">La contraseña es obligatoria.</div>
+        </div>
+
+        <div class="password-options">
+          <label class="check">
+            <input type="checkbox" id="mostrarClave">
+            Mostrar contraseña
+          </label>
+
+          <a href="#" class="forgot-link" id="olvideClave">Olvidé mi contraseña</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="btnLogin" disabled>
+          Iniciar sesión
+        </button>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="security-note">
+          Por seguridad, el acceso se encuentra restringido a usuarios autorizados.
+          Toda actividad realizada dentro del sistema podrá ser registrada para fines de auditoría.
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    const usuario = document.getElementById("usuario");
+    const clave = document.getElementById("clave");
+    const btnLogin = document.getElementById("btnLogin");
+    const formLogin = document.getElementById("formLogin");
+    const mostrarClave = document.getElementById("mostrarClave");
+    const errorUsuario = document.getElementById("errorUsuario");
+    const errorClave = document.getElementById("errorClave");
+    const feedback = document.getElementById("feedback");
+    const olvideClave = document.getElementById("olvideClave");
+
+    function validarCorreo(valor) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
+    }
+
+    function actualizarEstadoBoton() {
+      btnLogin.disabled = !(usuario.value.trim() && clave.value.trim());
+    }
+
+    function mostrarFeedback(tipo, mensaje) {
+      feedback.className = "feedback visible " + tipo;
+      feedback.textContent = mensaje;
+    }
+
+    function limpiarFeedback() {
+      feedback.className = "feedback";
+      feedback.textContent = "";
+    }
+
+    function validarUsuario() {
+      const valor = usuario.value.trim();
+
+      if (!valor || !validarCorreo(valor)) {
+        usuario.classList.add("error");
+        usuario.classList.remove("success");
+        errorUsuario.classList.add("visible");
+        return false;
+      }
+
+      usuario.classList.remove("error");
+      usuario.classList.add("success");
+      errorUsuario.classList.remove("visible");
+      return true;
+    }
+
+    function validarClave() {
+      const valor = clave.value.trim();
+
+      if (!valor) {
+        clave.classList.add("error");
+        clave.classList.remove("success");
+        errorClave.classList.add("visible");
+        return false;
+      }
+
+      clave.classList.remove("error");
+      clave.classList.add("success");
+      errorClave.classList.remove("visible");
+      return true;
+    }
+
+    usuario.addEventListener("input", () => {
+      actualizarEstadoBoton();
+      limpiarFeedback();
+
+      if (usuario.value.trim().length > 0) {
+        validarUsuario();
+      } else {
+        usuario.classList.remove("error", "success");
+        errorUsuario.classList.remove("visible");
+      }
+    });
+
+    clave.addEventListener("input", () => {
+      actualizarEstadoBoton();
+      limpiarFeedback();
+
+      if (clave.value.trim().length > 0) {
+        validarClave();
+      } else {
+        clave.classList.remove("error", "success");
+        errorClave.classList.remove("visible");
+      }
+    });
+
+    mostrarClave.addEventListener("change", () => {
+      clave.type = mostrarClave.checked ? "text" : "password";
+    });
+
+    olvideClave.addEventListener("click", (e) => {
+      e.preventDefault();
+      mostrarFeedback("warning", "Para recuperar su contraseña, contacte al administrador del sistema o al área de soporte.");
+    });
+
+    formLogin.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const usuarioValido = validarUsuario();
+      const claveValida = validarClave();
+
+      if (!usuarioValido || !claveValida) {
+        mostrarFeedback("error", "Revise los campos marcados antes de continuar.");
+        return;
+      }
+
+      btnLogin.disabled = true;
+      btnLogin.textContent = "Validando acceso...";
+      mostrarFeedback("warning", "Validando credenciales, aguarde unos segundos.");
+
+      setTimeout(() => {
+        mostrarFeedback("success", "Acceso validado correctamente. Redirigiendo al panel principal...");
+        btnLogin.textContent = "Iniciar sesión";
+        btnLogin.disabled = false;
+      }, 1000);
+    });
+  </script>
+
+</body>
+</html>

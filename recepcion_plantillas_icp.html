@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recepción Plantillas ICP - PROQUINAL</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Inter, Arial, sans-serif;
+      background: #f3f6fa;
+      color: #1f2937;
+      min-height: 100vh;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      background: linear-gradient(180deg, #071f3f, #0b3f75);
+      color: #fff;
+      padding: 28px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 34px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: #fff;
+      color: #0b3f75;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 20px;
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 17px;
+      letter-spacing: .5px;
+    }
+
+    .brand span {
+      font-size: 12px;
+      color: #bfdbfe;
+    }
+
+    .nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav a {
+      color: #dbeafe;
+      text-decoration: none;
+      padding: 13px 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      transition: .2s;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .nav a.active,
+    .nav a:hover {
+      background: rgba(255,255,255,.14);
+      color: #fff;
+    }
+
+    .sidebar-footer {
+      background: rgba(255,255,255,.1);
+      border-radius: 18px;
+      padding: 16px;
+      color: #dbeafe;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .main {
+      padding: 30px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .page-title h1 {
+      color: #071f3f;
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .page-title p {
+      color: #64748b;
+      font-size: 15px;
+      line-height: 1.5;
+      max-width: 850px;
+    }
+
+    .status-badge {
+      background: #ecfdf5;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, .05);
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .section-title h2 {
+      color: #071f3f;
+      font-size: 21px;
+      margin-bottom: 5px;
+    }
+
+    .section-title p {
+      color: #64748b;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .field label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 900;
+      color: #374151;
+      margin-bottom: 8px;
+    }
+
+    .required {
+      color: #dc2626;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 14px;
+      padding: 0 14px;
+      height: 46px;
+      outline: none;
+      font-size: 14px;
+      background: #fff;
+      color: #1f2937;
+      transition: .2s;
+    }
+
+    .field textarea {
+      height: 92px;
+      padding-top: 12px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: #0b4f8a;
+      box-shadow: 0 0 0 4px rgba(11, 79, 138, .1);
+    }
+
+    .field input.error,
+    .field select.error {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 4px rgba(220, 38, 38, .08);
+    }
+
+    .hint {
+      margin-top: 7px;
+      color: #64748b;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .error-message {
+      display: none;
+      margin-top: 7px;
+      color: #dc2626;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .error-message.visible {
+      display: block;
+    }
+
+    .upload-zone {
+      border: 2px dashed #bfdbfe;
+      background: #f8fbff;
+      border-radius: 22px;
+      padding: 28px;
+      text-align: center;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .upload-zone:hover,
+    .upload-zone.dragover {
+      border-color: #0b4f8a;
+      background: #eff6ff;
+      transform: translateY(-1px);
+    }
+
+    .upload-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      background: #e8f2ff;
+      color: #0b4f8a;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 14px;
+      font-size: 26px;
+      font-weight: 900;
+    }
+
+    .upload-zone strong {
+      display: block;
+      color: #071f3f;
+      font-size: 17px;
+      margin-bottom: 7px;
+    }
+
+    .upload-zone span {
+      color: #64748b;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .file-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .file-item {
+      display: grid;
+      grid-template-columns: 42px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .file-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: #ecfdf5;
+      color: #166534;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 11px;
+    }
+
+    .file-info strong {
+      display: block;
+      color: #111827;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .file-info span {
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .badge.green {
+      background: #ecfdf5;
+      color: #166534;
+    }
+
+    .badge.yellow {
+      background: #fffbeb;
+      color: #92400e;
+    }
+
+    .badge.red {
+      background: #fef2f2;
+      color: #991b1b;
+    }
+
+    .badge.blue {
+      background: #e8f2ff;
+      color: #0b4f8a;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 14px;
+      height: 46px;
+      padding: 0 18px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: .2s;
+      font-size: 14px;
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: .6;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0b4f8a, #0d6fb8);
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(11, 79, 138, .18);
+    }
+
+    .btn-secondary {
+      background: #eef2f7;
+      color: #334155;
+    }
+
+    .btn-success {
+      background: #16a34a;
+      color: #fff;
+    }
+
+    .btn-outline {
+      background: #fff;
+      color: #0b4f8a;
+      border: 1px solid #bfdbfe;
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .kpi {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, .045);
+    }
+
+    .kpi span {
+      display: block;
+      font-size: 12px;
+      font-weight: 900;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+
+    .kpi strong {
+      color: #071f3f;
+      font-size: 26px;
+    }
+
+    .process {
+      display: grid;
+      gap: 14px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .step-number {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #e8f2ff;
+      color: #0b4f8a;
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    .step.done .step-number {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .step.warning .step-number {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .step-content {
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 14px;
+    }
+
+    .step-content strong {
+      display: block;
+      color: #111827;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .step-content span {
+      color: #64748b;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+    }
+
+    th {
+      text-align: left;
+      background: #f8fafc;
+      color: #64748b;
+      padding: 13px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    td {
+      padding: 14px 13px;
+      border-bottom: 1px solid #edf2f7;
+      color: #374151;
+      font-size: 14px;
+    }
+
+    td strong {
+      color: #111827;
+    }
+
+    .mini-btn {
+      border: 1px solid #dbeafe;
+      background: #fff;
+      color: #0b4f8a;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .feedback {
+      display: none;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .feedback.visible {
+      display: block;
+    }
+
+    .feedback.success {
+      background: #ecfdf5;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .feedback.error {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .feedback.warning {
+      background: #fffbeb;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      background: rgba(15,23,42,.45);
+      z-index: 30;
+    }
+
+    .modal-backdrop.visible {
+      display: flex;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 720px;
+      background: #fff;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 28px 80px rgba(15,23,42,.32);
+    }
+
+    .modal-header {
+      padding: 24px;
+      background: linear-gradient(135deg, #071f3f, #0b4f8a);
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .modal-header h3 {
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    .modal-header p {
+      color: #dbeafe;
+      font-size: 14px;
+    }
+
+    .close {
+      width: 38px;
+      height: 38px;
+      border: none;
+      border-radius: 12px;
+      background: rgba(255,255,255,.16);
+      color: #fff;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 1100px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .main {
+        padding: 18px;
+      }
+
+      .topbar,
+      .section-title {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .grid-2,
+      .kpis {
+        grid-template-columns: 1fr;
+      }
+
+      .btn-row {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .status-badge {
+        width: fit-content;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app">
+    <aside class="sidebar">
+      <div>
+        <div class="brand">
+          <div class="brand-mark">P</div>
+          <div>
+            <strong>PROQUINAL</strong>
+            <span>Agente Intercompany</span>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <a href="#">▣ Dashboard</a>
+          <a href="#" class="active">▤ Recepción ICP</a>
+          <a href="#">▧ Validación archivo</a>
+          <a href="#">▨ Tipo de cambio</a>
+          <a href="#">▦ Conciliación</a>
+          <a href="#">⚠ Diferencias</a>
+          <a href="#">✓ Aprobaciones</a>
+          <a href="#">▥ Repositorio</a>
+          <a href="#">☰ Bitácora</a>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        Recepción automática o manual de plantillas ICP desde correo corporativo, SharePoint o carga asistida.
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="page-title">
+          <h1>Recepción de Plantillas ICP</h1>
+          <p>
+            Registro, clasificación y control de archivos Excel enviados por las compañías del grupo para iniciar el ciclo mensual de conciliación intercompany.
+          </p>
+        </div>
+
+        <div class="status-badge">● Bot disponible</div>
+      </header>
+
+      <section class="kpis">
+        <div class="kpi">
+          <span>Archivos recibidos del mes</span>
+          <strong id="kpiRecibidos">42</strong>
+        </div>
+        <div class="kpi">
+          <span>Pendientes de validar</span>
+          <strong id="kpiPendientes">9</strong>
+        </div>
+        <div class="kpi">
+          <span>Capacidad mensual ICP</span>
+          <strong>100</strong>
+        </div>
+      </section>
+
+      <div id="feedback" class="feedback"></div>
+
+      <section class="layout">
+        <div>
+          <div class="card">
+            <div class="section-title">
+              <div>
+                <h2>Registrar recepción de archivo</h2>
+                <p>Complete la información mínima para clasificar el archivo por período, compañía, tipo de envío y versión.</p>
+              </div>
+              <span class="badge blue">Plantilla oficial ICP</span>
+            </div>
+
+            <form id="formRecepcion" novalidate>
+              <div class="grid grid-2">
+                <div class="field">
+                  <label for="periodo">Período <span class="required">*</span></label>
+                  <input type="month" id="periodo" value="2026-05">
+                  <div class="error-message" id="errorPeriodo">Debe seleccionar el período.</div>
+                </div>
+
+                <div class="field">
+                  <label for="compania">Compañía remitente <span class="required">*</span></label>
+                  <select id="compania">
+                    <option value="">Seleccione compañía</option>
+                    <option>Proquinal Colombia</option>
+                    <option>Proquinal Costa Rica</option>
+                    <option>Spradling Group</option>
+                    <option>Calipso Colombia</option>
+                    <option>Holding</option>
+                  </select>
+                  <div class="error-message" id="errorCompania">Debe seleccionar una compañía.</div>
+                </div>
+
+                <div class="field">
+                  <label for="tipoEnvio">Tipo de envío <span class="required">*</span></label>
+                  <select id="tipoEnvio">
+                    <option value="">Seleccione tipo</option>
+                    <option value="primer_envio">Primer envío</option>
+                    <option value="archivo_corregido">Archivo corregido</option>
+                    <option value="reenvio">Reenvío / nueva versión</option>
+                    <option value="complementario">Información complementaria</option>
+                  </select>
+                  <div class="error-message" id="errorTipoEnvio">Debe seleccionar el tipo de envío.</div>
+                </div>
+
+                <div class="field">
+                  <label for="version">Versión <span class="required">*</span></label>
+                  <select id="version">
+                    <option value="">Seleccione versión</option>
+                    <option>V1 - Original</option>
+                    <option>V2 - Corregida</option>
+                    <option>V3 - Reprocesada</option>
+                  </select>
+                  <div class="error-message" id="errorVersion">Debe seleccionar una versión.</div>
+                </div>
+
+                <div class="field">
+                  <label for="origen">Origen de recepción <span class="required">*</span></label>
+                  <select id="origen">
+                    <option value="">Seleccione origen</option>
+                    <option value="correo">Correo corporativo Outlook</option>
+                    <option value="sharepoint">SharePoint</option>
+                    <option value="manual">Carga manual asistida</option>
+                  </select>
+                  <div class="error-message" id="errorOrigen">Debe seleccionar el origen.</div>
+                </div>
+
+                <div class="field" id="campoCorreo">
+                  <label for="correoRemitente">Correo remitente</label>
+                  <input type="email" id="correoRemitente" placeholder="usuario@proquinal.com">
+                  <div class="hint">Se utiliza para dejar evidencia de recepción y trazabilidad.</div>
+                </div>
+              </div>
+
+              <div class="field" style="margin-top:16px;">
+                <label for="observaciones">Observaciones</label>
+                <textarea id="observaciones" placeholder="Ejemplo: archivo recibido fuera de fecha, reenvío solicitado por diferencia de monto, archivo corregido por negocio, etc."></textarea>
+              </div>
+
+              <div class="upload-zone" id="uploadZone">
+                <input type="file" id="archivoICP" accept=".xlsx,.xls" hidden>
+                <div class="upload-icon">↑</div>
+                <strong>Arrastre o seleccione la plantilla ICP</strong>
+                <span>Formatos permitidos: .xlsx o .xls. No se procesan PDF, imágenes ni archivos escaneados.</span>
+              </div>
+
+              <div class="file-list" id="fileList"></div>
+
+              <div class="btn-row">
+                <button type="submit" class="btn btn-primary" id="btnRegistrar" disabled>Registrar recepción</button>
+                <button type="button" class="btn btn-success" id="btnValidar" disabled>Enviar a validación</button>
+                <button type="button" class="btn btn-secondary" id="btnLimpiar">Limpiar formulario</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="card">
+            <div class="section-title">
+              <div>
+                <h2>Archivos recibidos recientemente</h2>
+                <p>Listado de plantillas ICP clasificadas por compañía, período, versión y estado.</p>
+              </div>
+              <button class="btn btn-outline" id="btnActualizar">Actualizar bandeja</button>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Archivo</th>
+                    <th>Compañía</th>
+                    <th>Período</th>
+                    <th>Tipo</th>
+                    <th>Versión</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody id="tablaArchivos">
+                  <tr>
+                    <td><strong>ICP_Proquinal_CR_2026_05.xlsx</strong></td>
+                    <td>Proquinal Costa Rica</td>
+                    <td>Mayo 2026</td>
+                    <td>Primer envío</td>
+                    <td>V1</td>
+                    <td><span class="badge yellow">Pendiente validar</span></td>
+                    <td><button class="mini-btn" onclick="abrirDetalle('ICP_Proquinal_CR_2026_05.xlsx','Pendiente validar')">Ver</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>ICP_Spradling_2026_05_V2.xlsx</strong></td>
+                    <td>Spradling Group</td>
+                    <td>Mayo 2026</td>
+                    <td>Archivo corregido</td>
+                    <td>V2</td>
+                    <td><span class="badge green">Recibido</span></td>
+                    <td><button class="mini-btn" onclick="abrirDetalle('ICP_Spradling_2026_05_V2.xlsx','Recibido')">Ver</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>ICP_Calipso_2026_05_V2.xlsx</strong></td>
+                    <td>Calipso Colombia</td>
+                    <td>Mayo 2026</td>
+                    <td>Reenvío / nueva versión</td>
+                    <td>V2</td>
+                    <td><span class="badge blue">Nueva versión</span></td>
+                    <td><button class="mini-btn" onclick="abrirDetalle('ICP_Calipso_2026_05_V2.xlsx','Nueva versión')">Ver</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>ICP_Holding_2026_05.pdf</strong></td>
+                    <td>Holding</td>
+                    <td>Mayo 2026</td>
+                    <td>Primer envío</td>
+                    <td>V1</td>
+                    <td><span class="badge red">Formato inválido</span></td>
+                    <td><button class="mini-btn" onclick="abrirDetalle('ICP_Holding_2026_05.pdf','Formato inválido')">Ver</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <aside>
+          <div class="card">
+            <div class="section-title">
+              <div>
+                <h2>Flujo de recepción</h2>
+                <p>Secuencia esperada antes de iniciar validaciones estructurales.</p>
+              </div>
+            </div>
+
+            <div class="process">
+              <div class="step done">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                  <strong>Recepción desde Outlook</strong>
+                  <span>El bot identifica correos con adjuntos ICP del período activo.</span>
+                </div>
+              </div>
+
+              <div class="step done">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                  <strong>Descarga del archivo</strong>
+                  <span>Se descargan adjuntos Excel y se descartan formatos no permitidos.</span>
+                </div>
+              </div>
+
+              <div class="step warning">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                  <strong>Clasificación inicial</strong>
+                  <span>Se clasifica por año, mes, compañía, tipo de archivo y versión.</span>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                  <strong>Repositorio SharePoint</strong>
+                  <span>Se almacena evidencia en carpeta estructurada para trazabilidad.</span>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                  <strong>Envío a validación</strong>
+                  <span>El archivo queda disponible para control de hojas, columnas, fechas y datos mínimos.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-title">
+              <div>
+                <h2>Reglas de recepción</h2>
+                <p>Controles mínimos aplicados antes de procesar.</p>
+              </div>
+            </div>
+
+            <div class="process">
+              <div class="step">
+                <div class="step-number">✓</div>
+                <div class="step-content">
+                  <strong>Formato permitido</strong>
+                  <span>Solo plantillas Excel oficiales: .xlsx o .xls.</span>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-number">✓</div>
+                <div class="step-content">
+                  <strong>Clasificación obligatoria</strong>
+                  <span>Período, compañía, tipo de envío, origen y versión son obligatorios.</span>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-number">✓</div>
+                <div class="step-content">
+                  <strong>Reenvíos o correcciones</strong>
+                  <span>Cuando una compañía envía una versión corregida, el sistema debe conservar trazabilidad contra el archivo recibido originalmente.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modalDetalle">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h3 id="modalTitulo">Detalle del archivo</h3>
+          <p>Información de recepción, clasificación y estado operativo.</p>
+        </div>
+        <button class="close" onclick="cerrarDetalle()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="grid grid-2">
+          <div class="field">
+            <label>Estado actual</label>
+            <input type="text" id="modalEstado" readonly>
+          </div>
+          <div class="field">
+            <label>Ubicación destino</label>
+            <input type="text" value="/ICP/2026/Mayo/Compañía/Recibidos/V1" readonly>
+          </div>
+          <div class="field">
+            <label>Validación siguiente</label>
+            <input type="text" value="Estructura, hojas, columnas y fechas" readonly>
+          </div>
+          <div class="field">
+            <label>Responsable</label>
+            <input type="text" value="Bot RPA / Usuario funcional" readonly>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary">Abrir archivo</button>
+          <button class="btn btn-success">Enviar a validación</button>
+          <button class="btn btn-secondary" onclick="cerrarDetalle()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const formRecepcion = document.getElementById("formRecepcion");
+    const periodo = document.getElementById("periodo");
+    const compania = document.getElementById("compania");
+    const tipoEnvio = document.getElementById("tipoEnvio");
+    const version = document.getElementById("version");
+    const origen = document.getElementById("origen");
+    const correoRemitente = document.getElementById("correoRemitente");
+    const campoCorreo = document.getElementById("campoCorreo");
+    const archivoICP = document.getElementById("archivoICP");
+    const uploadZone = document.getElementById("uploadZone");
+    const fileList = document.getElementById("fileList");
+    const btnRegistrar = document.getElementById("btnRegistrar");
+    const btnValidar = document.getElementById("btnValidar");
+    const btnLimpiar = document.getElementById("btnLimpiar");
+    const feedback = document.getElementById("feedback");
+    const modalDetalle = document.getElementById("modalDetalle");
+    const modalTitulo = document.getElementById("modalTitulo");
+    const modalEstado = document.getElementById("modalEstado");
+
+    let archivoSeleccionado = null;
+
+    function mostrarFeedback(tipo, mensaje) {
+      feedback.className = "feedback visible " + tipo;
+      feedback.textContent = mensaje;
+      setTimeout(() => {
+        feedback.className = "feedback";
+        feedback.textContent = "";
+      }, 3500);
+    }
+
+    function validarCampo(campo, errorId) {
+      const error = document.getElementById(errorId);
+
+      if (!campo.value.trim()) {
+        campo.classList.add("error");
+        error.classList.add("visible");
+        return false;
+      }
+
+      campo.classList.remove("error");
+      error.classList.remove("visible");
+      return true;
+    }
+
+    function validarFormularioBasico() {
+      const okPeriodo = validarCampo(periodo, "errorPeriodo");
+      const okCompania = validarCampo(compania, "errorCompania");
+      const okTipo = validarCampo(tipoEnvio, "errorTipoEnvio");
+      const okVersion = validarCampo(version, "errorVersion");
+      const okOrigen = validarCampo(origen, "errorOrigen");
+
+      return okPeriodo && okCompania && okTipo && okVersion && okOrigen;
+    }
+
+    function actualizarBotones() {
+      const camposCompletos = periodo.value && compania.value && tipoEnvio.value && version.value && origen.value;
+      btnRegistrar.disabled = !(camposCompletos && archivoSeleccionado);
+      btnValidar.disabled = true;
+    }
+
+    function formatoArchivoValido(nombre) {
+      const lower = nombre.toLowerCase();
+      return lower.endsWith(".xlsx") || lower.endsWith(".xls");
+    }
+
+    function cargarArchivo(file) {
+      fileList.innerHTML = "";
+
+      if (!formatoArchivoValido(file.name)) {
+        archivoSeleccionado = null;
+        btnRegistrar.disabled = true;
+        mostrarFeedback("error", "Formato inválido. Solo se permiten archivos Excel .xlsx o .xls.");
+        fileList.innerHTML = `
+          <div class="file-item">
+            <div class="file-icon" style="background:#fef2f2;color:#991b1b;">!</div>
+            <div class="file-info">
+              <strong>${file.name}</strong>
+              <span>Archivo rechazado por formato inválido.</span>
+            </div>
+            <span class="badge red">Rechazado</span>
+          </div>
+        `;
+        return;
+      }
+
+      archivoSeleccionado = file;
+      fileList.innerHTML = `
+        <div class="file-item">
+          <div class="file-icon">XLS</div>
+          <div class="file-info">
+            <strong>${file.name}</strong>
+            <span>${(file.size / 1024).toFixed(1)} KB · Listo para registrar</span>
+          </div>
+          <span class="badge green">Aceptado</span>
+        </div>
+      `;
+
+      mostrarFeedback("success", "Archivo cargado correctamente. Complete los datos y registre la recepción.");
+      actualizarBotones();
+    }
+
+    uploadZone.addEventListener("click", () => archivoICP.click());
+
+    uploadZone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      uploadZone.classList.add("dragover");
+    });
+
+    uploadZone.addEventListener("dragleave", () => {
+      uploadZone.classList.remove("dragover");
+    });
+
+    uploadZone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      uploadZone.classList.remove("dragover");
+      const file = e.dataTransfer.files[0];
+      if (file) cargarArchivo(file);
+    });
+
+    archivoICP.addEventListener("change", () => {
+      const file = archivoICP.files[0];
+      if (file) cargarArchivo(file);
+    });
+
+    [periodo, compania, tipoEnvio, version, origen].forEach(campo => {
+      campo.addEventListener("change", actualizarBotones);
+      campo.addEventListener("input", actualizarBotones);
+    });
+
+    origen.addEventListener("change", () => {
+      if (origen.value === "correo") {
+        campoCorreo.classList.remove("hidden");
+      } else {
+        campoCorreo.classList.add("hidden");
+        correoRemitente.value = "";
+      }
+      actualizarBotones();
+    });
+
+    formRecepcion.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      if (!validarFormularioBasico()) {
+        mostrarFeedback("error", "Revise los campos obligatorios antes de registrar la recepción.");
+        return;
+      }
+
+      if (!archivoSeleccionado) {
+        mostrarFeedback("error", "Debe seleccionar una plantilla ICP válida.");
+        return;
+      }
+
+      btnRegistrar.disabled = true;
+      btnRegistrar.textContent = "Registrando...";
+
+      setTimeout(() => {
+        mostrarFeedback("success", "Recepción registrada correctamente. El archivo fue clasificado y queda disponible para validación.");
+        btnRegistrar.textContent = "Registrar recepción";
+        btnValidar.disabled = false;
+      }, 900);
+    });
+
+    btnValidar.addEventListener("click", () => {
+      mostrarFeedback("success", "Archivo enviado a la etapa de validación estructural.");
+    });
+
+    btnLimpiar.addEventListener("click", () => {
+      formRecepcion.reset();
+      periodo.value = "2026-05";
+      archivoSeleccionado = null;
+      archivoICP.value = "";
+      fileList.innerHTML = "";
+      document.querySelectorAll(".error").forEach(el => el.classList.remove("error"));
+      document.querySelectorAll(".error-message").forEach(el => el.classList.remove("visible"));
+      campoCorreo.classList.remove("hidden");
+      btnRegistrar.disabled = true;
+      btnValidar.disabled = true;
+      mostrarFeedback("warning", "Formulario limpiado.");
+    });
+
+    document.getElementById("btnActualizar").addEventListener("click", () => {
+      mostrarFeedback("success", "Bandeja actualizada. No se encontraron nuevos archivos.");
+    });
+
+    function abrirDetalle(nombre, estado) {
+      modalTitulo.textContent = nombre;
+      modalEstado.value = estado;
+      modalDetalle.classList.add("visible");
+    }
+
+    function cerrarDetalle() {
+      modalDetalle.classList.remove("visible");
+    }
+
+    modalDetalle.addEventListener("click", (e) => {
+      if (e.target === modalDetalle) cerrarDetalle();
+    });
+  </script>
+
+</body>
+</html>
