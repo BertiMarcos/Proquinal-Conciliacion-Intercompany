@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conciliación Automática - PROQUINAL</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Inter,Arial,sans-serif;background:#f3f6fa;color:#1f2937;min-height:100vh}
+    .app{display:grid;grid-template-columns:270px 1fr;min-height:100vh}
+    .sidebar{background:linear-gradient(180deg,#071f3f,#0b3f75);color:#fff;padding:28px 22px;display:flex;flex-direction:column;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:34px}
+    .brand-mark{width:42px;height:42px;border-radius:14px;background:#fff;color:#0b3f75;display:grid;place-items:center;font-weight:900;font-size:20px}
+    .brand strong{display:block;font-size:17px;letter-spacing:.5px}
+    .brand span{font-size:12px;color:#bfdbfe}
+    .nav{display:grid;gap:8px}
+    .nav a{color:#dbeafe;text-decoration:none;padding:13px 14px;border-radius:14px;font-size:14px;font-weight:700;transition:.2s;display:flex;gap:10px;align-items:center}
+    .nav a.active,.nav a:hover{background:rgba(255,255,255,.14);color:#fff}
+    .sidebar-footer{background:rgba(255,255,255,.1);border-radius:18px;padding:16px;color:#dbeafe;font-size:13px;line-height:1.5}
+    .main{padding:30px}
+    .topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:24px}
+    .page-title h1{color:#071f3f;font-size:30px;margin-bottom:8px}
+    .page-title p{color:#64748b;font-size:15px;line-height:1.5;max-width:900px}
+    .status-badge{background:#fffbeb;color:#92400e;border:1px solid #fde68a;padding:10px 14px;border-radius:999px;font-size:13px;font-weight:900;white-space:nowrap}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:24px;padding:24px;box-shadow:0 10px 30px rgba(15,23,42,.05);margin-bottom:24px}
+    .layout{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:start}
+    .section-title{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:20px}
+    .section-title h2{color:#071f3f;font-size:21px;margin-bottom:5px}
+    .section-title p{color:#64748b;font-size:13px;line-height:1.5}
+    .grid{display:grid;gap:16px}
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    .field label{display:flex;justify-content:space-between;font-size:13px;font-weight:900;color:#374151;margin-bottom:8px}
+    .required{color:#dc2626}
+    .field input,.field select,.field textarea{width:100%;border:1px solid #d1d5db;border-radius:14px;padding:0 14px;height:46px;outline:none;font-size:14px;background:#fff;color:#1f2937;transition:.2s}
+    .field textarea{height:86px;padding-top:12px;resize:vertical}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:#0b4f8a;box-shadow:0 0 0 4px rgba(11,79,138,.1)}
+    .field input.error,.field select.error{border-color:#dc2626;box-shadow:0 0 0 4px rgba(220,38,38,.08)}
+    .hint{margin-top:7px;color:#64748b;font-size:12px;line-height:1.4}
+    .error-message{display:none;margin-top:7px;color:#dc2626;font-size:12px;font-weight:800}
+    .error-message.visible{display:block}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+    .kpi{background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:18px;box-shadow:0 10px 26px rgba(15,23,42,.045)}
+    .kpi span{display:block;font-size:12px;font-weight:900;color:#64748b;margin-bottom:8px}
+    .kpi strong{color:#071f3f;font-size:26px}
+    .badge{display:inline-flex;align-items:center;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;white-space:nowrap}
+    .badge.green{background:#ecfdf5;color:#166534}
+    .badge.yellow{background:#fffbeb;color:#92400e}
+    .badge.red{background:#fef2f2;color:#991b1b}
+    .badge.blue{background:#e8f2ff;color:#0b4f8a}
+    .badge.gray{background:#f1f5f9;color:#475569}
+    .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+    .btn{border:none;border-radius:14px;height:46px;padding:0 18px;font-weight:900;cursor:pointer;transition:.2s;font-size:14px}
+    .btn:hover:not(:disabled){transform:translateY(-1px)}
+    .btn:disabled{cursor:not-allowed;opacity:.6}
+    .btn-primary{background:linear-gradient(135deg,#0b4f8a,#0d6fb8);color:#fff;box-shadow:0 10px 22px rgba(11,79,138,.18)}
+    .btn-secondary{background:#eef2f7;color:#334155}
+    .btn-success{background:#16a34a;color:#fff}
+    .btn-danger{background:#dc2626;color:#fff}
+    .btn-outline{background:#fff;color:#0b4f8a;border:1px solid #bfdbfe}
+    .table-wrap{overflow-x:auto}
+    table{width:100%;min-width:920px;border-collapse:collapse}
+    th{text-align:left;background:#f8fafc;color:#64748b;padding:13px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #e5e7eb}
+    td{padding:14px 13px;border-bottom:1px solid #edf2f7;color:#374151;font-size:14px;vertical-align:middle}
+    td strong{color:#111827}
+    .mini-btn{border:1px solid #dbeafe;background:#fff;color:#0b4f8a;border-radius:10px;padding:8px 10px;font-size:12px;font-weight:900;cursor:pointer}
+    .progress-box{background:#f8fafc;border:1px solid #e5e7eb;border-radius:20px;padding:18px}
+    .progress-label{display:flex;justify-content:space-between;margin-bottom:10px;color:#334155;font-weight:900;font-size:13px}
+    .progress{height:12px;background:#e5e7eb;border-radius:999px;overflow:hidden}
+    .progress-bar{height:100%;width:0;background:linear-gradient(135deg,#0b4f8a,#16a34a);transition:width .4s}
+    .rule-list{display:grid;gap:14px}
+    .rule{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:flex-start;border:1px solid #e5e7eb;border-radius:17px;padding:14px;background:#fff}
+    .rule-icon{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;font-weight:900;background:#e8f2ff;color:#0b4f8a}
+    .rule.green .rule-icon{background:#dcfce7;color:#166534}
+    .rule.yellow .rule-icon{background:#fef3c7;color:#92400e}
+    .rule.red .rule-icon{background:#fee2e2;color:#991b1b}
+    .rule strong{display:block;color:#111827;font-size:14px;margin-bottom:5px}
+    .rule span{color:#64748b;font-size:13px;line-height:1.5}
+    .feedback{display:none;border-radius:16px;padding:14px 16px;font-size:14px;font-weight:800;line-height:1.5;margin-bottom:18px}
+    .feedback.visible{display:block}
+    .feedback.success{background:#ecfdf5;color:#166534;border:1px solid #bbf7d0}
+    .feedback.error{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+    .feedback.warning{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+    .modal-backdrop{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(15,23,42,.45);z-index:30}
+    .modal-backdrop.visible{display:flex}
+    .modal{width:100%;max-width:760px;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 28px 80px rgba(15,23,42,.32)}
+    .modal-header{padding:24px;background:linear-gradient(135deg,#071f3f,#0b4f8a);color:#fff;display:flex;justify-content:space-between;gap:16px}
+    .modal-header h3{font-size:22px;margin-bottom:6px}
+    .modal-header p{color:#dbeafe;font-size:14px}
+    .close{width:38px;height:38px;border:none;border-radius:12px;background:rgba(255,255,255,.16);color:#fff;cursor:pointer;font-size:20px}
+    .modal-body{padding:24px}
+    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{display:none}.layout{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:760px){.main{padding:18px}.topbar,.section-title{flex-direction:column;align-items:stretch}.grid-2,.grid-3,.kpis{grid-template-columns:1fr}.btn-row{flex-direction:column}.btn{width:100%}.status-badge{width:fit-content}}
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar">
+    <div>
+      <div class="brand">
+        <div class="brand-mark">P</div>
+        <div>
+          <strong>PROQUINAL</strong>
+          <span>Agente Intercompany</span>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="dashboard_intercompany.html">▣ Dashboard</a>
+        <a href="recepcion_plantillas_icp.html">▤ Recepción ICP</a>
+        <a href="validacion_archivo_icp.html">▧ Validación archivo</a>
+        <a href="parametros_tipo_cambio.html">▨ Tipo de cambio</a>
+        <a href="conciliacion_automatica.html" class="active">▦ Conciliación</a>
+        <a href="gestion_diferencias_icp.html">⚠ Diferencias</a>
+        <a href="aprobacion_conciliacion_icp.html">✓ Aprobaciones</a>
+        <a href="repositorio_historico_icp.html">▥ Repositorio</a>
+        <a href="#">☰ Bitácora</a>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer">
+      Cruce automático entre compañía vendedora y compradora por cuenta, referencia, moneda, período y monto.
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="page-title">
+        <h1>Conciliación Automática Intercompany</h1>
+        <p>
+          Ejecución del cruce automático entre operaciones reportadas por compañías vendedoras y compradoras, identificando coincidencias, diferencias, faltantes e inconsistencias.
+        </p>
+      </div>
+      <div class="status-badge" id="estadoGeneral">● Pendiente de ejecución</div>
+    </header>
+
+    <section class="kpis">
+      <div class="kpi">
+        <span>Registros procesados</span>
+        <strong id="kpiProcesados">0</strong>
+      </div>
+      <div class="kpi">
+        <span>Conciliados</span>
+        <strong id="kpiConciliados">0</strong>
+      </div>
+      <div class="kpi">
+        <span>Diferencias</span>
+        <strong id="kpiDiferencias">0</strong>
+      </div>
+      <div class="kpi">
+        <span>No reportados</span>
+        <strong id="kpiNoReportados">0</strong>
+      </div>
+    </section>
+
+    <div id="feedback" class="feedback"></div>
+
+    <section class="layout">
+      <div>
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Configurar ejecución</h2>
+              <p>Seleccione las compañías, período y reglas de cruce para ejecutar la conciliación automática.</p>
+            </div>
+            <span class="badge blue">Cruce ICP</span>
+          </div>
+
+          <form id="formConciliacion" novalidate>
+            <div class="grid grid-2">
+              <div class="field">
+                <label for="periodo">Período <span class="required">*</span></label>
+                <input type="month" id="periodo" value="2026-05">
+                <div class="error-message" id="errorPeriodo">Debe seleccionar período.</div>
+              </div>
+
+              <div class="field">
+                <label for="tipoOperacion">Tipo de operación <span class="required">*</span></label>
+                <select id="tipoOperacion">
+                  <option value="">Seleccione tipo</option>
+                  <option value="comercial">Comercial - compra venta de productos</option>
+                  <option value="gastos">Gastos intercompany</option>
+                  <option value="prestamos">Préstamos por cobrar / pagar</option>
+                  <option value="intereses">Intereses</option>
+                  <option value="dividendos">Dividendos</option>
+                  <option value="ifrs16">IFRS 16 - Arrendamientos</option>
+                </select>
+                <div class="error-message" id="errorTipoOperacion">Debe seleccionar tipo de operación.</div>
+              </div>
+
+              <div class="field">
+                <label for="vendedora">Compañía vendedora <span class="required">*</span></label>
+                <select id="vendedora">
+                  <option value="">Seleccione compañía</option>
+                  <option>Proquinal Colombia</option>
+                  <option>Proquinal Costa Rica</option>
+                  <option>Spradling Group</option>
+                  <option>Calipso Colombia</option>
+                </select>
+                <div class="error-message" id="errorVendedora">Debe seleccionar compañía vendedora.</div>
+              </div>
+
+              <div class="field">
+                <label for="compradora">Compañía compradora <span class="required">*</span></label>
+                <select id="compradora">
+                  <option value="">Seleccione compañía</option>
+                  <option>Proquinal Colombia</option>
+                  <option>Proquinal Costa Rica</option>
+                  <option>Spradling Group</option>
+                  <option>Calipso Colombia</option>
+                </select>
+                <div class="error-message" id="errorCompradora">Debe seleccionar compañía compradora.</div>
+              </div>
+
+              <div class="field">
+                <label for="reglaCruce">Regla principal <span class="required">*</span></label>
+                <select id="reglaCruce">
+                  <option value="">Seleccione regla</option>
+                  <option value="referencia_monto">Factura / referencia + moneda + monto</option>
+                  <option value="cuenta_periodo_monto">Cuenta + período + moneda + monto</option>
+                  <option value="contraparte_monto">Contraparte + moneda + monto</option>
+                </select>
+                <div class="error-message" id="errorReglaCruce">Debe seleccionar regla de cruce.</div>
+              </div>
+
+              <div class="field">
+                <label for="tolerancia">Tolerancia de diferencia</label>
+                <input type="number" id="tolerancia" value="0.01" step="0.01">
+                <div class="hint">Diferencia máxima aceptada para considerar coincidencia exacta o menor.</div>
+              </div>
+            </div>
+
+            <div class="btn-row">
+              <button type="submit" class="btn btn-primary" id="btnEjecutar">Ejecutar conciliación</button>
+              <button type="button" class="btn btn-success" id="btnEnviarDiferencias" disabled>Enviar diferencias a revisión</button>
+              <button type="button" class="btn btn-secondary" id="btnLimpiar">Limpiar</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Avance de ejecución</h2>
+              <p>Progreso del robot durante el cruce automático.</p>
+            </div>
+            <span class="badge gray" id="badgeResultado">Sin ejecutar</span>
+          </div>
+
+          <div class="progress-box">
+            <div class="progress-label">
+              <span>Procesamiento</span>
+              <span id="porcentaje">0%</span>
+            </div>
+            <div class="progress">
+              <div class="progress-bar" id="progressBar"></div>
+            </div>
+          </div>
+
+          <div class="rule-list" style="margin-top:18px;" id="logEjecucion">
+            <div class="rule yellow">
+              <div class="rule-icon">!</div>
+              <div>
+                <strong>Conciliación pendiente</strong>
+                <span>Configure los parámetros y ejecute el proceso para visualizar el detalle.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Resultado de conciliación</h2>
+              <p>Detalle de registros cruzados entre compañías.</p>
+            </div>
+            <button class="btn btn-outline" id="btnExportar">Exportar resultado</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Referencia</th>
+                  <th>Vendedora</th>
+                  <th>Compradora</th>
+                  <th>Cuenta</th>
+                  <th>Moneda</th>
+                  <th>Monto vendedora</th>
+                  <th>Monto compradora</th>
+                  <th>Diferencia</th>
+                  <th>Estado</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="tablaResultado">
+                <tr>
+                  <td colspan="10">Sin conciliación ejecutada.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <aside>
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Reglas del cruce</h2>
+              <p>Criterios utilizados por el robot.</p>
+            </div>
+          </div>
+
+          <div class="rule-list">
+            <div class="rule green">
+              <div class="rule-icon">1</div>
+              <div>
+                <strong>Coincidencia exacta</strong>
+                <span>Factura o referencia, compañía contraparte, moneda y monto coinciden dentro de la tolerancia definida.</span>
+              </div>
+            </div>
+
+            <div class="rule yellow">
+              <div class="rule-icon">2</div>
+              <div>
+                <strong>Diferencia de monto</strong>
+                <span>Existe coincidencia de referencia, pero el monto reportado por ambas compañías no coincide.</span>
+              </div>
+            </div>
+
+            <div class="rule red">
+              <div class="rule-icon">3</div>
+              <div>
+                <strong>Operación no reportada</strong>
+                <span>Un registro existe en una compañía, pero no se identifica su contraparte en la otra.</span>
+              </div>
+            </div>
+
+            <div class="rule red">
+              <div class="rule-icon">4</div>
+              <div>
+                <strong>Inconsistencia contable</strong>
+                <span>Se detecta diferencia de cuenta, moneda, período o compañía contraparte.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Clasificación automática</h2>
+              <p>Estados posibles del resultado.</p>
+            </div>
+          </div>
+
+          <div class="rule-list">
+            <div class="rule green">
+              <div class="rule-icon">✓</div>
+              <div>
+                <strong>Conciliado</strong>
+                <span>No requiere acción adicional. Queda disponible para reporte final.</span>
+              </div>
+            </div>
+
+            <div class="rule yellow">
+              <div class="rule-icon">!</div>
+              <div>
+                <strong>Con diferencia</strong>
+                <span>Debe revisarse antes de enviar notificación o aprobación.</span>
+              </div>
+            </div>
+
+            <div class="rule red">
+              <div class="rule-icon">×</div>
+              <div>
+                <strong>Pendiente contraparte</strong>
+                <span>Se debe solicitar corrección o confirmación a la compañía correspondiente.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+
+<div class="modal-backdrop" id="modalDetalle">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h3 id="modalTitulo">Detalle de conciliación</h3>
+        <p>Información del registro cruzado entre compañías.</p>
+      </div>
+      <button class="close" onclick="cerrarDetalle()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="grid grid-2">
+        <div class="field">
+          <label>Referencia</label>
+          <input type="text" id="modalReferencia" readonly>
+        </div>
+        <div class="field">
+          <label>Estado</label>
+          <input type="text" id="modalEstado" readonly>
+        </div>
+        <div class="field">
+          <label>Diferencia</label>
+          <input type="text" id="modalDiferencia" readonly>
+        </div>
+        <div class="field">
+          <label>Acción sugerida</label>
+          <input type="text" id="modalAccion" readonly>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:16px;">
+        <label>Comentario del robot</label>
+        <textarea id="modalComentario" readonly></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary">Ver evidencia</button>
+        <button class="btn btn-success">Enviar a revisión</button>
+        <button class="btn btn-secondary" onclick="cerrarDetalle()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById("formConciliacion");
+  const periodo = document.getElementById("periodo");
+  const tipoOperacion = document.getElementById("tipoOperacion");
+  const vendedora = document.getElementById("vendedora");
+  const compradora = document.getElementById("compradora");
+  const reglaCruce = document.getElementById("reglaCruce");
+  const tolerancia = document.getElementById("tolerancia");
+  const feedback = document.getElementById("feedback");
+  const tablaResultado = document.getElementById("tablaResultado");
+  const progressBar = document.getElementById("progressBar");
+  const porcentaje = document.getElementById("porcentaje");
+  const logEjecucion = document.getElementById("logEjecucion");
+  const badgeResultado = document.getElementById("badgeResultado");
+  const estadoGeneral = document.getElementById("estadoGeneral");
+  const btnEnviarDiferencias = document.getElementById("btnEnviarDiferencias");
+  const modalDetalle = document.getElementById("modalDetalle");
+
+  function mostrarFeedback(tipo, mensaje) {
+    feedback.className = "feedback visible " + tipo;
+    feedback.textContent = mensaje;
+    setTimeout(() => {
+      feedback.className = "feedback";
+      feedback.textContent = "";
+    }, 3600);
+  }
+
+  function validarCampo(campo, errorId) {
+    const error = document.getElementById(errorId);
+    if (!campo.value.trim()) {
+      campo.classList.add("error");
+      error.classList.add("visible");
+      return false;
+    }
+    campo.classList.remove("error");
+    error.classList.remove("visible");
+    return true;
+  }
+
+  function setProgress(valor) {
+    progressBar.style.width = valor + "%";
+    porcentaje.textContent = valor + "%";
+  }
+
+  function agregarLog(tipo, titulo, descripcion) {
+    const clase = tipo === "ok" ? "green" : tipo === "warn" ? "yellow" : "red";
+    const icono = tipo === "ok" ? "✓" : tipo === "warn" ? "!" : "×";
+
+    logEjecucion.innerHTML += `
+      <div class="rule ${clase}">
+        <div class="rule-icon">${icono}</div>
+        <div>
+          <strong>${titulo}</strong>
+          <span>${descripcion}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderResultado() {
+    const datos = [
+      {
+        ref:"FAC-ICP-000145",
+        cuenta:"AR-1200",
+        moneda:"USD",
+        venta:"12,450.00",
+        compra:"12,450.00",
+        dif:"0.00",
+        estado:"Conciliado",
+        badge:"green",
+        comentario:"El registro coincide por referencia, moneda y monto."
+      },
+      {
+        ref:"FAC-ICP-000188",
+        cuenta:"REV-4100",
+        moneda:"USD",
+        venta:"8,900.00",
+        compra:"8,750.00",
+        dif:"150.00",
+        estado:"Diferencia monto",
+        badge:"yellow",
+        comentario:"La referencia coincide, pero existe diferencia entre el monto reportado por la vendedora y la compradora."
+      },
+      {
+        ref:"FAC-ICP-000203",
+        cuenta:"AP-2300",
+        moneda:"COP",
+        venta:"3,400,000.00",
+        compra:"-",
+        dif:"3,400,000.00",
+        estado:"No reportado",
+        badge:"red",
+        comentario:"La operación existe en la compañía vendedora, pero no fue reportada por la contraparte."
+      },
+      {
+        ref:"FAC-ICP-000244",
+        cuenta:"EXP-6100",
+        moneda:"USD",
+        venta:"2,100.00",
+        compra:"2,100.00",
+        dif:"0.00",
+        estado:"Conciliado",
+        badge:"green",
+        comentario:"Coincidencia exacta dentro de la tolerancia definida."
+      },
+      {
+        ref:"FAC-ICP-000301",
+        cuenta:"INT-7200",
+        moneda:"USD",
+        venta:"940.00",
+        compra:"940.00",
+        dif:"0.00",
+        estado:"Cuenta a revisar",
+        badge:"yellow",
+        comentario:"El monto coincide, pero la cuenta informada requiere revisión funcional."
+      }
+    ];
+
+    tablaResultado.innerHTML = "";
+
+    datos.forEach(item => {
+      tablaResultado.innerHTML += `
+        <tr>
+          <td><strong>${item.ref}</strong></td>
+          <td>${vendedora.value}</td>
+          <td>${compradora.value}</td>
+          <td>${item.cuenta}</td>
+          <td>${item.moneda}</td>
+          <td>${item.venta}</td>
+          <td>${item.compra}</td>
+          <td>${item.dif}</td>
+          <td><span class="badge ${item.badge}">${item.estado}</span></td>
+          <td>
+            <button class="mini-btn" onclick="abrirDetalle('${item.ref}','${item.estado}','${item.dif}','${item.comentario}')">Ver</button>
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  form.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const okPeriodo = validarCampo(periodo, "errorPeriodo");
+    const okTipo = validarCampo(tipoOperacion, "errorTipoOperacion");
+    const okVend = validarCampo(vendedora, "errorVendedora");
+    const okComp = validarCampo(compradora, "errorCompradora");
+    const okRegla = validarCampo(reglaCruce, "errorReglaCruce");
+
+    if (!okPeriodo || !okTipo || !okVend || !okComp || !okRegla) {
+      mostrarFeedback("error", "Debe completar los campos obligatorios antes de ejecutar la conciliación.");
+      return;
+    }
+
+    if (vendedora.value === compradora.value) {
+      mostrarFeedback("error", "La compañía vendedora y compradora no pueden ser la misma.");
+      return;
+    }
+
+    logEjecucion.innerHTML = "";
+    setProgress(10);
+    badgeResultado.className = "badge blue";
+    badgeResultado.textContent = "Ejecutando";
+    estadoGeneral.textContent = "● Ejecutando conciliación";
+    estadoGeneral.style.background = "#e8f2ff";
+    estadoGeneral.style.color = "#0b4f8a";
+    estadoGeneral.style.borderColor = "#bfdbfe";
+
+    agregarLog("ok", "Archivos validados", "Se detectaron archivos válidos para ambas compañías.");
+
+    setTimeout(() => {
+      setProgress(35);
+      agregarLog("ok", "Normalización aplicada", "Se normalizaron fechas, monedas, compañías, cuentas y referencias.");
+    }, 500);
+
+    setTimeout(() => {
+      setProgress(65);
+      agregarLog("warn", "Cruce con diferencias", "Se encontraron diferencias de monto y registros no reportados por contraparte.");
+    }, 1000);
+
+    setTimeout(() => {
+      setProgress(100);
+      agregarLog("ok", "Conciliación finalizada", "El resultado fue clasificado y queda disponible para revisión.");
+
+      renderResultado();
+
+      document.getElementById("kpiProcesados").textContent = "5";
+      document.getElementById("kpiConciliados").textContent = "2";
+      document.getElementById("kpiDiferencias").textContent = "2";
+      document.getElementById("kpiNoReportados").textContent = "1";
+
+      badgeResultado.className = "badge yellow";
+      badgeResultado.textContent = "Con diferencias";
+      estadoGeneral.textContent = "● Finalizado con diferencias";
+      estadoGeneral.style.background = "#fffbeb";
+      estadoGeneral.style.color = "#92400e";
+      estadoGeneral.style.borderColor = "#fde68a";
+
+      btnEnviarDiferencias.disabled = false;
+      mostrarFeedback("warning", "Conciliación finalizada. Se detectaron diferencias que requieren revisión.");
+    }, 1500);
+  });
+
+  btnEnviarDiferencias.addEventListener("click", function() {
+    mostrarFeedback("success", "Diferencias enviadas a la etapa de revisión y clasificación de inconsistencias.");
+  });
+
+  document.getElementById("btnLimpiar").addEventListener("click", function() {
+    form.reset();
+    periodo.value = "2026-05";
+    tolerancia.value = "0.01";
+    setProgress(0);
+    logEjecucion.innerHTML = `
+      <div class="rule yellow">
+        <div class="rule-icon">!</div>
+        <div>
+          <strong>Conciliación pendiente</strong>
+          <span>Configure los parámetros y ejecute el proceso para visualizar el detalle.</span>
+        </div>
+      </div>
+    `;
+    tablaResultado.innerHTML = `<tr><td colspan="10">Sin conciliación ejecutada.</td></tr>`;
+    document.getElementById("kpiProcesados").textContent = "0";
+    document.getElementById("kpiConciliados").textContent = "0";
+    document.getElementById("kpiDiferencias").textContent = "0";
+    document.getElementById("kpiNoReportados").textContent = "0";
+    badgeResultado.className = "badge gray";
+    badgeResultado.textContent = "Sin ejecutar";
+    estadoGeneral.textContent = "● Pendiente de ejecución";
+    estadoGeneral.style.background = "#fffbeb";
+    estadoGeneral.style.color = "#92400e";
+    estadoGeneral.style.borderColor = "#fde68a";
+    btnEnviarDiferencias.disabled = true;
+    document.querySelectorAll(".error").forEach(el => el.classList.remove("error"));
+    document.querySelectorAll(".error-message").forEach(el => el.classList.remove("visible"));
+    mostrarFeedback("warning", "Pantalla reiniciada.");
+  });
+
+  document.getElementById("btnExportar").addEventListener("click", function() {
+    mostrarFeedback("success", "Exportación simulada del resultado generada correctamente.");
+  });
+
+  function abrirDetalle(referencia, estado, diferencia, comentario) {
+    document.getElementById("modalReferencia").value = referencia;
+    document.getElementById("modalEstado").value = estado;
+    document.getElementById("modalDiferencia").value = diferencia;
+    document.getElementById("modalComentario").value = comentario;
+
+    if (estado === "Conciliado") {
+      document.getElementById("modalAccion").value = "Sin acción requerida";
+    } else if (estado === "No reportado") {
+      document.getElementById("modalAccion").value = "Solicitar confirmación a contraparte";
+    } else {
+      document.getElementById("modalAccion").value = "Enviar a revisión funcional";
+    }
+
+    modalDetalle.classList.add("visible");
+  }
+
+  function cerrarDetalle() {
+    modalDetalle.classList.remove("visible");
+  }
+
+  modalDetalle.addEventListener("click", function(e) {
+    if (e.target === modalDetalle) cerrarDetalle();
+  });
+</script>
+
+</body>
+</html>

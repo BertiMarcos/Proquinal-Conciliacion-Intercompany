@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notificaciones ICP - PROQUINAL</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Inter,Arial,sans-serif;background:#f3f6fa;color:#1f2937;min-height:100vh}
+    .app{display:grid;grid-template-columns:270px 1fr;min-height:100vh}
+    .sidebar{background:linear-gradient(180deg,#071f3f,#0b3f75);color:#fff;padding:28px 22px;display:flex;flex-direction:column;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:34px}.brand-mark{width:42px;height:42px;border-radius:14px;background:#fff;color:#0b3f75;display:grid;place-items:center;font-weight:900;font-size:20px}
+    .brand strong{display:block;font-size:17px}.brand span{font-size:12px;color:#bfdbfe}
+    .nav{display:grid;gap:8px}.nav a{color:#dbeafe;text-decoration:none;padding:13px 14px;border-radius:14px;font-size:14px;font-weight:700}.nav a.active,.nav a:hover{background:rgba(255,255,255,.14);color:#fff}
+    .sidebar-footer{background:rgba(255,255,255,.1);border-radius:18px;padding:16px;color:#dbeafe;font-size:13px;line-height:1.5}
+    .main{padding:30px}.topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:24px}
+    h1{color:#071f3f;font-size:30px;margin-bottom:8px}.page-title p{color:#64748b;font-size:15px;line-height:1.5;max-width:900px}
+    .status-badge{background:#e8f2ff;color:#0b4f8a;border:1px solid #bfdbfe;padding:10px 14px;border-radius:999px;font-size:13px;font-weight:900}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:24px;padding:24px;box-shadow:0 10px 30px rgba(15,23,42,.05);margin-bottom:24px}
+    .layout{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:start}
+    .section-title{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:20px}
+    .section-title h2{color:#071f3f;font-size:21px;margin-bottom:5px}.section-title p{color:#64748b;font-size:13px;line-height:1.5}
+    .grid{display:grid;gap:16px}.grid-2{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}
+    .field label{display:block;font-size:13px;font-weight:900;color:#374151;margin-bottom:8px}
+    .field input,.field select,.field textarea{width:100%;border:1px solid #d1d5db;border-radius:14px;padding:0 14px;height:46px;outline:none;font-size:14px}
+    .field textarea{height:140px;padding-top:12px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:#0b4f8a;box-shadow:0 0 0 4px rgba(11,79,138,.1)}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}.kpi{background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:18px;box-shadow:0 10px 26px rgba(15,23,42,.045)}
+    .kpi span{display:block;font-size:12px;font-weight:900;color:#64748b;margin-bottom:8px}.kpi strong{color:#071f3f;font-size:26px}
+    .badge{display:inline-flex;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;white-space:nowrap}.green{background:#ecfdf5;color:#166534}.yellow{background:#fffbeb;color:#92400e}.red{background:#fef2f2;color:#991b1b}.blue{background:#e8f2ff;color:#0b4f8a}.gray{background:#f1f5f9;color:#475569}
+    .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}.btn{border:none;border-radius:14px;height:46px;padding:0 18px;font-weight:900;cursor:pointer;font-size:14px}.btn:hover{transform:translateY(-1px)}
+    .btn-primary{background:linear-gradient(135deg,#0b4f8a,#0d6fb8);color:#fff}.btn-secondary{background:#eef2f7;color:#334155}.btn-success{background:#16a34a;color:#fff}.btn-outline{background:#fff;color:#0b4f8a;border:1px solid #bfdbfe}
+    table{width:100%;min-width:900px;border-collapse:collapse}th{text-align:left;background:#f8fafc;color:#64748b;padding:13px;font-size:12px;text-transform:uppercase;border-bottom:1px solid #e5e7eb}td{padding:14px 13px;border-bottom:1px solid #edf2f7;color:#374151;font-size:14px}.table-wrap{overflow-x:auto}.mini-btn{border:1px solid #dbeafe;background:#fff;color:#0b4f8a;border-radius:10px;padding:8px 10px;font-size:12px;font-weight:900;cursor:pointer}
+    .mail-preview{border:1px solid #e5e7eb;border-radius:22px;overflow:hidden}.mail-head{background:linear-gradient(135deg,#071f3f,#0b4f8a);color:#fff;padding:22px}.mail-head p{color:#dbeafe;font-size:13px}.mail-body{padding:22px}.mail-body p{font-size:14px;color:#475569;line-height:1.6;margin-bottom:12px}
+    .rule{display:grid;grid-template-columns:38px 1fr;gap:12px;border:1px solid #e5e7eb;border-radius:17px;padding:14px;background:#fff;margin-bottom:14px}.rule-icon{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;font-weight:900;background:#e8f2ff;color:#0b4f8a}.rule strong{display:block;color:#111827;font-size:14px;margin-bottom:5px}.rule span{color:#64748b;font-size:13px;line-height:1.5}
+    .feedback{display:none;border-radius:16px;padding:14px 16px;font-size:14px;font-weight:800;margin-bottom:18px}.feedback.visible{display:block}.success{background:#ecfdf5;color:#166534;border:1px solid #bbf7d0}.warning{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{display:none}.layout{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}@media(max-width:760px){.main{padding:18px}.topbar,.section-title{flex-direction:column}.grid-2,.grid-3,.kpis{grid-template-columns:1fr}.btn{width:100%}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div>
+      <div class="brand"><div class="brand-mark">P</div><div><strong>PROQUINAL</strong><span>Agente Intercompany</span></div></div>
+      <nav class="nav">
+        <a href="dashboard_intercompany.html">▣ Dashboard</a><a href="recepcion_plantillas_icp.html">▤ Recepción ICP</a><a href="validacion_archivo_icp.html">▧ Validación</a><a href="conciliacion_automatica.html">▦ Conciliación</a><a href="gestion_diferencias_icp.html">⚠ Diferencias</a><a href="aprobacion_conciliacion_icp.html">✓ Aprobaciones</a><a class="active" href="notificaciones_automaticas_icp.html">✉ Notificaciones</a><a href="repositorio_historico_icp.html">▥ Repositorio</a>
+      </nav>
+    </div>
+    <div class="sidebar-footer">Envío controlado de correos luego de aprobación funcional.</div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="page-title"><h1>Notificaciones Automáticas ICP</h1><p>Preparación, aprobación y envío de correos a compañías con diferencias, recordatorios o reportes finales.</p></div>
+      <div class="status-badge" id="estadoGeneral">● Pendiente de envío</div>
+    </header>
+
+    <section class="kpis">
+      <div class="kpi"><span>Correos preparados</span><strong>9</strong></div>
+      <div class="kpi"><span>Aprobados</span><strong id="kpiAprobados">6</strong></div>
+      <div class="kpi"><span>Pendientes</span><strong id="kpiPendientes">3</strong></div>
+      <div class="kpi"><span>Enviados</span><strong id="kpiEnviados">0</strong></div>
+    </section>
+
+    <div id="feedback" class="feedback"></div>
+
+    <section class="layout">
+      <div>
+        <div class="card">
+          <div class="section-title"><div><h2>Preparar notificación</h2><p>Seleccione compañía, motivo y plantilla de correo.</p></div><span class="badge blue">Correo corporativo</span></div>
+          <div class="grid grid-3">
+            <div class="field"><label>Período</label><input type="month" id="periodo" value="2026-05"></div>
+            <div class="field"><label>Compañía destinataria</label><select id="compania"><option>Spradling Group</option><option>Proquinal Costa Rica</option><option>Calipso Colombia</option></select></div>
+            <div class="field"><label>Tipo de notificación</label><select id="tipo"><option>Diferencias detectadas</option><option>Recordatorio envío ICP</option><option>Reporte final</option><option>Archivo observado</option></select></div>
+          </div>
+          <div class="grid grid-2" style="margin-top:16px">
+            <div class="field"><label>Destinatarios</label><input id="destinatarios" value="responsable@proquinal.com; contabilidad@proquinal.com"></div>
+            <div class="field"><label>Asunto</label><input id="asunto" value="Diferencias ICP - Mayo 2026"></div>
+          </div>
+          <div class="field" style="margin-top:16px"><label>Cuerpo del correo</label><textarea id="cuerpo">Estimados, se adjunta detalle de diferencias identificadas durante el proceso de conciliación intercompany del período Mayo 2026. Favor revisar, corregir o confirmar la información observada.</textarea></div>
+          <div class="btn-row">
+            <button class="btn btn-primary" id="btnPrevisualizar">Actualizar vista previa</button>
+            <button class="btn btn-success" id="btnEnviar">Enviar notificación</button>
+            <button class="btn btn-outline" id="btnRecordatorio">Programar recordatorio</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title"><div><h2>Bandeja de notificaciones</h2><p>Correos generados por el proceso.</p></div><button class="btn btn-outline" id="btnActualizar">Actualizar</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Correo</th><th>Compañía</th><th>Tipo</th><th>Estado</th><th>Fecha</th><th>Acción</th></tr></thead>
+              <tbody>
+                <tr><td><strong>MAIL-DIF-001</strong></td><td>Spradling Group</td><td>Diferencias</td><td><span class="badge yellow">Pendiente</span></td><td>12/06/2026</td><td><button class="mini-btn">Ver</button></td></tr>
+                <tr><td><strong>MAIL-REP-002</strong></td><td>Proquinal Costa Rica</td><td>Reporte final</td><td><span class="badge green">Aprobado</span></td><td>12/06/2026</td><td><button class="mini-btn">Ver</button></td></tr>
+                <tr><td><strong>MAIL-OBS-003</strong></td><td>Calipso Colombia</td><td>Archivo observado</td><td><span class="badge blue">Preparado</span></td><td>11/06/2026</td><td><button class="mini-btn">Ver</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <aside>
+        <div class="card">
+          <div class="section-title"><div><h2>Vista previa</h2><p>Correo que recibirá la compañía.</p></div></div>
+          <div class="mail-preview">
+            <div class="mail-head"><h3 id="previewAsunto">Diferencias ICP - Mayo 2026</h3><p id="previewPara">Para: responsable@proquinal.com; contabilidad@proquinal.com</p></div>
+            <div class="mail-body">
+              <p id="previewCuerpo">Estimados, se adjunta detalle de diferencias identificadas durante el proceso de conciliación intercompany del período Mayo 2026. Favor revisar, corregir o confirmar la información observada.</p>
+              <p><strong>Adjuntos:</strong> Reporte_Diferencias_ICP_Mayo_2026.xlsx</p>
+              <span class="badge blue">En espera de envío</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title"><div><h2>Reglas</h2><p>Condiciones del envío.</p></div></div>
+          <div class="rule"><div class="rule-icon">✓</div><div><strong>Aprobación previa</strong><span>No se envían diferencias sin aprobación funcional.</span></div></div>
+          <div class="rule"><div class="rule-icon">✉</div><div><strong>Evidencia del envío</strong><span>Todo correo enviado queda registrado para auditoría.</span></div></div>
+          <div class="rule"><div class="rule-icon">!</div><div><strong>Recordatorios</strong><span>El bot puede programar recordatorios por vencimiento.</span></div></div>
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+
+<script>
+  const feedback=document.getElementById("feedback");
+  function msg(tipo,texto){feedback.className="feedback visible "+tipo;feedback.textContent=texto;setTimeout(()=>feedback.className="feedback",3200)}
+  document.getElementById("btnPrevisualizar").onclick=()=>{
+    document.getElementById("previewAsunto").textContent=document.getElementById("asunto").value;
+    document.getElementById("previewPara").textContent="Para: "+document.getElementById("destinatarios").value;
+    document.getElementById("previewCuerpo").textContent=document.getElementById("cuerpo").value;
+    msg("success","Vista previa actualizada.");
+  };
+  document.getElementById("btnEnviar").onclick=()=>{
+    document.getElementById("estadoGeneral").textContent="● Notificación enviada";
+    document.getElementById("estadoGeneral").style.background="#ecfdf5";
+    document.getElementById("estadoGeneral").style.color="#166534";
+    document.getElementById("estadoGeneral").style.borderColor="#bbf7d0";
+    document.getElementById("kpiEnviados").textContent="1";
+    msg("success","Notificación enviada y registrada en bitácora.");
+  };
+  document.getElementById("btnRecordatorio").onclick=()=>msg("warning","Recordatorio programado para la compañía seleccionada.");
+  document.getElementById("btnActualizar").onclick=()=>msg("success","Bandeja actualizada.");
+</script>
+</body>
+</html>

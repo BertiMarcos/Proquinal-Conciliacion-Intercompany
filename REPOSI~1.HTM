@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Repositorio Histórico ICP - PROQUINAL</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Inter,Arial,sans-serif;background:#f3f6fa;color:#1f2937;min-height:100vh}
+    .app{display:grid;grid-template-columns:270px 1fr;min-height:100vh}
+    .sidebar{background:linear-gradient(180deg,#071f3f,#0b3f75);color:#fff;padding:28px 22px;display:flex;flex-direction:column;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:34px}
+    .brand-mark{width:42px;height:42px;border-radius:14px;background:#fff;color:#0b3f75;display:grid;place-items:center;font-weight:900;font-size:20px}
+    .brand strong{display:block;font-size:17px}.brand span{font-size:12px;color:#bfdbfe}
+    .nav{display:grid;gap:8px}
+    .nav a{color:#dbeafe;text-decoration:none;padding:13px 14px;border-radius:14px;font-size:14px;font-weight:700}
+    .nav a.active,.nav a:hover{background:rgba(255,255,255,.14);color:#fff}
+    .sidebar-footer{background:rgba(255,255,255,.1);border-radius:18px;padding:16px;color:#dbeafe;font-size:13px;line-height:1.5}
+    .main{padding:30px}
+    .topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:24px}
+    h1{color:#071f3f;font-size:30px;margin-bottom:8px}.page-title p{color:#64748b;font-size:15px;line-height:1.5;max-width:900px}
+    .status-badge{background:#ecfdf5;color:#166534;border:1px solid #bbf7d0;padding:10px 14px;border-radius:999px;font-size:13px;font-weight:900}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:24px;padding:24px;box-shadow:0 10px 30px rgba(15,23,42,.05);margin-bottom:24px}
+    .layout{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:start}
+    .section-title{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:20px}
+    .section-title h2{color:#071f3f;font-size:21px;margin-bottom:5px}.section-title p{color:#64748b;font-size:13px;line-height:1.5}
+    .grid{display:grid;gap:16px}.grid-2{grid-template-columns:repeat(2,1fr)}.grid-4{grid-template-columns:repeat(4,1fr)}
+    .field label{display:block;font-size:13px;font-weight:900;color:#374151;margin-bottom:8px}
+    .field input,.field select{width:100%;border:1px solid #d1d5db;border-radius:14px;padding:0 14px;height:46px;outline:none;font-size:14px;background:#fff;color:#1f2937}
+    .field input:focus,.field select:focus{border-color:#0b4f8a;box-shadow:0 0 0 4px rgba(11,79,138,.1)}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+    .kpi{background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:18px;box-shadow:0 10px 26px rgba(15,23,42,.045)}
+    .kpi span{display:block;font-size:12px;font-weight:900;color:#64748b;margin-bottom:8px}.kpi strong{color:#071f3f;font-size:26px}
+    .badge{display:inline-flex;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;white-space:nowrap}
+    .green{background:#ecfdf5;color:#166534}.yellow{background:#fffbeb;color:#92400e}.red{background:#fef2f2;color:#991b1b}.blue{background:#e8f2ff;color:#0b4f8a}.gray{background:#f1f5f9;color:#475569}
+    .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}.btn{border:none;border-radius:14px;height:46px;padding:0 18px;font-weight:900;cursor:pointer;font-size:14px}
+    .btn:hover{transform:translateY(-1px)}.btn-primary{background:linear-gradient(135deg,#0b4f8a,#0d6fb8);color:#fff}.btn-secondary{background:#eef2f7;color:#334155}.btn-success{background:#16a34a;color:#fff}.btn-outline{background:#fff;color:#0b4f8a;border:1px solid #bfdbfe}
+    table{width:100%;min-width:900px;border-collapse:collapse}.table-wrap{overflow-x:auto}
+    th{text-align:left;background:#f8fafc;color:#64748b;padding:13px;font-size:12px;text-transform:uppercase;border-bottom:1px solid #e5e7eb}
+    td{padding:14px 13px;border-bottom:1px solid #edf2f7;color:#374151;font-size:14px}td strong{color:#111827}
+    .mini-btn{border:1px solid #dbeafe;background:#fff;color:#0b4f8a;border-radius:10px;padding:8px 10px;font-size:12px;font-weight:900;cursor:pointer}
+    .folder-list{display:grid;gap:12px}
+    .folder{display:grid;grid-template-columns:42px 1fr auto;gap:12px;align-items:center;border:1px solid #e5e7eb;border-radius:16px;padding:14px;background:#fff}
+    .folder-icon{width:42px;height:42px;border-radius:13px;background:#e8f2ff;color:#0b4f8a;display:grid;place-items:center;font-weight:900}
+    .folder strong{display:block;color:#111827;font-size:14px;margin-bottom:4px}.folder span{font-size:12px;color:#64748b}
+    .tree{background:#f8fafc;border:1px solid #e5e7eb;border-radius:18px;padding:18px;font-size:14px;line-height:1.9;color:#334155}
+    .tree strong{color:#071f3f}
+    .feedback{display:none;border-radius:16px;padding:14px 16px;font-size:14px;font-weight:800;margin-bottom:18px}.feedback.visible{display:block}.success{background:#ecfdf5;color:#166534;border:1px solid #bbf7d0}.warning{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+    .modal-backdrop{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(15,23,42,.45);z-index:30}
+    .modal-backdrop.visible{display:flex}.modal{width:100%;max-width:760px;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 28px 80px rgba(15,23,42,.32)}
+    .modal-header{padding:24px;background:linear-gradient(135deg,#071f3f,#0b4f8a);color:#fff;display:flex;justify-content:space-between;gap:16px}.modal-header p{color:#dbeafe;font-size:14px}
+    .close{width:38px;height:38px;border:none;border-radius:12px;background:rgba(255,255,255,.16);color:#fff;cursor:pointer;font-size:20px}.modal-body{padding:24px}
+    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{display:none}.layout{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:760px){.main{padding:18px}.topbar,.section-title{flex-direction:column}.grid-2,.grid-4,.kpis{grid-template-columns:1fr}.btn{width:100%}.folder{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div>
+      <div class="brand"><div class="brand-mark">P</div><div><strong>PROQUINAL</strong><span>Agente Intercompany</span></div></div>
+      <nav class="nav">
+        <a href="dashboard_intercompany.html">▣ Dashboard</a><a href="recepcion_plantillas_icp.html">▤ Recepción ICP</a><a href="validacion_archivo_icp.html">▧ Validación</a><a href="conciliacion_automatica.html">▦ Conciliación</a><a href="gestion_diferencias_icp.html">⚠ Diferencias</a><a href="aprobacion_conciliacion_icp.html">✓ Aprobaciones</a><a href="notificaciones_automaticas_icp.html">✉ Notificaciones</a><a class="active" href="repositorio_historico_icp.html">▥ Repositorio</a><a href="#">☰ Bitácora</a>
+      </nav>
+    </div>
+    <div class="sidebar-footer">Repositorio histórico por año, mes, compañía, tipo de archivo y versión.</div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="page-title"><h1>Repositorio Histórico ICP</h1><p>Consulta y trazabilidad de archivos recibidos, procesados, observados, corregidos, reportes finales, evidencias y bitácoras del proceso.</p></div>
+      <div class="status-badge">● SharePoint disponible</div>
+    </header>
+
+    <section class="kpis">
+      <div class="kpi"><span>Archivos históricos</span><strong id="kpiArchivos">428</strong></div>
+      <div class="kpi"><span>Reportes finales</span><strong>36</strong></div>
+      <div class="kpi"><span>Versiones corregidas</span><strong>54</strong></div>
+      <div class="kpi"><span>Evidencias</span><strong>211</strong></div>
+    </section>
+
+    <div id="feedback" class="feedback"></div>
+
+    <section class="card">
+      <div class="section-title"><div><h2>Filtros del repositorio</h2><p>Busque archivos por período, compañía, tipo, versión o estado.</p></div><button class="btn btn-primary" id="btnBuscar">Buscar archivos</button></div>
+      <div class="grid grid-4">
+        <div class="field"><label>Año</label><select id="anio"><option>2026</option><option>2025</option><option>2024</option></select></div>
+        <div class="field"><label>Mes</label><select id="mes"><option>Mayo</option><option>Abril</option><option>Marzo</option><option>Febrero</option></select></div>
+        <div class="field"><label>Compañía</label><select id="compania"><option value="">Todas</option><option>Proquinal Costa Rica</option><option>Spradling Group</option><option>Calipso Colombia</option></select></div>
+        <div class="field"><label>Tipo archivo</label><select id="tipo"><option value="">Todos</option><option value="recibido">Recibido</option><option value="corregido">Corregido</option><option value="reporte">Reporte final</option><option value="evidencia">Evidencia</option></select></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btnLimpiar">Limpiar</button>
+        <button class="btn btn-outline" id="btnCrearCarpeta">Crear estructura mensual</button>
+        <button class="btn btn-success" id="btnExportar">Exportar índice</button>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div>
+        <div class="card">
+          <div class="section-title"><div><h2>Archivos del repositorio</h2><p>Documentos almacenados para trazabilidad del cierre ICP.</p></div><span class="badge blue" id="badgeResultados">6 archivos</span></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Archivo</th><th>Compañía</th><th>Tipo</th><th>Versión</th><th>Ruta</th><th>Estado</th><th>Acción</th></tr></thead>
+              <tbody id="tablaArchivos">
+                <tr data-tipo="recibido"><td><strong>ICP_Proquinal_CR_2026_05.xlsx</strong></td><td>Proquinal Costa Rica</td><td>Recibido</td><td>V1</td><td>/ICP/2026/Mayo/Proquinal Costa Rica/Recibidos/V1</td><td><span class="badge green">Disponible</span></td><td><button class="mini-btn" onclick="abrirDetalle('ICP_Proquinal_CR_2026_05.xlsx','Recibido','V1')">Ver</button></td></tr>
+                <tr data-tipo="corregido"><td><strong>ICP_Spradling_2026_05_V2.xlsx</strong></td><td>Spradling Group</td><td>Corregido</td><td>V2</td><td>/ICP/2026/Mayo/Spradling/Corregidos/V2</td><td><span class="badge green">Disponible</span></td><td><button class="mini-btn" onclick="abrirDetalle('ICP_Spradling_2026_05_V2.xlsx','Corregido','V2')">Ver</button></td></tr>
+                <tr data-tipo="reporte"><td><strong>Reporte_Final_ICP_Mayo_2026.xlsx</strong></td><td>Todas</td><td>Reporte final</td><td>Final</td><td>/ICP/2026/Mayo/Reportes/Final</td><td><span class="badge blue">Final</span></td><td><button class="mini-btn" onclick="abrirDetalle('Reporte_Final_ICP_Mayo_2026.xlsx','Reporte final','Final')">Ver</button></td></tr>
+                <tr data-tipo="evidencia"><td><strong>Evidencia_Aprobacion_APR-ICP-005.pdf</strong></td><td>Todas</td><td>Evidencia</td><td>Única</td><td>/ICP/2026/Mayo/Evidencias/Aprobaciones</td><td><span class="badge gray">Archivado</span></td><td><button class="mini-btn" onclick="abrirDetalle('Evidencia_Aprobacion_APR-ICP-005.pdf','Evidencia','Única')">Ver</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title"><div><h2>Carpetas recientes</h2><p>Estructura creada automáticamente por el bot.</p></div></div>
+          <div class="folder-list">
+            <div class="folder"><div class="folder-icon">📁</div><div><strong>/ICP/2026/Mayo/Recibidos</strong><span>Archivos ICP originales por compañía</span></div><span class="badge green">Activo</span></div>
+            <div class="folder"><div class="folder-icon">📁</div><div><strong>/ICP/2026/Mayo/Corregidos</strong><span>Versiones corregidas y reprocesadas</span></div><span class="badge yellow">En uso</span></div>
+            <div class="folder"><div class="folder-icon">📁</div><div><strong>/ICP/2026/Mayo/Reportes</strong><span>Reportes de diferencias y reporte final</span></div><span class="badge blue">Final</span></div>
+          </div>
+        </div>
+      </div>
+
+      <aside>
+        <div class="card">
+          <div class="section-title"><div><h2>Estructura SharePoint</h2><p>Modelo recomendado.</p></div></div>
+          <div class="tree">
+            <strong>/ICP</strong><br>
+            └── 2026<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;└── Mayo<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── Compañía<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── Recibidos<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── Corregidos<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── Observados<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── Diferencias<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── Reportes<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── Evidencias
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title"><div><h2>Reglas de archivo</h2><p>Controles del repositorio.</p></div></div>
+          <div class="folder-list">
+            <div class="folder"><div class="folder-icon">✓</div><div><strong>Versionado</strong><span>Cada reenvío debe conservar relación con el archivo original.</span></div></div>
+            <div class="folder"><div class="folder-icon">✓</div><div><strong>Evidencia</strong><span>Correos, aprobaciones y reportes deben archivarse.</span></div></div>
+            <div class="folder"><div class="folder-icon">!</div><div><strong>No modificar originales</strong><span>El bot genera salidas, pero no altera archivos fuente.</span></div></div>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+
+<div class="modal-backdrop" id="modalDetalle">
+  <div class="modal">
+    <div class="modal-header">
+      <div><h3 id="modalTitulo">Detalle de archivo</h3><p>Información de ubicación, versión y trazabilidad.</p></div>
+      <button class="close" onclick="cerrarDetalle()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="grid grid-2">
+        <div class="field"><label>Archivo</label><input id="modalArchivo" readonly></div>
+        <div class="field"><label>Tipo</label><input id="modalTipo" readonly></div>
+        <div class="field"><label>Versión</label><input id="modalVersion" readonly></div>
+        <div class="field"><label>Ruta</label><input value="/ICP/2026/Mayo/Compañía/Tipo/Versión" readonly></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary">Abrir en SharePoint</button>
+        <button class="btn btn-outline">Descargar</button>
+        <button class="btn btn-secondary" onclick="cerrarDetalle()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const feedback=document.getElementById("feedback");
+  const modal=document.getElementById("modalDetalle");
+  function msg(tipo,texto){feedback.className="feedback visible "+tipo;feedback.textContent=texto;setTimeout(()=>feedback.className="feedback",3200)}
+  document.getElementById("btnBuscar").onclick=()=>{
+    const tipo=document.getElementById("tipo").value;let visibles=0;
+    document.querySelectorAll("#tablaArchivos tr").forEach(row=>{
+      const ok=!tipo||row.dataset.tipo===tipo;row.style.display=ok?"":"none";if(ok)visibles++;
+    });
+    document.getElementById("badgeResultados").textContent=visibles+" archivos";
+    msg("success","Búsqueda ejecutada correctamente.");
+  };
+  document.getElementById("btnLimpiar").onclick=()=>{
+    document.getElementById("tipo").value="";document.getElementById("compania").value="";
+    document.querySelectorAll("#tablaArchivos tr").forEach(row=>row.style.display="");
+    document.getElementById("badgeResultados").textContent="6 archivos";
+    msg("warning","Filtros limpiados.");
+  };
+  document.getElementById("btnCrearCarpeta").onclick=()=>msg("success","Estructura mensual creada correctamente.");
+  document.getElementById("btnExportar").onclick=()=>msg("success","Índice del repositorio exportado correctamente.");
+  function abrirDetalle(archivo,tipo,version){
+    document.getElementById("modalTitulo").textContent="Detalle "+archivo;
+    document.getElementById("modalArchivo").value=archivo;
+    document.getElementById("modalTipo").value=tipo;
+    document.getElementById("modalVersion").value=version;
+    modal.classList.add("visible");
+  }
+  function cerrarDetalle(){modal.classList.remove("visible")}
+  modal.addEventListener("click",e=>{if(e.target===modal)cerrarDetalle()});
+</script>
+</body>
+</html>

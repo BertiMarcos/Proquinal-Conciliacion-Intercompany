@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Diferencias ICP - PROQUINAL</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Inter,Arial,sans-serif;background:#f3f6fa;color:#1f2937;min-height:100vh}
+    .app{display:grid;grid-template-columns:270px 1fr;min-height:100vh}
+    .sidebar{background:linear-gradient(180deg,#071f3f,#0b3f75);color:#fff;padding:28px 22px;display:flex;flex-direction:column;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:34px}
+    .brand-mark{width:42px;height:42px;border-radius:14px;background:#fff;color:#0b3f75;display:grid;place-items:center;font-weight:900;font-size:20px}
+    .brand strong{display:block;font-size:17px;letter-spacing:.5px}
+    .brand span{font-size:12px;color:#bfdbfe}
+    .nav{display:grid;gap:8px}
+    .nav a{color:#dbeafe;text-decoration:none;padding:13px 14px;border-radius:14px;font-size:14px;font-weight:700;transition:.2s;display:flex;gap:10px;align-items:center}
+    .nav a.active,.nav a:hover{background:rgba(255,255,255,.14);color:#fff}
+    .sidebar-footer{background:rgba(255,255,255,.1);border-radius:18px;padding:16px;color:#dbeafe;font-size:13px;line-height:1.5}
+    .main{padding:30px}
+    .topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:24px}
+    .page-title h1{color:#071f3f;font-size:30px;margin-bottom:8px}
+    .page-title p{color:#64748b;font-size:15px;line-height:1.5;max-width:900px}
+    .status-badge{background:#fffbeb;color:#92400e;border:1px solid #fde68a;padding:10px 14px;border-radius:999px;font-size:13px;font-weight:900;white-space:nowrap}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:24px;padding:24px;box-shadow:0 10px 30px rgba(15,23,42,.05);margin-bottom:24px}
+    .layout{display:grid;grid-template-columns:1.25fr .75fr;gap:24px;align-items:start}
+    .section-title{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:20px}
+    .section-title h2{color:#071f3f;font-size:21px;margin-bottom:5px}
+    .section-title p{color:#64748b;font-size:13px;line-height:1.5}
+    .grid{display:grid;gap:16px}
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    .grid-4{grid-template-columns:repeat(4,1fr)}
+    .field label{display:block;font-size:13px;font-weight:900;color:#374151;margin-bottom:8px}
+    .field input,.field select,.field textarea{width:100%;border:1px solid #d1d5db;border-radius:14px;padding:0 14px;height:46px;outline:none;font-size:14px;background:#fff;color:#1f2937;transition:.2s}
+    .field textarea{height:90px;padding-top:12px;resize:vertical}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:#0b4f8a;box-shadow:0 0 0 4px rgba(11,79,138,.1)}
+    .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:24px}
+    .kpi{background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:18px;box-shadow:0 10px 26px rgba(15,23,42,.045)}
+    .kpi span{display:block;font-size:12px;font-weight:900;color:#64748b;margin-bottom:8px}
+    .kpi strong{color:#071f3f;font-size:26px}
+    .badge{display:inline-flex;align-items:center;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;white-space:nowrap}
+    .badge.green{background:#ecfdf5;color:#166534}
+    .badge.yellow{background:#fffbeb;color:#92400e}
+    .badge.orange{background:#fff7ed;color:#9a3412}
+    .badge.red{background:#fef2f2;color:#991b1b}
+    .badge.blue{background:#e8f2ff;color:#0b4f8a}
+    .badge.gray{background:#f1f5f9;color:#475569}
+    .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+    .btn{border:none;border-radius:14px;height:46px;padding:0 18px;font-weight:900;cursor:pointer;transition:.2s;font-size:14px}
+    .btn:hover:not(:disabled){transform:translateY(-1px)}
+    .btn:disabled{cursor:not-allowed;opacity:.6}
+    .btn-primary{background:linear-gradient(135deg,#0b4f8a,#0d6fb8);color:#fff;box-shadow:0 10px 22px rgba(11,79,138,.18)}
+    .btn-secondary{background:#eef2f7;color:#334155}
+    .btn-success{background:#16a34a;color:#fff}
+    .btn-danger{background:#dc2626;color:#fff}
+    .btn-outline{background:#fff;color:#0b4f8a;border:1px solid #bfdbfe}
+    .table-wrap{overflow-x:auto}
+    table{width:100%;min-width:980px;border-collapse:collapse}
+    th{text-align:left;background:#f8fafc;color:#64748b;padding:13px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #e5e7eb}
+    td{padding:14px 13px;border-bottom:1px solid #edf2f7;color:#374151;font-size:14px;vertical-align:middle}
+    td strong{color:#111827}
+    .mini-btn{border:1px solid #dbeafe;background:#fff;color:#0b4f8a;border-radius:10px;padding:8px 10px;font-size:12px;font-weight:900;cursor:pointer}
+    .check{width:16px;height:16px;accent-color:#0b4f8a}
+    .rule-list{display:grid;gap:14px}
+    .rule{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:flex-start;border:1px solid #e5e7eb;border-radius:17px;padding:14px;background:#fff}
+    .rule-icon{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;font-weight:900;background:#e8f2ff;color:#0b4f8a}
+    .rule.green .rule-icon{background:#dcfce7;color:#166534}
+    .rule.yellow .rule-icon{background:#fef3c7;color:#92400e}
+    .rule.orange .rule-icon{background:#ffedd5;color:#9a3412}
+    .rule.red .rule-icon{background:#fee2e2;color:#991b1b}
+    .rule strong{display:block;color:#111827;font-size:14px;margin-bottom:5px}
+    .rule span{color:#64748b;font-size:13px;line-height:1.5}
+    .workflow{display:grid;gap:10px}
+    .flow-step{display:flex;align-items:center;gap:10px}
+    .flow-dot{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#e8f2ff;color:#0b4f8a;font-weight:900;font-size:12px}
+    .flow-step.active .flow-dot{background:#ffedd5;color:#9a3412}
+    .flow-step.done .flow-dot{background:#dcfce7;color:#166534}
+    .flow-text{font-size:13px;font-weight:900;color:#334155}
+    .feedback{display:none;border-radius:16px;padding:14px 16px;font-size:14px;font-weight:800;line-height:1.5;margin-bottom:18px}
+    .feedback.visible{display:block}
+    .feedback.success{background:#ecfdf5;color:#166534;border:1px solid #bbf7d0}
+    .feedback.error{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+    .feedback.warning{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+    .modal-backdrop{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(15,23,42,.45);z-index:30}
+    .modal-backdrop.visible{display:flex}
+    .modal{width:100%;max-width:860px;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 28px 80px rgba(15,23,42,.32)}
+    .modal-header{padding:24px;background:linear-gradient(135deg,#071f3f,#0b4f8a);color:#fff;display:flex;justify-content:space-between;gap:16px}
+    .modal-header h3{font-size:22px;margin-bottom:6px}
+    .modal-header p{color:#dbeafe;font-size:14px}
+    .close{width:38px;height:38px;border:none;border-radius:12px;background:rgba(255,255,255,.16);color:#fff;cursor:pointer;font-size:20px}
+    .modal-body{padding:24px}
+    @media(max-width:1200px){.app{grid-template-columns:1fr}.sidebar{display:none}.layout{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:760px){.main{padding:18px}.topbar,.section-title{flex-direction:column;align-items:stretch}.grid-2,.grid-3,.grid-4,.kpis{grid-template-columns:1fr}.btn-row{flex-direction:column}.btn{width:100%}.status-badge{width:fit-content}}
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar">
+    <div>
+      <div class="brand">
+        <div class="brand-mark">P</div>
+        <div>
+          <strong>PROQUINAL</strong>
+          <span>Agente Intercompany</span>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="dashboard_intercompany.html">▣ Dashboard</a>
+        <a href="recepcion_plantillas_icp.html">▤ Recepción ICP</a>
+        <a href="validacion_archivo_icp.html">▧ Validación archivo</a>
+        <a href="parametros_tipo_cambio.html">▨ Tipo de cambio</a>
+        <a href="conciliacion_automatica.html">▦ Conciliación</a>
+        <a href="gestion_diferencias_icp.html" class="active">⚠ Diferencias</a>
+        <a href="aprobacion_conciliacion_icp.html">✓ Aprobaciones</a>
+        <a href="repositorio_historico_icp.html">▥ Repositorio</a>
+        <a href="#">☰ Bitácora</a>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer">
+      Gestión funcional de diferencias detectadas por el robot antes de notificar o cerrar el proceso.
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="page-title">
+        <h1>Gestión de Diferencias ICP</h1>
+        <p>
+          Clasifique, asigne responsables y gestione las diferencias detectadas durante la conciliación automática entre compañías.
+        </p>
+      </div>
+      <div class="status-badge" id="estadoGeneral">● Diferencias pendientes</div>
+    </header>
+
+    <section class="kpis">
+      <div class="kpi">
+        <span>Diferencias detectadas</span>
+        <strong id="kpiDetectadas">18</strong>
+      </div>
+      <div class="kpi">
+        <span>Críticas</span>
+        <strong id="kpiCriticas">5</strong>
+      </div>
+      <div class="kpi">
+        <span>Pendientes respuesta</span>
+        <strong id="kpiPendientes">7</strong>
+      </div>
+      <div class="kpi">
+        <span>Cerradas</span>
+        <strong id="kpiCerradas">6</strong>
+      </div>
+      <div class="kpi">
+        <span>% conciliado</span>
+        <strong id="kpiPorcentaje">72%</strong>
+      </div>
+    </section>
+
+    <div id="feedback" class="feedback"></div>
+
+    <section class="card">
+      <div class="section-title">
+        <div>
+          <h2>Filtros de búsqueda</h2>
+          <p>Filtre las diferencias por período, compañía, motivo, severidad o estado de gestión.</p>
+        </div>
+        <button class="btn btn-primary" id="btnReporte">Generar reporte de diferencias</button>
+      </div>
+
+      <div class="grid grid-4">
+        <div class="field">
+          <label for="periodo">Período</label>
+          <input type="month" id="periodo" value="2026-05">
+        </div>
+
+        <div class="field">
+          <label for="compania">Compañía origen</label>
+          <select id="compania">
+            <option value="">Todas</option>
+            <option>Proquinal Colombia</option>
+            <option>Proquinal Costa Rica</option>
+            <option>Spradling Group</option>
+            <option>Calipso Colombia</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="motivo">Motivo</label>
+          <select id="motivo">
+            <option value="">Todos</option>
+            <option value="monto">Monto distinto</option>
+            <option value="faltante">Factura faltante</option>
+            <option value="cuenta">Cuenta distinta</option>
+            <option value="moneda">Moneda distinta</option>
+            <option value="periodo">Período distinto</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="estado">Estado</label>
+          <select id="estado">
+            <option value="">Todos</option>
+            <option value="pendiente">Pendiente análisis</option>
+            <option value="respuesta">Esperando respuesta</option>
+            <option value="critico">Crítico</option>
+            <option value="cerrado">Cerrado</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btnFiltrar">Aplicar filtros</button>
+        <button class="btn btn-secondary" id="btnLimpiar">Limpiar filtros</button>
+        <button class="btn btn-outline" id="btnAsignar">Asignar responsable</button>
+        <button class="btn btn-outline" id="btnCorreo">Enviar correo</button>
+        <button class="btn btn-success" id="btnCerrarSeleccionadas">Cerrar seleccionadas</button>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div>
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Diferencias detectadas</h2>
+              <p>Listado de registros no conciliados o con inconsistencias detectadas por el robot.</p>
+            </div>
+            <span class="badge yellow" id="badgeTabla">18 pendientes</span>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" class="check" id="checkAll"></th>
+                  <th>Referencia</th>
+                  <th>Motivo</th>
+                  <th>Compañía</th>
+                  <th>Contraparte</th>
+                  <th>Diferencia</th>
+                  <th>Severidad</th>
+                  <th>Estado</th>
+                  <th>Responsable</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="tablaDiferencias">
+                <tr data-estado="pendiente" data-motivo="monto">
+                  <td><input type="checkbox" class="check fila-check"></td>
+                  <td><strong>FAC-ICP-000188</strong></td>
+                  <td>Monto distinto</td>
+                  <td>Proquinal Colombia</td>
+                  <td>Spradling Group</td>
+                  <td>USD 150.00</td>
+                  <td><span class="badge yellow">Media</span></td>
+                  <td><span class="badge yellow">Pendiente análisis</span></td>
+                  <td>Sin asignar</td>
+                  <td><button class="mini-btn" onclick="abrirDetalle('FAC-ICP-000188','Monto distinto','USD 150.00','Pendiente análisis','La referencia coincide, pero existe diferencia entre los montos reportados.')">Ver</button></td>
+                </tr>
+
+                <tr data-estado="critico" data-motivo="faltante">
+                  <td><input type="checkbox" class="check fila-check"></td>
+                  <td><strong>FAC-ICP-000203</strong></td>
+                  <td>Factura faltante</td>
+                  <td>Calipso Colombia</td>
+                  <td>Proquinal Costa Rica</td>
+                  <td>COP 3,400,000.00</td>
+                  <td><span class="badge red">Alta</span></td>
+                  <td><span class="badge red">Crítico</span></td>
+                  <td>Analista ICP</td>
+                  <td><button class="mini-btn" onclick="abrirDetalle('FAC-ICP-000203','Factura faltante','COP 3,400,000.00','Crítico','La operación existe en una compañía, pero no fue reportada por la contraparte.')">Ver</button></td>
+                </tr>
+
+                <tr data-estado="respuesta" data-motivo="cuenta">
+                  <td><input type="checkbox" class="check fila-check"></td>
+                  <td><strong>FAC-ICP-000301</strong></td>
+                  <td>Cuenta distinta</td>
+                  <td>Spradling Group</td>
+                  <td>Calipso Colombia</td>
+                  <td>USD 0.00</td>
+                  <td><span class="badge orange">Media</span></td>
+                  <td><span class="badge orange">Esperando respuesta</span></td>
+                  <td>Contabilidad</td>
+                  <td><button class="mini-btn" onclick="abrirDetalle('FAC-ICP-000301','Cuenta distinta','USD 0.00','Esperando respuesta','El monto coincide, pero la cuenta contable informada es diferente.')">Ver</button></td>
+                </tr>
+
+                <tr data-estado="pendiente" data-motivo="moneda">
+                  <td><input type="checkbox" class="check fila-check"></td>
+                  <td><strong>FAC-ICP-000332</strong></td>
+                  <td>Moneda distinta</td>
+                  <td>Proquinal Costa Rica</td>
+                  <td>Proquinal Colombia</td>
+                  <td>USD 920.00</td>
+                  <td><span class="badge yellow">Media</span></td>
+                  <td><span class="badge yellow">Pendiente análisis</span></td>
+                  <td>Sin asignar</td>
+                  <td><button class="mini-btn" onclick="abrirDetalle('FAC-ICP-000332','Moneda distinta','USD 920.00','Pendiente análisis','La transacción fue reportada con moneda distinta entre compañías.')">Ver</button></td>
+                </tr>
+
+                <tr data-estado="cerrado" data-motivo="periodo">
+                  <td><input type="checkbox" class="check fila-check"></td>
+                  <td><strong>FAC-ICP-000410</strong></td>
+                  <td>Período distinto</td>
+                  <td>Calipso Colombia</td>
+                  <td>Spradling Group</td>
+                  <td>USD 0.00</td>
+                  <td><span class="badge green">Baja</span></td>
+                  <td><span class="badge green">Cerrado</span></td>
+                  <td>Analista ICP</td>
+                  <td><button class="mini-btn" onclick="abrirDetalle('FAC-ICP-000410','Período distinto','USD 0.00','Cerrado','La diferencia fue revisada y cerrada por negocio.')">Ver</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <aside>
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Workflow de gestión</h2>
+              <p>Estado esperado de resolución.</p>
+            </div>
+          </div>
+
+          <div class="workflow">
+            <div class="flow-step done"><div class="flow-dot">1</div><div class="flow-text">Detectada por robot</div></div>
+            <div class="flow-step active"><div class="flow-dot">2</div><div class="flow-text">Clasificada</div></div>
+            <div class="flow-step active"><div class="flow-dot">3</div><div class="flow-text">Asignada a responsable</div></div>
+            <div class="flow-step"><div class="flow-dot">4</div><div class="flow-text">Respuesta recibida</div></div>
+            <div class="flow-step"><div class="flow-dot">5</div><div class="flow-text">Validada por negocio</div></div>
+            <div class="flow-step"><div class="flow-dot">6</div><div class="flow-text">Cerrada</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Top motivos</h2>
+              <p>Principales causas detectadas.</p>
+            </div>
+          </div>
+
+          <div class="rule-list">
+            <div class="rule yellow">
+              <div class="rule-icon">1</div>
+              <div>
+                <strong>Monto distinto</strong>
+                <span>Referencia coincidente con diferencia de valor.</span>
+              </div>
+            </div>
+            <div class="rule red">
+              <div class="rule-icon">2</div>
+              <div>
+                <strong>Factura faltante</strong>
+                <span>Registro no reportado por la contraparte.</span>
+              </div>
+            </div>
+            <div class="rule orange">
+              <div class="rule-icon">3</div>
+              <div>
+                <strong>Cuenta distinta</strong>
+                <span>Factura coincide, pero cuenta contable difiere.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Top compañías</h2>
+              <p>Compañías con mayor cantidad de diferencias.</p>
+            </div>
+          </div>
+
+          <div class="rule-list">
+            <div class="rule">
+              <div class="rule-icon">7</div>
+              <div>
+                <strong>Spradling Group</strong>
+                <span>Mayor concentración de diferencias de monto.</span>
+              </div>
+            </div>
+            <div class="rule">
+              <div class="rule-icon">5</div>
+              <div>
+                <strong>Proquinal Costa Rica</strong>
+                <span>Casos pendientes de respuesta.</span>
+              </div>
+            </div>
+            <div class="rule">
+              <div class="rule-icon">4</div>
+              <div>
+                <strong>Calipso Colombia</strong>
+                <span>Casos asociados a cuenta y período.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+
+<div class="modal-backdrop" id="modalDetalle">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h3 id="modalTitulo">Detalle de diferencia</h3>
+        <p>Clasificación, responsable, observaciones y acción sugerida.</p>
+      </div>
+      <button class="close" onclick="cerrarDetalle()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="grid grid-2">
+        <div class="field">
+          <label>Referencia</label>
+          <input type="text" id="modalReferencia" readonly>
+        </div>
+
+        <div class="field">
+          <label>Estado actual</label>
+          <input type="text" id="modalEstado" readonly>
+        </div>
+
+        <div class="field">
+          <label>Motivo de diferencia</label>
+          <select id="modalMotivo">
+            <option>Monto distinto</option>
+            <option>Factura faltante</option>
+            <option>Fecha distinta</option>
+            <option>Cuenta distinta</option>
+            <option>Moneda distinta</option>
+            <option>Tipo cambio</option>
+            <option>IFRS16</option>
+            <option>Préstamo</option>
+            <option>Intereses</option>
+            <option>Dividendos</option>
+            <option>Error carga manual</option>
+            <option>Otro</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Diferencia</label>
+          <input type="text" id="modalDiferencia" readonly>
+        </div>
+
+        <div class="field">
+          <label>Responsable</label>
+          <select id="modalResponsable">
+            <option>Sin asignar</option>
+            <option>Analista ICP</option>
+            <option>Contabilidad</option>
+            <option>Compañía origen</option>
+            <option>Compañía contraparte</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Acción requerida</label>
+          <select id="modalAccion">
+            <option>Solicitar aclaración</option>
+            <option>Enviar correo</option>
+            <option>Generar ticket</option>
+            <option>Marcar resuelta</option>
+            <option>Cerrar diferencia</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:16px;">
+        <label>Comentario del robot</label>
+        <textarea id="modalComentario" readonly></textarea>
+      </div>
+
+      <div class="field" style="margin-top:16px;">
+        <label>Comentario funcional</label>
+        <textarea id="comentarioFuncional" placeholder="Ingrese análisis, respuesta recibida o justificación de cierre."></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btnGuardarDetalle">Guardar gestión</button>
+        <button class="btn btn-outline">Solicitar aclaración</button>
+        <button class="btn btn-success">Marcar resuelta</button>
+        <button class="btn btn-secondary" onclick="cerrarDetalle()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const feedback = document.getElementById("feedback");
+  const estado = document.getElementById("estado");
+  const motivo = document.getElementById("motivo");
+  const tabla = document.getElementById("tablaDiferencias");
+  const modalDetalle = document.getElementById("modalDetalle");
+  const checkAll = document.getElementById("checkAll");
+
+  function mostrarFeedback(tipo, mensaje) {
+    feedback.className = "feedback visible " + tipo;
+    feedback.textContent = mensaje;
+    setTimeout(() => {
+      feedback.className = "feedback";
+      feedback.textContent = "";
+    }, 3500);
+  }
+
+  function aplicarFiltros() {
+    const estadoFiltro = estado.value;
+    const motivoFiltro = motivo.value;
+    let visibles = 0;
+
+    document.querySelectorAll("#tablaDiferencias tr").forEach(row => {
+      const coincideEstado = !estadoFiltro || row.dataset.estado === estadoFiltro;
+      const coincideMotivo = !motivoFiltro || row.dataset.motivo === motivoFiltro;
+
+      if (coincideEstado && coincideMotivo) {
+        row.style.display = "";
+        visibles++;
+      } else {
+        row.style.display = "none";
+      }
+    });
+
+    document.getElementById("badgeTabla").textContent = visibles + " visibles";
+    mostrarFeedback("success", "Filtros aplicados correctamente.");
+  }
+
+  function limpiarFiltros() {
+    estado.value = "";
+    motivo.value = "";
+    document.getElementById("compania").value = "";
+    document.querySelectorAll("#tablaDiferencias tr").forEach(row => row.style.display = "");
+    document.getElementById("badgeTabla").textContent = "18 pendientes";
+    mostrarFeedback("warning", "Filtros restablecidos.");
+  }
+
+  function seleccionadas() {
+    return Array.from(document.querySelectorAll(".fila-check")).filter(c => c.checked);
+  }
+
+  function accionMasiva(tipo) {
+    const total = seleccionadas().length;
+
+    if (total === 0) {
+      mostrarFeedback("error", "Debe seleccionar al menos una diferencia.");
+      return;
+    }
+
+    if (tipo === "asignar") mostrarFeedback("success", total + " diferencia(s) asignadas a responsable.");
+    if (tipo === "correo") mostrarFeedback("success", total + " diferencia(s) preparadas para envío de correo.");
+    if (tipo === "cerrar") mostrarFeedback("success", total + " diferencia(s) cerradas correctamente.");
+  }
+
+  function abrirDetalle(referencia, motivo, diferencia, estado, comentario) {
+    document.getElementById("modalTitulo").textContent = "Detalle " + referencia;
+    document.getElementById("modalReferencia").value = referencia;
+    document.getElementById("modalMotivo").value = motivo;
+    document.getElementById("modalDiferencia").value = diferencia;
+    document.getElementById("modalEstado").value = estado;
+    document.getElementById("modalComentario").value = comentario;
+    document.getElementById("comentarioFuncional").value = "";
+    modalDetalle.classList.add("visible");
+  }
+
+  function cerrarDetalle() {
+    modalDetalle.classList.remove("visible");
+  }
+
+  document.getElementById("btnFiltrar").addEventListener("click", aplicarFiltros);
+  document.getElementById("btnLimpiar").addEventListener("click", limpiarFiltros);
+  document.getElementById("btnAsignar").addEventListener("click", () => accionMasiva("asignar"));
+  document.getElementById("btnCorreo").addEventListener("click", () => accionMasiva("correo"));
+  document.getElementById("btnCerrarSeleccionadas").addEventListener("click", () => accionMasiva("cerrar"));
+
+  document.getElementById("btnReporte").addEventListener("click", () => {
+    mostrarFeedback("success", "Reporte de diferencias generado correctamente. Disponible para aprobación.");
+  });
+
+  document.getElementById("btnGuardarDetalle").addEventListener("click", () => {
+    const comentario = document.getElementById("comentarioFuncional").value.trim();
+
+    if (!comentario) {
+      mostrarFeedback("error", "Debe ingresar un comentario funcional antes de guardar la gestión.");
+      return;
+    }
+
+    cerrarDetalle();
+    mostrarFeedback("success", "Gestión de diferencia guardada correctamente.");
+  });
+
+  checkAll.addEventListener("change", () => {
+    document.querySelectorAll(".fila-check").forEach(c => c.checked = checkAll.checked);
+  });
+
+  modalDetalle.addEventListener("click", e => {
+    if (e.target === modalDetalle) cerrarDetalle();
+  });
+</script>
+
+</body>
+</html>

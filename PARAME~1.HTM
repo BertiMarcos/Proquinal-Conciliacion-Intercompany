@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parámetros Tipo de Cambio - PROQUINAL</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Inter,Arial,sans-serif;background:#f3f6fa;color:#1f2937;min-height:100vh}
+    .app{display:grid;grid-template-columns:270px 1fr;min-height:100vh}
+    .sidebar{background:linear-gradient(180deg,#071f3f,#0b3f75);color:#fff;padding:28px 22px;display:flex;flex-direction:column;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:34px}
+    .brand-mark{width:42px;height:42px;border-radius:14px;background:#fff;color:#0b3f75;display:grid;place-items:center;font-weight:900;font-size:20px}
+    .brand strong{display:block;font-size:17px;letter-spacing:.5px}
+    .brand span{font-size:12px;color:#bfdbfe}
+    .nav{display:grid;gap:8px}
+    .nav a{color:#dbeafe;text-decoration:none;padding:13px 14px;border-radius:14px;font-size:14px;font-weight:700;transition:.2s;display:flex;gap:10px;align-items:center}
+    .nav a.active,.nav a:hover{background:rgba(255,255,255,.14);color:#fff}
+    .sidebar-footer{background:rgba(255,255,255,.1);border-radius:18px;padding:16px;color:#dbeafe;font-size:13px;line-height:1.5}
+    .main{padding:30px}
+    .topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:24px}
+    .page-title h1{color:#071f3f;font-size:30px;margin-bottom:8px}
+    .page-title p{color:#64748b;font-size:15px;line-height:1.5;max-width:900px}
+    .status-badge{background:#e8f2ff;color:#0b4f8a;border:1px solid #bfdbfe;padding:10px 14px;border-radius:999px;font-size:13px;font-weight:900;white-space:nowrap}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:24px;padding:24px;box-shadow:0 10px 30px rgba(15,23,42,.05);margin-bottom:24px}
+    .layout{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:start}
+    .section-title{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:20px}
+    .section-title h2{color:#071f3f;font-size:21px;margin-bottom:5px}
+    .section-title p{color:#64748b;font-size:13px;line-height:1.5}
+    .grid{display:grid;gap:16px}
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    .field label{display:flex;justify-content:space-between;font-size:13px;font-weight:900;color:#374151;margin-bottom:8px}
+    .required{color:#dc2626}
+    .field input,.field select,.field textarea{width:100%;border:1px solid #d1d5db;border-radius:14px;padding:0 14px;height:46px;outline:none;font-size:14px;background:#fff;color:#1f2937;transition:.2s}
+    .field textarea{height:86px;padding-top:12px;resize:vertical}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:#0b4f8a;box-shadow:0 0 0 4px rgba(11,79,138,.1)}
+    .field input.error,.field select.error{border-color:#dc2626;box-shadow:0 0 0 4px rgba(220,38,38,.08)}
+    .hint{margin-top:7px;color:#64748b;font-size:12px;line-height:1.4}
+    .error-message{display:none;margin-top:7px;color:#dc2626;font-size:12px;font-weight:800}
+    .error-message.visible{display:block}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+    .kpi{background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:18px;box-shadow:0 10px 26px rgba(15,23,42,.045)}
+    .kpi span{display:block;font-size:12px;font-weight:900;color:#64748b;margin-bottom:8px}
+    .kpi strong{color:#071f3f;font-size:26px}
+    .badge{display:inline-flex;align-items:center;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;white-space:nowrap}
+    .badge.green{background:#ecfdf5;color:#166534}
+    .badge.yellow{background:#fffbeb;color:#92400e}
+    .badge.red{background:#fef2f2;color:#991b1b}
+    .badge.blue{background:#e8f2ff;color:#0b4f8a}
+    .badge.gray{background:#f1f5f9;color:#475569}
+    .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+    .btn{border:none;border-radius:14px;height:46px;padding:0 18px;font-weight:900;cursor:pointer;transition:.2s;font-size:14px}
+    .btn:hover:not(:disabled){transform:translateY(-1px)}
+    .btn:disabled{cursor:not-allowed;opacity:.6}
+    .btn-primary{background:linear-gradient(135deg,#0b4f8a,#0d6fb8);color:#fff;box-shadow:0 10px 22px rgba(11,79,138,.18)}
+    .btn-secondary{background:#eef2f7;color:#334155}
+    .btn-success{background:#16a34a;color:#fff}
+    .btn-danger{background:#dc2626;color:#fff}
+    .btn-outline{background:#fff;color:#0b4f8a;border:1px solid #bfdbfe}
+    .table-wrap{overflow-x:auto}
+    table{width:100%;min-width:820px;border-collapse:collapse}
+    th{text-align:left;background:#f8fafc;color:#64748b;padding:13px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #e5e7eb}
+    td{padding:14px 13px;border-bottom:1px solid #edf2f7;color:#374151;font-size:14px;vertical-align:middle}
+    td strong{color:#111827}
+    .mini-btn{border:1px solid #dbeafe;background:#fff;color:#0b4f8a;border-radius:10px;padding:8px 10px;font-size:12px;font-weight:900;cursor:pointer}
+    .rule-list{display:grid;gap:14px}
+    .rule{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:flex-start;border:1px solid #e5e7eb;border-radius:17px;padding:14px;background:#fff}
+    .rule-icon{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;font-weight:900;background:#e8f2ff;color:#0b4f8a}
+    .rule.green .rule-icon{background:#dcfce7;color:#166534}
+    .rule.yellow .rule-icon{background:#fef3c7;color:#92400e}
+    .rule.red .rule-icon{background:#fee2e2;color:#991b1b}
+    .rule strong{display:block;color:#111827;font-size:14px;margin-bottom:5px}
+    .rule span{color:#64748b;font-size:13px;line-height:1.5}
+    .feedback{display:none;border-radius:16px;padding:14px 16px;font-size:14px;font-weight:800;line-height:1.5;margin-bottom:18px}
+    .feedback.visible{display:block}
+    .feedback.success{background:#ecfdf5;color:#166534;border:1px solid #bbf7d0}
+    .feedback.error{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+    .feedback.warning{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+    .modal-backdrop{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(15,23,42,.45);z-index:30}
+    .modal-backdrop.visible{display:flex}
+    .modal{width:100%;max-width:720px;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 28px 80px rgba(15,23,42,.32)}
+    .modal-header{padding:24px;background:linear-gradient(135deg,#071f3f,#0b4f8a);color:#fff;display:flex;justify-content:space-between;gap:16px}
+    .modal-header h3{font-size:22px;margin-bottom:6px}
+    .modal-header p{color:#dbeafe;font-size:14px}
+    .close{width:38px;height:38px;border:none;border-radius:12px;background:rgba(255,255,255,.16);color:#fff;cursor:pointer;font-size:20px}
+    .modal-body{padding:24px}
+    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{display:none}.layout{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:760px){.main{padding:18px}.topbar,.section-title{flex-direction:column;align-items:stretch}.grid-2,.grid-3,.kpis{grid-template-columns:1fr}.btn-row{flex-direction:column}.btn{width:100%}.status-badge{width:fit-content}}
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar">
+    <div>
+      <div class="brand">
+        <div class="brand-mark">P</div>
+        <div>
+          <strong>PROQUINAL</strong>
+          <span>Agente Intercompany</span>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="dashboard_intercompany.html">▣ Dashboard</a>
+        <a href="recepcion_plantillas_icp.html">▤ Recepción ICP</a>
+        <a href="validacion_archivo_icp.html">▧ Validación archivo</a>
+        <a href="parametros_tipo_cambio.html" class="active">▨ Tipo de cambio</a>
+        <a href="conciliacion_automatica.html">▦ Conciliación</a>
+        <a href="gestion_diferencias_icp.html">⚠ Diferencias</a>
+        <a href="aprobacion_conciliacion_icp.html">✓ Aprobaciones</a>
+        <a href="repositorio_historico_icp.html">▥ Repositorio</a>
+        <a href="#">☰ Bitácora</a>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer">
+      Parametrización mensual de tasas Closing y Average para conversión de saldos y resultados.
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="page-title">
+        <h1>Parámetros de Tipo de Cambio</h1>
+        <p>
+          Carga, validación y aprobación de tasas de cambio utilizadas por el robot para convertir montos dentro del proceso de conciliación intercompany.
+        </p>
+      </div>
+      <div class="status-badge" id="estadoGeneral">● Parámetros en edición</div>
+    </header>
+
+    <section class="kpis">
+      <div class="kpi">
+        <span>Monedas configuradas</span>
+        <strong id="kpiMonedas">4</strong>
+      </div>
+      <div class="kpi">
+        <span>Tasas completas</span>
+        <strong id="kpiCompletas">3</strong>
+      </div>
+      <div class="kpi">
+        <span>Pendientes</span>
+        <strong id="kpiPendientes">1</strong>
+      </div>
+      <div class="kpi">
+        <span>Estado período</span>
+        <strong id="kpiEstado">Abierto</strong>
+      </div>
+    </section>
+
+    <div id="feedback" class="feedback"></div>
+
+    <section class="layout">
+      <div>
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Cargar tipo de cambio mensual</h2>
+              <p>Complete las tasas Closing y Average para el período a conciliar. Estos valores serán utilizados por el robot durante la normalización de datos.</p>
+            </div>
+            <span class="badge blue">Carga negocio</span>
+          </div>
+
+          <form id="formTipoCambio" novalidate>
+            <div class="grid grid-3">
+              <div class="field">
+                <label for="periodo">Período <span class="required">*</span></label>
+                <input type="month" id="periodo" value="2026-05">
+                <div class="error-message" id="errorPeriodo">Debe seleccionar período.</div>
+              </div>
+
+              <div class="field">
+                <label for="moneda">Moneda <span class="required">*</span></label>
+                <select id="moneda">
+                  <option value="">Seleccione moneda</option>
+                  <option value="COP">COP - Peso colombiano</option>
+                  <option value="CRC">CRC - Colón costarricense</option>
+                  <option value="MXN">MXN - Peso mexicano</option>
+                  <option value="USD">USD - Dólar estadounidense</option>
+                </select>
+                <div class="error-message" id="errorMoneda">Debe seleccionar moneda.</div>
+              </div>
+
+              <div class="field">
+                <label for="fuente">Fuente <span class="required">*</span></label>
+                <select id="fuente">
+                  <option value="">Seleccione fuente</option>
+                  <option>Archivo conciliación anterior</option>
+                  <option>Tabla informada por negocio</option>
+                  <option>Carga manual aprobada</option>
+                </select>
+                <div class="error-message" id="errorFuente">Debe seleccionar fuente.</div>
+              </div>
+
+              <div class="field">
+                <label for="closing">Closing <span class="required">*</span></label>
+                <input type="number" id="closing" step="0.0001" placeholder="Ej: 3890.5500">
+                <div class="hint">Se utiliza para cuentas de balance: activos y pasivos.</div>
+                <div class="error-message" id="errorClosing">Debe ingresar un valor mayor a cero.</div>
+              </div>
+
+              <div class="field">
+                <label for="average">Average <span class="required">*</span></label>
+                <input type="number" id="average" step="0.0001" placeholder="Ej: 3845.3200">
+                <div class="hint">Se utiliza para cuentas de resultado.</div>
+                <div class="error-message" id="errorAverage">Debe ingresar un valor mayor a cero.</div>
+              </div>
+
+              <div class="field">
+                <label for="estadoParametro">Estado</label>
+                <select id="estadoParametro">
+                  <option>Borrador</option>
+                  <option>Validado por negocio</option>
+                  <option>Aprobado para conciliación</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field" style="margin-top:16px;">
+              <label for="observaciones">Observaciones</label>
+              <textarea id="observaciones" placeholder="Ejemplo: tasa obtenida de archivo anterior, valor confirmado por negocio, ajuste manual autorizado, etc."></textarea>
+            </div>
+
+            <div class="btn-row">
+              <button type="submit" class="btn btn-primary">Guardar tasa</button>
+              <button type="button" class="btn btn-success" id="btnAprobar">Aprobar período</button>
+              <button type="button" class="btn btn-secondary" id="btnLimpiar">Limpiar</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Tipos de cambio registrados</h2>
+              <p>Listado de tasas disponibles para el período actual.</p>
+            </div>
+            <button class="btn btn-outline" id="btnExportar">Exportar tabla</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Período</th>
+                  <th>Moneda</th>
+                  <th>Closing</th>
+                  <th>Average</th>
+                  <th>Fuente</th>
+                  <th>Estado</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="tablaTasas">
+                <tr>
+                  <td>Mayo 2026</td>
+                  <td><strong>COP</strong></td>
+                  <td>3890.5500</td>
+                  <td>3845.3200</td>
+                  <td>Negocio</td>
+                  <td><span class="badge green">Aprobado</span></td>
+                  <td><button class="mini-btn" onclick="abrirDetalle('COP','3890.5500','3845.3200','Aprobado')">Ver</button></td>
+                </tr>
+                <tr>
+                  <td>Mayo 2026</td>
+                  <td><strong>CRC</strong></td>
+                  <td>514.2200</td>
+                  <td>512.8000</td>
+                  <td>Archivo anterior</td>
+                  <td><span class="badge green">Aprobado</span></td>
+                  <td><button class="mini-btn" onclick="abrirDetalle('CRC','514.2200','512.8000','Aprobado')">Ver</button></td>
+                </tr>
+                <tr>
+                  <td>Mayo 2026</td>
+                  <td><strong>MXN</strong></td>
+                  <td>18.4200</td>
+                  <td>18.2100</td>
+                  <td>Carga manual</td>
+                  <td><span class="badge yellow">Borrador</span></td>
+                  <td><button class="mini-btn" onclick="abrirDetalle('MXN','18.4200','18.2100','Borrador')">Ver</button></td>
+                </tr>
+                <tr>
+                  <td>Mayo 2026</td>
+                  <td><strong>USD</strong></td>
+                  <td>1.0000</td>
+                  <td>1.0000</td>
+                  <td>Base</td>
+                  <td><span class="badge blue">Referencia</span></td>
+                  <td><button class="mini-btn" onclick="abrirDetalle('USD','1.0000','1.0000','Referencia')">Ver</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <aside>
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Reglas de aplicación</h2>
+              <p>Uso del tipo de cambio según naturaleza contable.</p>
+            </div>
+          </div>
+
+          <div class="rule-list">
+            <div class="rule green">
+              <div class="rule-icon">C</div>
+              <div>
+                <strong>Closing</strong>
+                <span>Debe aplicarse a cuentas de balance, activos y pasivos. Ejemplo: cuentas por cobrar, cuentas por pagar, préstamos y saldos patrimoniales.</span>
+              </div>
+            </div>
+
+            <div class="rule green">
+              <div class="rule-icon">A</div>
+              <div>
+                <strong>Average</strong>
+                <span>Debe aplicarse a cuentas de resultado. Ejemplo: ventas, compras, gastos, costos, intereses y otros resultados del período.</span>
+              </div>
+            </div>
+
+            <div class="rule yellow">
+              <div class="rule-icon">!</div>
+              <div>
+                <strong>Tipo de cambio faltante</strong>
+                <span>Si falta una tasa requerida, el robot debe detener la conciliación y solicitar intervención del usuario funcional.</span>
+              </div>
+            </div>
+
+            <div class="rule red">
+              <div class="rule-icon">×</div>
+              <div>
+                <strong>Período cerrado</strong>
+                <span>Una vez aprobado el período, cualquier modificación debe quedar registrada como ajuste manual con observación.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Simulador de conversión</h2>
+              <p>Validación rápida del valor convertido.</p>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="field">
+              <label for="montoSimulado">Monto origen</label>
+              <input type="number" id="montoSimulado" placeholder="Ej: 1000">
+            </div>
+
+            <div class="field">
+              <label for="tipoSimulador">Tipo de cuenta</label>
+              <select id="tipoSimulador">
+                <option value="closing">Balance - Closing</option>
+                <option value="average">Resultado - Average</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="tasaSimulada">Tasa</label>
+              <input type="number" id="tasaSimulada" placeholder="Ej: 3890.55">
+            </div>
+
+            <button class="btn btn-primary" id="btnSimular">Calcular conversión</button>
+
+            <div class="rule blue" style="margin-top:4px;">
+              <div class="rule-icon">=</div>
+              <div>
+                <strong id="resultadoSimulador">Resultado pendiente</strong>
+                <span>Ingrese monto y tasa para simular conversión.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+
+<div class="modal-backdrop" id="modalDetalle">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h3 id="modalTitulo">Detalle de tasa</h3>
+        <p>Información registrada para auditoría y trazabilidad.</p>
+      </div>
+      <button class="close" onclick="cerrarDetalle()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="grid grid-2">
+        <div class="field">
+          <label>Moneda</label>
+          <input type="text" id="modalMoneda" readonly>
+        </div>
+        <div class="field">
+          <label>Estado</label>
+          <input type="text" id="modalEstado" readonly>
+        </div>
+        <div class="field">
+          <label>Closing</label>
+          <input type="text" id="modalClosing" readonly>
+        </div>
+        <div class="field">
+          <label>Average</label>
+          <input type="text" id="modalAverage" readonly>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:16px;">
+        <label>Observación</label>
+        <textarea readonly>Tipo de cambio registrado para ser utilizado por el robot durante la normalización y conciliación del período.</textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary">Editar tasa</button>
+        <button class="btn btn-secondary" onclick="cerrarDetalle()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById("formTipoCambio");
+  const periodo = document.getElementById("periodo");
+  const moneda = document.getElementById("moneda");
+  const fuente = document.getElementById("fuente");
+  const closing = document.getElementById("closing");
+  const average = document.getElementById("average");
+  const tablaTasas = document.getElementById("tablaTasas");
+  const feedback = document.getElementById("feedback");
+  const modalDetalle = document.getElementById("modalDetalle");
+
+  function mostrarFeedback(tipo, mensaje) {
+    feedback.className = "feedback visible " + tipo;
+    feedback.textContent = mensaje;
+    setTimeout(() => {
+      feedback.className = "feedback";
+      feedback.textContent = "";
+    }, 3500);
+  }
+
+  function validarCampo(campo, errorId, numerico = false) {
+    const error = document.getElementById(errorId);
+    const valor = campo.value.trim();
+
+    if (!valor || (numerico && Number(valor) <= 0)) {
+      campo.classList.add("error");
+      error.classList.add("visible");
+      return false;
+    }
+
+    campo.classList.remove("error");
+    error.classList.remove("visible");
+    return true;
+  }
+
+  function nombrePeriodo(valor) {
+    const meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+    const partes = valor.split("-");
+    return meses[Number(partes[1]) - 1] + " " + partes[0];
+  }
+
+  form.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const okPeriodo = validarCampo(periodo, "errorPeriodo");
+    const okMoneda = validarCampo(moneda, "errorMoneda");
+    const okFuente = validarCampo(fuente, "errorFuente");
+    const okClosing = validarCampo(closing, "errorClosing", true);
+    const okAverage = validarCampo(average, "errorAverage", true);
+
+    if (!okPeriodo || !okMoneda || !okFuente || !okClosing || !okAverage) {
+      mostrarFeedback("error", "Revise los campos obligatorios antes de guardar.");
+      return;
+    }
+
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${nombrePeriodo(periodo.value)}</td>
+      <td><strong>${moneda.value}</strong></td>
+      <td>${Number(closing.value).toFixed(4)}</td>
+      <td>${Number(average.value).toFixed(4)}</td>
+      <td>${fuente.value}</td>
+      <td><span class="badge yellow">Borrador</span></td>
+      <td><button class="mini-btn" onclick="abrirDetalle('${moneda.value}','${Number(closing.value).toFixed(4)}','${Number(average.value).toFixed(4)}','Borrador')">Ver</button></td>
+    `;
+    tablaTasas.prepend(row);
+
+    document.getElementById("kpiCompletas").textContent = "4";
+    document.getElementById("kpiPendientes").textContent = "0";
+
+    mostrarFeedback("success", "Tipo de cambio guardado correctamente en estado borrador.");
+  });
+
+  document.getElementById("btnAprobar").addEventListener("click", function() {
+    document.getElementById("estadoGeneral").textContent = "● Período aprobado";
+    document.getElementById("estadoGeneral").style.background = "#ecfdf5";
+    document.getElementById("estadoGeneral").style.color = "#166534";
+    document.getElementById("estadoGeneral").style.borderColor = "#bbf7d0";
+    document.getElementById("kpiEstado").textContent = "Aprobado";
+    mostrarFeedback("success", "Período aprobado para conciliación. El robot ya puede utilizar estas tasas.");
+  });
+
+  document.getElementById("btnLimpiar").addEventListener("click", function() {
+    form.reset();
+    periodo.value = "2026-05";
+    document.querySelectorAll(".error").forEach(e => e.classList.remove("error"));
+    document.querySelectorAll(".error-message").forEach(e => e.classList.remove("visible"));
+    mostrarFeedback("warning", "Formulario limpiado.");
+  });
+
+  document.getElementById("btnExportar").addEventListener("click", function() {
+    mostrarFeedback("success", "Exportación simulada generada correctamente.");
+  });
+
+  document.getElementById("btnSimular").addEventListener("click", function() {
+    const monto = Number(document.getElementById("montoSimulado").value);
+    const tasa = Number(document.getElementById("tasaSimulada").value);
+    const tipo = document.getElementById("tipoSimulador").value;
+    const resultado = document.getElementById("resultadoSimulador");
+
+    if (!monto || !tasa || monto <= 0 || tasa <= 0) {
+      resultado.textContent = "Ingrese monto y tasa válidos";
+      mostrarFeedback("error", "Para simular, el monto y la tasa deben ser mayores a cero.");
+      return;
+    }
+
+    const convertido = monto * tasa;
+    resultado.textContent = "Resultado: " + convertido.toLocaleString("es-ES", {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " | " + (tipo === "closing" ? "Closing" : "Average");
+  });
+
+  function abrirDetalle(moneda, closing, average, estado) {
+    document.getElementById("modalTitulo").textContent = "Detalle de tasa " + moneda;
+    document.getElementById("modalMoneda").value = moneda;
+    document.getElementById("modalClosing").value = closing;
+    document.getElementById("modalAverage").value = average;
+    document.getElementById("modalEstado").value = estado;
+    modalDetalle.classList.add("visible");
+  }
+
+  function cerrarDetalle() {
+    modalDetalle.classList.remove("visible");
+  }
+
+  modalDetalle.addEventListener("click", function(e) {
+    if (e.target === modalDetalle) cerrarDetalle();
+  });
+</script>
+
+</body>
+</html>

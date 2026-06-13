@@ -629,7 +629,7 @@
         </div>
 
         <nav class="nav">
-          <a href="#" class="active">▣ Dashboard</a>
+          <a href="dashboard_intercompany.html" class="active">▣ Dashboard</a>
           <a href="recepcion_plantillas_icp.html">▤ Recepción de archivos</a>
           <a href="#">▧ Compañía vendedora</a>
           <a href="#">▨ Compañía compradora</a>
@@ -979,7 +979,9 @@
       modalDetalle.classList.remove("visible");
     }
 
-    document.getElementById("btnNueva").addEventListener("click", () => { window.location.href = "recepcion_plantillas_icp.html"; });
+    document.getElementById("btnNueva").addEventListener("click", () => {
+      mostrarFeedback("success", "Acción simulada: se iniciaría el alta de una nueva conciliación.");
+    });
 
     btnFiltrar.addEventListener("click", aplicarFiltros);
     btnLimpiar.addEventListener("click", limpiarFiltros);
