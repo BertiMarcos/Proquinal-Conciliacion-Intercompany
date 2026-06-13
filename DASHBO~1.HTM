@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard PROQUINAL - Conciliación Intercompany</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Inter, Arial, sans-serif;
+      background: #f3f6fa;
+      color: #1f2937;
+      min-height: 100vh;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      background: linear-gradient(180deg, #071f3f, #0b3f75);
+      color: #ffffff;
+      padding: 28px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: #ffffff;
+      color: #0b3f75;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 20px;
+    }
+
+    .brand-text strong {
+      display: block;
+      font-size: 17px;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-text span {
+      font-size: 12px;
+      color: #bfdbfe;
+    }
+
+    .nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav a {
+      color: #dbeafe;
+      text-decoration: none;
+      padding: 13px 14px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .nav a.active,
+    .nav a:hover {
+      background: rgba(255, 255, 255, 0.13);
+      color: #ffffff;
+    }
+
+    .sidebar-footer {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.1);
+      font-size: 13px;
+      color: #dbeafe;
+      line-height: 1.5;
+    }
+
+    .main {
+      padding: 30px;
+      overflow-x: hidden;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 26px;
+    }
+
+    .page-title h1 {
+      color: #071f3f;
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .page-title p {
+      color: #6b7280;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .user-box {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+      min-width: 230px;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #e8f2ff;
+      color: #0b4f8a;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+
+    .user-box strong {
+      display: block;
+      color: #111827;
+      font-size: 14px;
+    }
+
+    .user-box span {
+      color: #6b7280;
+      font-size: 12px;
+    }
+
+    .filters {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 22px;
+      padding: 22px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: #374151;
+      margin-bottom: 8px;
+    }
+
+    .field select,
+    .field input {
+      width: 100%;
+      height: 46px;
+      border: 1px solid #d1d5db;
+      border-radius: 13px;
+      padding: 0 13px;
+      outline: none;
+      background: #ffffff;
+      font-size: 14px;
+      color: #1f2937;
+    }
+
+    .field select:focus,
+    .field input:focus {
+      border-color: #0b4f8a;
+      box-shadow: 0 0 0 4px rgba(11, 79, 138, 0.1);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 13px;
+      height: 46px;
+      padding: 0 18px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0b4f8a, #0d6fb8);
+      color: #ffffff;
+      box-shadow: 0 10px 22px rgba(11, 79, 138, 0.18);
+    }
+
+    .btn-secondary {
+      background: #eef2f7;
+      color: #334155;
+    }
+
+    .btn-success {
+      background: #16a34a;
+      color: #ffffff;
+    }
+
+    .btn-outline {
+      background: #ffffff;
+      color: #0b4f8a;
+      border: 1px solid #bfdbfe;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+    }
+
+    .kpi {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi::after {
+      content: "";
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      position: absolute;
+      right: -25px;
+      top: -25px;
+      background: #e8f2ff;
+    }
+
+    .kpi span {
+      color: #6b7280;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .kpi strong {
+      display: block;
+      margin-top: 10px;
+      color: #071f3f;
+      font-size: 30px;
+    }
+
+    .kpi small {
+      display: block;
+      margin-top: 8px;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.65fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .section-title h2 {
+      color: #071f3f;
+      font-size: 20px;
+    }
+
+    .section-title p {
+      color: #6b7280;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 6px 11px;
+      font-size: 12px;
+      font-weight: 800;
+      gap: 6px;
+    }
+
+    .badge.green {
+      background: #ecfdf5;
+      color: #166534;
+    }
+
+    .badge.yellow {
+      background: #fffbeb;
+      color: #92400e;
+    }
+
+    .badge.red {
+      background: #fef2f2;
+      color: #991b1b;
+    }
+
+    .badge.blue {
+      background: #e8f2ff;
+      color: #0b4f8a;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 820px;
+    }
+
+    th {
+      text-align: left;
+      font-size: 12px;
+      color: #64748b;
+      background: #f8fafc;
+      padding: 13px;
+      border-bottom: 1px solid #e5e7eb;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    td {
+      padding: 15px 13px;
+      border-bottom: 1px solid #edf2f7;
+      font-size: 14px;
+      color: #374151;
+      vertical-align: middle;
+    }
+
+    td strong {
+      color: #111827;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .mini-btn {
+      border: 1px solid #dbeafe;
+      color: #0b4f8a;
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-weight: 800;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .step-number {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #e8f2ff;
+      color: #0b4f8a;
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    .step.done .step-number {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .step.warning .step-number {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .step.error .step-number {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .step-content {
+      padding-bottom: 14px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .step-content strong {
+      display: block;
+      color: #111827;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .step-content span {
+      color: #6b7280;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.42);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 20;
+    }
+
+    .modal-backdrop.visible {
+      display: flex;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 760px;
+      background: #ffffff;
+      border-radius: 24px;
+      box-shadow: 0 28px 80px rgba(15, 23, 42, 0.32);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 24px;
+      background: linear-gradient(135deg, #071f3f, #0b4f8a);
+      color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .modal-header h3 {
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    .modal-header p {
+      color: #dbeafe;
+      font-size: 14px;
+    }
+
+    .close {
+      border: none;
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      border-radius: 12px;
+      width: 38px;
+      height: 38px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .detail-item {
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .detail-item span {
+      display: block;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+
+    .detail-item strong {
+      color: #111827;
+      font-size: 14px;
+    }
+
+    .feedback {
+      display: none;
+      margin-bottom: 18px;
+      border-radius: 15px;
+      padding: 14px 16px;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .feedback.visible {
+      display: block;
+    }
+
+    .feedback.success {
+      background: #ecfdf5;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .feedback.warning {
+      background: #fffbeb;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    @media (max-width: 1100px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .grid-4,
+      .kpis,
+      .content-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .main {
+        padding: 18px;
+      }
+
+      .topbar,
+      .section-title {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .grid-4,
+      .kpis,
+      .content-grid,
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .btn-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app">
+    <aside class="sidebar">
+      <div>
+        <div class="brand">
+          <div class="brand-mark">P</div>
+          <div class="brand-text">
+            <strong>PROQUINAL</strong>
+            <span>Conciliación Intercompany</span>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <a href="#" class="active">▣ Dashboard</a>
+          <a href="recepcion_plantillas_icp.html">▤ Recepción de archivos</a>
+          <a href="#">▧ Compañía vendedora</a>
+          <a href="#">▨ Compañía compradora</a>
+          <a href="conciliacion_automatica.html">▦ Conciliación</a>
+          <a href="#">▥ Base de datos</a>
+          <a href="aprobacion_conciliacion_icp.html">✉ Correos de aprobación</a>
+          <a href="#">⚠ Excepciones RPA</a>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        Módulo de control ejecutivo para seguimiento de procesos, archivos, diferencias y aprobaciones.
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="page-title">
+          <h1>Dashboard de Conciliación Intercompany</h1>
+          <p>Monitoreo general del procesamiento mensual entre compañías, validaciones, diferencias y aprobaciones pendientes.</p>
+        </div>
+
+        <div class="user-box">
+          <div class="avatar">VB</div>
+          <div>
+            <strong>Usuario Administrador</strong>
+            <span>Operaciones Intercompany</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="filters">
+        <div class="grid grid-4">
+          <div class="field">
+            <label for="periodo">Período</label>
+            <select id="periodo">
+              <option value="2026-05">Mayo 2026</option>
+              <option value="2026-04">Abril 2026</option>
+              <option value="2026-03">Marzo 2026</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="vendedora">Compañía vendedora</label>
+            <select id="vendedora">
+              <option value="">Todas</option>
+              <option>Proquinal Colombia</option>
+              <option>Spradling Group</option>
+              <option>Calipso Colombia</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="estado">Estado</label>
+            <select id="estado">
+              <option value="">Todos</option>
+              <option value="procesado">Procesado</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="diferencias">Con diferencias</option>
+              <option value="error">Error</option>
+            </select>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-primary" id="btnFiltrar">Aplicar filtros</button>
+            <button class="btn btn-secondary" id="btnLimpiar">Limpiar</button>
+          </div>
+        </div>
+      </section>
+
+      <div id="feedback" class="feedback"></div>
+
+      <section class="kpis">
+        <div class="card kpi">
+          <span>Compañías activas</span>
+          <strong>17</strong>
+          <small>Incluye compañías operativas del grupo</small>
+        </div>
+
+        <div class="card kpi">
+          <span>Conciliaciones del período</span>
+          <strong id="kpiConciliaciones">24</strong>
+          <small>Entre vendedoras y compradoras</small>
+        </div>
+
+        <div class="card kpi">
+          <span>Con diferencias</span>
+          <strong id="kpiDiferencias">6</strong>
+          <small>Requieren revisión o aprobación</small>
+        </div>
+
+        <div class="card kpi">
+          <span>Pendientes de aprobación</span>
+          <strong id="kpiPendientes">4</strong>
+          <small>Correos pendientes o no aprobados</small>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Conciliaciones recientes</h2>
+              <p>Seguimiento por compañía vendedora, compradora, período y estado.</p>
+            </div>
+            <button class="btn btn-success" id="btnNueva">Nueva conciliación</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nombre conciliación</th>
+                  <th>Vendedora</th>
+                  <th>Compradora</th>
+                  <th>Período</th>
+                  <th>Diferencias</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tablaConciliaciones">
+                <tr data-estado="procesado">
+                  <td><strong>PROQUINAL & SPRADLING - MAYO 2026</strong></td>
+                  <td>Proquinal Colombia</td>
+                  <td>Spradling Group</td>
+                  <td>Mayo 2026</td>
+                  <td>0</td>
+                  <td><span class="badge green">Sin diferencias</span></td>
+                  <td class="actions">
+                    <button class="mini-btn" onclick="abrirDetalle('PROQUINAL & SPRADLING - MAYO 2026','Sin diferencias','0')">Ver</button>
+                    <button class="mini-btn">Exportar</button>
+                  </td>
+                </tr>
+
+                <tr data-estado="diferencias">
+                  <td><strong>CALIPSO & PROQUINAL - MAYO 2026</strong></td>
+                  <td>Calipso Colombia</td>
+                  <td>Proquinal Colombia</td>
+                  <td>Mayo 2026</td>
+                  <td>8</td>
+                  <td><span class="badge yellow">Con diferencias</span></td>
+                  <td class="actions">
+                    <button class="mini-btn" onclick="abrirDetalle('CALIPSO & PROQUINAL - MAYO 2026','Con diferencias','8')">Ver</button>
+                    <button class="mini-btn">Revisar</button>
+                  </td>
+                </tr>
+
+                <tr data-estado="pendiente">
+                  <td><strong>SPRADLING & CALIPSO - MAYO 2026</strong></td>
+                  <td>Spradling Group</td>
+                  <td>Calipso Colombia</td>
+                  <td>Mayo 2026</td>
+                  <td>2</td>
+                  <td><span class="badge blue">Pendiente aprobación</span></td>
+                  <td class="actions">
+                    <button class="mini-btn" onclick="abrirDetalle('SPRADLING & CALIPSO - MAYO 2026','Pendiente aprobación','2')">Ver</button>
+                    <button class="mini-btn">Enviar correo</button>
+                  </td>
+                </tr>
+
+                <tr data-estado="error">
+                  <td><strong>PROQUINAL & HOLDING - MAYO 2026</strong></td>
+                  <td>Proquinal Colombia</td>
+                  <td>Holding</td>
+                  <td>Mayo 2026</td>
+                  <td>-</td>
+                  <td><span class="badge red">Error archivo</span></td>
+                  <td class="actions">
+                    <button class="mini-btn" onclick="abrirDetalle('PROQUINAL & HOLDING - MAYO 2026','Error archivo','-')">Ver</button>
+                    <button class="mini-btn">Evidencia</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <aside class="card">
+          <div class="section-title">
+            <div>
+              <h2>Flujo del proceso</h2>
+              <p>Estado resumido del ciclo operativo.</p>
+            </div>
+          </div>
+
+          <div class="timeline">
+            <div class="step done">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <strong>Recepción de correos y archivos</strong>
+                <span>Descarga de adjuntos Excel enviados por compañías del grupo.</span>
+              </div>
+            </div>
+
+            <div class="step done">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <strong>Validación de estructura</strong>
+                <span>Control de hojas, columnas, fechas y archivos requeridos.</span>
+              </div>
+            </div>
+
+            <div class="step warning">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <strong>Conciliación entre compañías</strong>
+                <span>Comparación entre compañía vendedora y compradora.</span>
+              </div>
+            </div>
+
+            <div class="step warning">
+              <div class="step-number">4</div>
+              <div class="step-content">
+                <strong>Generación de correo</strong>
+                <span>Armado de correo de aprobación con resumen y adjuntos.</span>
+              </div>
+            </div>
+
+            <div class="step error">
+              <div class="step-number">5</div>
+              <div class="step-content">
+                <strong>Excepciones pendientes</strong>
+                <span>Casos con error de archivo, diferencias o aprobación pendiente.</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modalDetalle">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h3 id="modalTitulo">Detalle de conciliación</h3>
+          <p>Información ejecutiva del procesamiento seleccionado.</p>
+        </div>
+        <button class="close" onclick="cerrarDetalle()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span>Estado</span>
+            <strong id="modalEstado">-</strong>
+          </div>
+
+          <div class="detail-item">
+            <span>Diferencias detectadas</span>
+            <strong id="modalDiferencias">-</strong>
+          </div>
+
+          <div class="detail-item">
+            <span>Archivo origen</span>
+            <strong>Excel compañía vendedora / compradora</strong>
+          </div>
+
+          <div class="detail-item">
+            <span>Próxima acción</span>
+            <strong id="modalAccion">Revisión del responsable</strong>
+          </div>
+        </div>
+
+        <div class="section-title">
+          <div>
+            <h2>Resumen operativo</h2>
+            <p>El robot descarga archivos, valida estructura, procesa la conciliación y genera evidencia para aprobación.</p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary">Abrir conciliación</button>
+          <button class="btn btn-outline">Ver evidencia</button>
+          <button class="btn btn-secondary" onclick="cerrarDetalle()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const btnFiltrar = document.getElementById("btnFiltrar");
+    const btnLimpiar = document.getElementById("btnLimpiar");
+    const estado = document.getElementById("estado");
+    const feedback = document.getElementById("feedback");
+    const filas = document.querySelectorAll("#tablaConciliaciones tr");
+    const modalDetalle = document.getElementById("modalDetalle");
+    const modalTitulo = document.getElementById("modalTitulo");
+    const modalEstado = document.getElementById("modalEstado");
+    const modalDiferencias = document.getElementById("modalDiferencias");
+    const modalAccion = document.getElementById("modalAccion");
+
+    function mostrarFeedback(tipo, mensaje) {
+      feedback.className = "feedback visible " + tipo;
+      feedback.textContent = mensaje;
+      setTimeout(() => {
+        feedback.className = "feedback";
+        feedback.textContent = "";
+      }, 2600);
+    }
+
+    function aplicarFiltros() {
+      const estadoSeleccionado = estado.value;
+      let visibles = 0;
+
+      filas.forEach(fila => {
+        const coincideEstado = !estadoSeleccionado || fila.dataset.estado === estadoSeleccionado;
+        fila.style.display = coincideEstado ? "" : "none";
+        if (coincideEstado) visibles++;
+      });
+
+      mostrarFeedback("success", "Filtros aplicados correctamente. Registros visibles: " + visibles + ".");
+    }
+
+    function limpiarFiltros() {
+      document.getElementById("periodo").value = "2026-05";
+      document.getElementById("vendedora").value = "";
+      estado.value = "";
+
+      filas.forEach(fila => {
+        fila.style.display = "";
+      });
+
+      mostrarFeedback("warning", "Filtros restablecidos.");
+    }
+
+    function abrirDetalle(nombre, estadoTexto, diferencias) {
+      modalTitulo.textContent = nombre;
+      modalEstado.textContent = estadoTexto;
+      modalDiferencias.textContent = diferencias;
+
+      if (estadoTexto === "Sin diferencias") {
+        modalAccion.textContent = "Disponible para cierre o archivo histórico";
+      } else if (estadoTexto === "Con diferencias") {
+        modalAccion.textContent = "Revisar diferencias antes de enviar aprobación";
+      } else if (estadoTexto === "Pendiente aprobación") {
+        modalAccion.textContent = "Enviar o controlar correo de aprobación";
+      } else {
+        modalAccion.textContent = "Corregir excepción y reprocesar";
+      }
+
+      modalDetalle.classList.add("visible");
+    }
+
+    function cerrarDetalle() {
+      modalDetalle.classList.remove("visible");
+    }
+
+    document.getElementById("btnNueva").addEventListener("click", () => { window.location.href = "recepcion_plantillas_icp.html"; });
+
+    btnFiltrar.addEventListener("click", aplicarFiltros);
+    btnLimpiar.addEventListener("click", limpiarFiltros);
+
+    modalDetalle.addEventListener("click", (e) => {
+      if (e.target === modalDetalle) {
+        cerrarDetalle();
+      }
+    });
+  </script>
+
+</body>
+</html>
