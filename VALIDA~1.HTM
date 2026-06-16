@@ -532,7 +532,7 @@
       {estado:"ok", titulo:"Columnas obligatorias", desc:"Se detectaron columnas mínimas para compañía, contraparte, cuenta, factura, fecha, moneda y monto.", badge:"Correcto"},
       {estado:"warn", titulo:"Fechas como texto", desc:"Se encontraron fechas con formato texto. El robot las normalizará a dd/MM/yyyy.", badge:"Advertencia"},
       {estado:"ok", titulo:"Período consistente", desc:"Los registros corresponden al período esperado.", badge:"Correcto"},
-      {estado:"err", titulo:"Cuenta corporativa incompleta", desc:"Se detectaron registros con cuenta vacía o igual a 0.", badge:"Error"}
+      {estado:"warn", titulo:"Cuenta corporativa incompleta", desc:"Se detectaron registros con cuenta vacía o igual a 0. Se notifica al remitente pero el proceso continúa.", badge:"Advertencia"}
     ];
 
     if (tipo === "compradora") {
