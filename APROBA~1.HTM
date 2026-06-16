@@ -30,10 +30,6 @@
     .grid{display:grid;gap:16px}
     .grid-2{grid-template-columns:repeat(2,1fr)}
     .grid-3{grid-template-columns:repeat(3,1fr)}
-    .field label{display:block;font-size:13px;font-weight:900;color:#374151;margin-bottom:8px}
-    .field input,.field select,.field textarea{width:100%;border:1px solid #d1d5db;border-radius:14px;padding:0 14px;height:46px;outline:none;font-size:14px;background:#fff;color:#1f2937;transition:.2s}
-    .field textarea{height:100px;padding-top:12px;resize:vertical}
-    .field input:focus,.field select:focus,.field textarea:focus{border-color:#0b4f8a;box-shadow:0 0 0 4px rgba(11,79,138,.1)}
     .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
     .kpi{background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:18px;box-shadow:0 10px 26px rgba(15,23,42,.045)}
     .kpi span{display:block;font-size:12px;font-weight:900;color:#64748b;margin-bottom:8px}
@@ -44,69 +40,84 @@
     .badge.red{background:#fef2f2;color:#991b1b}
     .badge.blue{background:#e8f2ff;color:#0b4f8a}
     .badge.gray{background:#f1f5f9;color:#475569}
+    .badge.purple{background:#f3e8ff;color:#6b21a8}
     .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
     .btn{border:none;border-radius:14px;height:46px;padding:0 18px;font-weight:900;cursor:pointer;transition:.2s;font-size:14px}
     .btn:hover:not(:disabled){transform:translateY(-1px)}
     .btn:disabled{cursor:not-allowed;opacity:.55}
     .btn-primary{background:linear-gradient(135deg,#0b4f8a,#0d6fb8);color:#fff;box-shadow:0 10px 22px rgba(11,79,138,.18)}
     .btn-secondary{background:#eef2f7;color:#334155}
-    .btn-success{background:#16a34a;color:#fff}
-    .btn-danger{background:#dc2626;color:#fff}
     .btn-outline{background:#fff;color:#0b4f8a;border:1px solid #bfdbfe}
+    .field label{display:block;font-size:13px;font-weight:900;color:#374151;margin-bottom:8px}
+    .field input,.field select,.field textarea{width:100%;border:1px solid #d1d5db;border-radius:14px;padding:0 14px;height:46px;outline:none;font-size:14px;background:#fff;color:#1f2937;transition:.2s}
+    .field textarea{height:100px;padding-top:12px;resize:vertical}
     .table-wrap{overflow-x:auto}
-    table{width:100%;min-width:880px;border-collapse:collapse}
+    table{width:100%;min-width:820px;border-collapse:collapse}
     th{text-align:left;background:#f8fafc;color:#64748b;padding:13px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #e5e7eb}
     td{padding:14px 13px;border-bottom:1px solid #edf2f7;color:#374151;font-size:14px;vertical-align:middle}
     td strong{color:#111827}
     .mini-btn{border:1px solid #dbeafe;background:#fff;color:#0b4f8a;border-radius:10px;padding:8px 10px;font-size:12px;font-weight:900;cursor:pointer}
-    .approval-box{border:1px solid #e5e7eb;border-radius:22px;overflow:hidden;background:#fff}
-    .approval-header{background:linear-gradient(135deg,#071f3f,#0b4f8a);color:#fff;padding:22px}
-    .approval-header h3{font-size:22px;margin-bottom:6px}
-    .approval-header p{color:#dbeafe;font-size:14px}
-    .approval-body{padding:20px}
-    .approval-item{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;padding:14px;border:1px solid #e5e7eb;border-radius:16px;margin-bottom:12px;background:#f8fafc}
-    .approval-item strong{display:block;color:#111827;font-size:14px;margin-bottom:5px}
-    .approval-item span{color:#64748b;font-size:12px;line-height:1.4}
-    .rule-list{display:grid;gap:14px}
-    .rule{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:flex-start;border:1px solid #e5e7eb;border-radius:17px;padding:14px;background:#fff}
-    .rule-icon{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;font-weight:900;background:#e8f2ff;color:#0b4f8a}
-    .rule.green .rule-icon{background:#dcfce7;color:#166534}
-    .rule.yellow .rule-icon{background:#fef3c7;color:#92400e}
-    .rule.red .rule-icon{background:#fee2e2;color:#991b1b}
-    .rule strong{display:block;color:#111827;font-size:14px;margin-bottom:5px}
-    .rule span{color:#64748b;font-size:13px;line-height:1.5}
     .feedback{display:none;border-radius:16px;padding:14px 16px;font-size:14px;font-weight:800;line-height:1.5;margin-bottom:18px}
     .feedback.visible{display:block}
     .feedback.success{background:#ecfdf5;color:#166534;border:1px solid #bbf7d0}
     .feedback.error{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
     .feedback.warning{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+
+    /* Flujo Teams */
+    .flow-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;margin-bottom:8px}
+    .flow-step{text-align:center;padding:16px 10px;position:relative}
+    .flow-step:not(:last-child)::after{content:"→";position:absolute;right:-10px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:20px;font-weight:900;z-index:1}
+    .flow-icon{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-size:22px;margin:0 auto 10px}
+    .flow-icon.bot{background:#e8f2ff;color:#0b4f8a}
+    .flow-icon.teams{background:#f3e8ff;color:#6b21a8}
+    .flow-icon.genny{background:#fef3c7;color:#92400e}
+    .flow-icon.done{background:#dcfce7;color:#166534}
+    .flow-step strong{display:block;font-size:13px;color:#111827;margin-bottom:4px}
+    .flow-step span{font-size:12px;color:#64748b;line-height:1.4}
+
+    /* Solicitud pending card */
+    .approval-request{border:2px solid #e0e7ff;border-radius:20px;overflow:hidden;background:#fff}
+    .approval-request-header{background:linear-gradient(135deg,#4f46e5,#6b21a8);color:#fff;padding:18px 20px;display:flex;justify-content:space-between;align-items:center}
+    .approval-request-header h3{font-size:16px;margin-bottom:4px}
+    .approval-request-header p{font-size:13px;color:rgba(255,255,255,.75)}
+    .approval-request-body{padding:18px}
+    .apr-item{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-radius:12px;background:#f8fafc;margin-bottom:8px;font-size:13px}
+    .apr-item span{color:#64748b;font-weight:700}
+    .apr-item strong{color:#111827}
+
+    .rule-list{display:grid;gap:12px}
+    .rule{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:flex-start;border:1px solid #e5e7eb;border-radius:17px;padding:14px;background:#fff}
+    .rule-icon{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;font-weight:900;background:#e8f2ff;color:#0b4f8a}
+    .rule.green .rule-icon{background:#dcfce7;color:#166534}
+    .rule.yellow .rule-icon{background:#fef3c7;color:#92400e}
+    .rule.red .rule-icon{background:#fee2e2;color:#991b1b}
+    .rule.purple .rule-icon{background:#f3e8ff;color:#6b21a8}
+    .rule strong{display:block;color:#111827;font-size:14px;margin-bottom:4px}
+    .rule span{color:#64748b;font-size:13px;line-height:1.5}
+
     .modal-backdrop{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(15,23,42,.45);z-index:30}
     .modal-backdrop.visible{display:flex}
-    .modal{width:100%;max-width:760px;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 28px 80px rgba(15,23,42,.32)}
-    .modal-header{padding:24px;background:linear-gradient(135deg,#071f3f,#0b4f8a);color:#fff;display:flex;justify-content:space-between;gap:16px}
-    .modal-header h3{font-size:22px;margin-bottom:6px}
-    .modal-header p{color:#dbeafe;font-size:14px}
+    .modal{width:100%;max-width:700px;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 28px 80px rgba(15,23,42,.32)}
+    .modal-header{padding:24px;background:linear-gradient(135deg,#4f46e5,#6b21a8);color:#fff;display:flex;justify-content:space-between;gap:16px}
+    .modal-header h3{font-size:20px;margin-bottom:6px}
+    .modal-header p{color:rgba(255,255,255,.75);font-size:14px}
     .close{width:38px;height:38px;border:none;border-radius:12px;background:rgba(255,255,255,.16);color:#fff;cursor:pointer;font-size:20px}
     .modal-body{padding:24px}
-    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{display:none}.layout{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:760px){.main{padding:18px}.topbar,.section-title{flex-direction:column;align-items:stretch}.grid-2,.grid-3,.kpis{grid-template-columns:1fr}.btn-row{flex-direction:column}.btn{width:100%}.status-badge{width:fit-content}.approval-item{grid-template-columns:1fr}}
+    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{display:none}.layout{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.flow-steps{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:760px){.main{padding:18px}.topbar,.section-title{flex-direction:column}.grid-2,.grid-3,.kpis{grid-template-columns:1fr}.btn-row{flex-direction:column}.btn{width:100%}.flow-steps{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-
 <div class="app">
   <aside class="sidebar">
     <div>
       <div class="brand">
         <div class="brand-mark">P</div>
-        <div>
-          <strong>PROQUINAL</strong>
-          <span>Agente Intercompany</span>
-        </div>
+        <div><strong>PROQUINAL</strong><span>Agente Intercompany</span></div>
       </div>
-
       <nav class="nav">
         <a href="dashboard_intercompany.html">▣ Dashboard</a>
+        <a href="envio_plantilla_icp.html">📤 Envío plantilla</a>
         <a href="recepcion_plantillas_icp.html">▤ Recepción ICP</a>
         <a href="validacion_archivo_icp.html">▧ Validación archivo</a>
         <a href="parametros_tipo_cambio.html">▨ Tipo de cambio</a>
@@ -116,165 +127,159 @@
         <a href="aprobacion_conciliacion_icp.html" class="active">✓ Aprobaciones</a>
         <a href="notificaciones_automaticas_icp.html">✉ Notificaciones</a>
         <a href="repositorio_historico_icp.html">▥ Repositorio</a>
-        <span style="padding:13px 14px;border-radius:14px;font-size:14px;font-weight:700;color:rgba(255,255,255,0.3);display:flex;gap:10px;align-items:center;cursor:default;">☰ Bitácora</span>
+        <a href="segundo_envio_icp.html">↩ Segundo envío</a>
+        <a href="bitacora_ejecucion_icp.html">☰ Bitácora</a>
       </nav>
-
-<style id="doc-section-style">
-  .nav-docs-divider {
-    border: none;
-    border-top: 1px solid rgba(255,255,255,0.15);
-    margin: 16px 0 12px;
-  }
-  .nav-docs-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: rgba(255,255,255,0.45);
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    padding: 0 4px;
-    display: block;
-  }
-  .nav-docs a {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
-    border-radius: 10px;
-    color: #93c5fd;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 500;
-    transition: .15s;
-    margin-bottom: 2px;
-  }
-  .nav-docs a::before {
-    content: "📄";
-    font-size: 13px;
-    flex-shrink: 0;
-  }
-  .nav-docs a:hover {
-    background: rgba(147,197,253,0.15);
-    color: #fff;
-  }
-</style>
-        <div class="nav-docs">
-          <hr class="nav-docs-divider">
-          <span class="nav-docs-label">Documentación</span>
-          <a href="https://any2cloud-team-njnib2r4.atlassian.net/wiki/spaces/DP/pages/30343169/Conciliacion+Intercompany" target="_blank" rel="noopener">Conciliación Intercompany</a>
-        </div>
+      <style>
+        .nav-docs-divider{border:none;border-top:1px solid rgba(255,255,255,0.15);margin:16px 0 12px}
+        .nav-docs-label{font-size:11px;font-weight:700;letter-spacing:.08em;color:rgba(255,255,255,0.45);text-transform:uppercase;margin-bottom:8px;padding:0 4px;display:block}
+        .nav-docs a{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;color:#93c5fd;text-decoration:none;font-size:13px;font-weight:500;transition:.15s;margin-bottom:2px}
+        .nav-docs a::before{content:"📄";font-size:13px;flex-shrink:0}
+        .nav-docs a:hover{background:rgba(147,197,253,0.15);color:#fff}
+      </style>
+      <div class="nav-docs">
+        <hr class="nav-docs-divider">
+        <span class="nav-docs-label">Documentación</span>
+        <a href="https://any2cloud-team-njnib2r4.atlassian.net/wiki/spaces/DP/pages/30343169/Conciliacion+Intercompany" target="_blank" rel="noopener">Conciliación Intercompany</a>
+      </div>
     </div>
-
-    <div class="sidebar-footer">
-      Control de aprobación previa para reportes, diferencias y notificaciones antes del envío a compañías.
-    </div>
+    <div class="sidebar-footer">El bot solicita aprobación vía Microsoft Approvals (Teams/correo) antes de enviar notificaciones de diferencias a las compañías. El aprobador responde desde Teams.</div>
   </aside>
 
   <main class="main">
     <header class="topbar">
       <div class="page-title">
-        <h1>Aprobación de Conciliación ICP</h1>
-        <p>
-          Revise el reporte final, apruebe o rechace la conciliación del período y autorice el envío de notificaciones a las compañías involucradas.
-        </p>
+        <h1>Aprobación vía Microsoft Approvals</h1>
+        <p>Antes de enviar notificaciones de diferencias a las compañías, el bot genera una solicitud de aprobación mediante Microsoft Approvals. El aprobador la recibe en Teams o correo y responde desde ahí — no desde este portal.</p>
       </div>
-      <div class="status-badge" id="estadoGeneral">● Pendiente aprobación</div>
+      <div class="status-badge" id="estadoGeneral">● 3 solicitudes pendientes</div>
     </header>
 
     <section class="kpis">
-      <div class="kpi">
-        <span>Solicitudes pendientes</span>
-        <strong id="kpiPendientes">3</strong>
-      </div>
-      <div class="kpi">
-        <span>Aprobadas</span>
-        <strong id="kpiAprobadas">7</strong>
-      </div>
-      <div class="kpi">
-        <span>Rechazadas</span>
-        <strong id="kpiRechazadas">1</strong>
-      </div>
-      <div class="kpi">
-        <span>Notificaciones listas</span>
-        <strong id="kpiListas">9</strong>
-      </div>
+      <div class="kpi"><span>Pendientes en Teams</span><strong id="kpiPendientes">3</strong></div>
+      <div class="kpi"><span>Aprobadas este mes</span><strong>7</strong></div>
+      <div class="kpi"><span>Rechazadas este mes</span><strong>1</strong></div>
+      <div class="kpi"><span>Flujos detenidos</span><strong id="kpiDetenidos">3</strong></div>
     </section>
 
     <div id="feedback" class="feedback"></div>
 
+    <!-- Flujo visual -->
+    <div class="card">
+      <div class="section-title">
+        <div>
+          <h2>¿Cómo funciona la aprobación?</h2>
+          <p>El bot gestiona el flujo completo vía Microsoft Power Automate Approvals. El aprobador no necesita ingresar a ningún portal.</p>
+        </div>
+        <span class="badge purple">Microsoft Approvals</span>
+      </div>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-icon bot">🤖</div>
+          <strong>Bot detecta diferencias</strong>
+          <span>Finaliza la conciliación e identifica diferencias a notificar.</span>
+        </div>
+        <div class="flow-step">
+          <div class="flow-icon teams">💬</div>
+          <strong>Solicitud en Teams</strong>
+          <span>El bot envía solicitud de aprobación vía Microsoft Approvals al aprobador designado.</span>
+        </div>
+        <div class="flow-step">
+          <div class="flow-icon genny">✋</div>
+          <strong>Aprobador decide</strong>
+          <span>El aprobador recibe notificación en Teams o correo y responde Aprobar / Rechazar con comentario.</span>
+        </div>
+        <div class="flow-step">
+          <div class="flow-icon done">✅</div>
+          <strong>Bot continúa</strong>
+          <span>Si aprobado: envía notificación a la compañía. Si rechazado: registra la observación y detiene el flujo.</span>
+        </div>
+      </div>
+    </div>
+
     <section class="layout">
       <div>
+        <!-- Solicitudes pendientes -->
         <div class="card">
           <div class="section-title">
             <div>
-              <h2>Solicitud de aprobación</h2>
-              <p>Seleccione el reporte o lote de diferencias que requiere aprobación funcional.</p>
+              <h2>Solicitudes pendientes en Teams</h2>
+              <p>El aprobador debe responder estas solicitudes desde Microsoft Teams o su correo corporativo.</p>
             </div>
-            <span class="badge yellow" id="badgeSolicitud">En revisión</span>
+            <button class="btn btn-outline" id="btnActualizar" style="height:38px;font-size:13px">Actualizar</button>
           </div>
 
-          <form id="formAprobacion">
-            <div class="grid grid-3">
-              <div class="field">
-                <label for="periodo">Período</label>
-                <input type="month" id="periodo" value="2026-05">
+          <div style="display:grid;gap:14px" id="listaPendientes">
+            <div class="approval-request">
+              <div class="approval-request-header">
+                <div>
+                  <h3>APR-ICP-2026-005 · Reporte final Mayo 2026</h3>
+                  <p>Enviada a: Gerencia Financiera · 12/06/2026 09:14</p>
+                </div>
+                <span class="badge yellow">En Teams</span>
               </div>
-
-              <div class="field">
-                <label for="tipoSolicitud">Tipo de solicitud</label>
-                <select id="tipoSolicitud">
-                  <option value="reporte">Reporte final ICP</option>
-                  <option value="diferencias">Notificación de diferencias</option>
-                  <option value="reproceso">Reproceso de archivo corregido</option>
-                </select>
-              </div>
-
-              <div class="field">
-                <label for="aprobador">Aprobador</label>
-                <select id="aprobador">
-                  <option>Gerencia Financiera</option>
-                  <option>Contabilidad Corporativa</option>
-                  <option>Responsable ICP</option>
-                  <option>Usuario funcional</option>
-                </select>
+              <div class="approval-request-body">
+                <div class="apr-item"><span>Compañía</span><strong>Proquinal CR ↔ Spradling</strong></div>
+                <div class="apr-item"><span>Diferencias detectadas</span><strong>18 registros</strong></div>
+                <div class="apr-item"><span>Reporte adjunto</span><strong>Reporte_ICP_Mayo_2026.xlsx</strong></div>
+                <div class="apr-item"><span>Estado en bot</span><strong>⏳ Esperando respuesta del aprobador</strong></div>
+                <div class="btn-row" style="margin-top:14px">
+                  <button class="btn btn-outline" style="height:38px;font-size:13px" onclick="abrirDetalle('APR-ICP-2026-005','Pendiente','Reporte final Mayo 2026')">Ver detalle</button>
+                  <button class="btn btn-secondary" style="height:38px;font-size:13px" id="btnReenviar1" onclick="reenviar(this)">Reenviar solicitud Teams</button>
+                </div>
               </div>
             </div>
 
-            <div class="grid grid-2" style="margin-top:16px;">
-              <div class="field">
-                <label for="archivoReporte">Archivo asociado</label>
-                <input type="text" id="archivoReporte" value="Reporte_ICP_Mayo_2026.xlsx">
+            <div class="approval-request">
+              <div class="approval-request-header">
+                <div>
+                  <h3>APR-DIF-2026-019 · Diferencias Calipso Mayo 2026</h3>
+                  <p>Enviada a: Contabilidad Corporativa · 12/06/2026 09:17</p>
+                </div>
+                <span class="badge yellow">En Teams</span>
               </div>
-
-              <div class="field">
-                <label for="estadoSolicitud">Estado</label>
-                <input type="text" id="estadoSolicitud" value="Pendiente de aprobación" readonly>
+              <div class="approval-request-body">
+                <div class="apr-item"><span>Compañía</span><strong>Calipso S.A. ↔ Proquinal CO</strong></div>
+                <div class="apr-item"><span>Diferencias detectadas</span><strong>7 registros</strong></div>
+                <div class="apr-item"><span>Reporte adjunto</span><strong>Diferencias_Calipso_Mayo_2026.xlsx</strong></div>
+                <div class="apr-item"><span>Estado en bot</span><strong>⏳ Esperando respuesta del aprobador</strong></div>
+                <div class="btn-row" style="margin-top:14px">
+                  <button class="btn btn-outline" style="height:38px;font-size:13px" onclick="abrirDetalle('APR-DIF-2026-019','Pendiente','Diferencias Calipso Mayo 2026')">Ver detalle</button>
+                  <button class="btn btn-secondary" style="height:38px;font-size:13px" onclick="reenviar(this)">Reenviar solicitud Teams</button>
+                </div>
               </div>
             </div>
 
-            <div class="field" style="margin-top:16px;">
-              <label for="comentarioAprobacion">Comentario del aprobador</label>
-              <textarea id="comentarioAprobacion" placeholder="Ingrese comentario, condición de aprobación o motivo de rechazo."></textarea>
+            <div class="approval-request">
+              <div class="approval-request-header">
+                <div>
+                  <h3>APR-DIF-2026-020 · Diferencias Spradling Mayo 2026</h3>
+                  <p>Enviada a: Gerencia Financiera · 12/06/2026 09:20</p>
+                </div>
+                <span class="badge yellow">En Teams</span>
+              </div>
+              <div class="approval-request-body">
+                <div class="apr-item"><span>Compañía</span><strong>Spradling Group ↔ Proquinal MX</strong></div>
+                <div class="apr-item"><span>Diferencias detectadas</span><strong>11 registros</strong></div>
+                <div class="apr-item"><span>Reporte adjunto</span><strong>Diferencias_Spradling_Mayo_2026.xlsx</strong></div>
+                <div class="apr-item"><span>Estado en bot</span><strong>⏳ Esperando respuesta del aprobador</strong></div>
+                <div class="btn-row" style="margin-top:14px">
+                  <button class="btn btn-outline" style="height:38px;font-size:13px" onclick="abrirDetalle('APR-DIF-2026-020','Pendiente','Diferencias Spradling Mayo 2026')">Ver detalle</button>
+                  <button class="btn btn-secondary" style="height:38px;font-size:13px" onclick="reenviar(this)">Reenviar solicitud Teams</button>
+                </div>
+              </div>
             </div>
-
-            <div class="btn-row">
-              <button type="button" class="btn btn-success" id="btnAprobar">Aprobar</button>
-              <button type="button" class="btn btn-danger" id="btnRechazar">Rechazar</button>
-              <button type="button" class="btn btn-primary" id="btnEnviarNotif" disabled>Autorizar notificaciones</button>
-              <button type="button" class="btn btn-secondary" id="btnLimpiar">Limpiar</button>
-            </div>
-          </form>
+          </div>
         </div>
 
+        <!-- Historial -->
         <div class="card">
           <div class="section-title">
             <div>
-              <h2>Bandeja de aprobaciones</h2>
-              <p>Historial y estado de solicitudes asociadas al período.</p>
+              <h2>Historial de aprobaciones</h2>
+              <p>Registro de solicitudes respondidas. Trazabilidad para auditoría.</p>
             </div>
-            <button class="btn btn-outline" id="btnActualizar">Actualizar bandeja</button>
           </div>
-
           <div class="table-wrap">
             <table>
               <thead>
@@ -283,26 +288,19 @@
                   <th>Período</th>
                   <th>Tipo</th>
                   <th>Aprobador</th>
-                  <th>Estado</th>
+                  <th>Canal</th>
+                  <th>Resultado</th>
                   <th>Fecha</th>
                   <th>Acción</th>
                 </tr>
               </thead>
-              <tbody id="tablaAprobaciones">
-                <tr>
-                  <td><strong>APR-ICP-2026-005</strong></td>
-                  <td>Mayo 2026</td>
-                  <td>Reporte final</td>
-                  <td>Gerencia Financiera</td>
-                  <td><span class="badge yellow">Pendiente</span></td>
-                  <td>12/06/2026</td>
-                  <td><button class="mini-btn" onclick="abrirDetalle('APR-ICP-2026-005','Pendiente','Reporte final')">Ver</button></td>
-                </tr>
+              <tbody>
                 <tr>
                   <td><strong>APR-DIF-2026-018</strong></td>
                   <td>Mayo 2026</td>
                   <td>Diferencias</td>
-                  <td>Contabilidad Corporativa</td>
+                  <td>Contabilidad Corp.</td>
+                  <td><span class="badge purple">Teams</span></td>
                   <td><span class="badge green">Aprobado</span></td>
                   <td>11/06/2026</td>
                   <td><button class="mini-btn" onclick="abrirDetalle('APR-DIF-2026-018','Aprobado','Diferencias')">Ver</button></td>
@@ -312,9 +310,30 @@
                   <td>Abril 2026</td>
                   <td>Reproceso</td>
                   <td>Responsable ICP</td>
+                  <td><span class="badge purple">Teams</span></td>
                   <td><span class="badge red">Rechazado</span></td>
                   <td>09/06/2026</td>
                   <td><button class="mini-btn" onclick="abrirDetalle('APR-REP-2026-004','Rechazado','Reproceso')">Ver</button></td>
+                </tr>
+                <tr>
+                  <td><strong>APR-ICP-2026-003</strong></td>
+                  <td>Abril 2026</td>
+                  <td>Reporte final</td>
+                  <td>Gerencia Financiera</td>
+                  <td><span class="badge purple">Teams</span></td>
+                  <td><span class="badge green">Aprobado</span></td>
+                  <td>08/06/2026</td>
+                  <td><button class="mini-btn" onclick="abrirDetalle('APR-ICP-2026-003','Aprobado','Reporte final')">Ver</button></td>
+                </tr>
+                <tr>
+                  <td><strong>APR-DIF-2026-012</strong></td>
+                  <td>Abril 2026</td>
+                  <td>Diferencias</td>
+                  <td>Contabilidad Corp.</td>
+                  <td><span class="badge purple">Teams</span></td>
+                  <td><span class="badge green">Aprobado</span></td>
+                  <td>07/06/2026</td>
+                  <td><button class="mini-btn" onclick="abrirDetalle('APR-DIF-2026-012','Aprobado','Diferencias')">Ver</button></td>
                 </tr>
               </tbody>
             </table>
@@ -326,48 +345,34 @@
         <div class="card">
           <div class="section-title">
             <div>
-              <h2>Resumen para aprobar</h2>
-              <p>Información relevante del cierre mensual.</p>
+              <h2>Aprobadores configurados</h2>
+              <p>Usuarios que reciben solicitudes en Teams.</p>
             </div>
           </div>
-
-          <div class="approval-box">
-            <div class="approval-header">
-              <h3>ICP Mayo 2026</h3>
-              <p>Reporte final y notificaciones asociadas</p>
+          <div style="display:grid;gap:10px">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #e5e7eb;border-radius:14px;background:#f8fafc">
+              <div style="width:38px;height:38px;border-radius:50%;background:#e8f2ff;color:#0b4f8a;display:grid;place-items:center;font-weight:900;font-size:14px;flex-shrink:0">GF</div>
+              <div>
+                <div style="font-size:14px;font-weight:900;color:#111827">Gerencia Financiera</div>
+                <div style="font-size:12px;color:#64748b">genny@proquinal.com · Teams activo</div>
+              </div>
+              <span class="badge green" style="margin-left:auto">Activo</span>
             </div>
-            <div class="approval-body">
-              <div class="approval-item">
-                <div>
-                  <strong>Operaciones conciliadas</strong>
-                  <span>142 registros conciliados correctamente.</span>
-                </div>
-                <span class="badge green">OK</span>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #e5e7eb;border-radius:14px;background:#f8fafc">
+              <div style="width:38px;height:38px;border-radius:50%;background:#e8f2ff;color:#0b4f8a;display:grid;place-items:center;font-weight:900;font-size:14px;flex-shrink:0">CC</div>
+              <div>
+                <div style="font-size:14px;font-weight:900;color:#111827">Contabilidad Corporativa</div>
+                <div style="font-size:12px;color:#64748b">contabilidad@proquinal.com · Teams activo</div>
               </div>
-
-              <div class="approval-item">
-                <div>
-                  <strong>Diferencias pendientes</strong>
-                  <span>18 diferencias continúan abiertas.</span>
-                </div>
-                <span class="badge yellow">Revisar</span>
+              <span class="badge green" style="margin-left:auto">Activo</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #e5e7eb;border-radius:14px;background:#f8fafc">
+              <div style="width:38px;height:38px;border-radius:50%;background:#e8f2ff;color:#0b4f8a;display:grid;place-items:center;font-weight:900;font-size:14px;flex-shrink:0">RI</div>
+              <div>
+                <div style="font-size:14px;font-weight:900;color:#111827">Responsable ICP</div>
+                <div style="font-size:12px;color:#64748b">icp@proquinal.com · Teams activo</div>
               </div>
-
-              <div class="approval-item">
-                <div>
-                  <strong>Evidencia disponible</strong>
-                  <span>Archivos, bitácora y trazabilidad generados.</span>
-                </div>
-                <span class="badge green">OK</span>
-              </div>
-
-              <div class="approval-item">
-                <div>
-                  <strong>Notificaciones</strong>
-                  <span>9 correos listos para envío a compañías.</span>
-                </div>
-                <span class="badge blue">Listo</span>
-              </div>
+              <span class="badge green" style="margin-left:auto">Activo</span>
             </div>
           </div>
         </div>
@@ -375,41 +380,37 @@
         <div class="card">
           <div class="section-title">
             <div>
-              <h2>Reglas de aprobación</h2>
-              <p>Condiciones del proceso.</p>
+              <h2>Reglas del proceso</h2>
+              <p>Condiciones definidas en la propuesta.</p>
             </div>
           </div>
-
           <div class="rule-list">
+            <div class="rule purple">
+              <div class="rule-icon">💬</div>
+              <div>
+                <strong>Canal: Microsoft Approvals</strong>
+                <span>El aprobador responde desde Teams o correo. No requiere ingresar a ningún portal web.</span>
+              </div>
+            </div>
             <div class="rule green">
               <div class="rule-icon">✓</div>
               <div>
-                <strong>Aprobación requerida</strong>
-                <span>No se deben enviar notificaciones de diferencias sin aprobación previa.</span>
+                <strong>Aprobación previa obligatoria</strong>
+                <span>No se envían notificaciones de diferencias a compañías sin aprobación del responsable.</span>
               </div>
             </div>
-
             <div class="rule yellow">
               <div class="rule-icon">!</div>
               <div>
-                <strong>Rechazo con motivo</strong>
-                <span>Si se rechaza la solicitud, debe registrarse comentario obligatorio.</span>
+                <strong>Rechazo con comentario</strong>
+                <span>Si se rechaza, el bot registra el motivo y detiene el flujo. Queda trazabilidad completa.</span>
               </div>
             </div>
-
-            <div class="rule green">
-              <div class="rule-icon">✓</div>
-              <div>
-                <strong>Trazabilidad</strong>
-                <span>Cada aprobación o rechazo queda registrado para auditoría.</span>
-              </div>
-            </div>
-
             <div class="rule red">
               <div class="rule-icon">×</div>
               <div>
-                <strong>Sin aprobación</strong>
-                <span>El flujo queda detenido hasta intervención del aprobador.</span>
+                <strong>Sin respuesta = flujo detenido</strong>
+                <span>El bot espera hasta recibir respuesta. No envía nada de forma autónoma sin aprobación.</span>
               </div>
             </div>
           </div>
@@ -419,43 +420,29 @@
   </main>
 </div>
 
+<!-- Modal detalle -->
 <div class="modal-backdrop" id="modalDetalle">
   <div class="modal">
     <div class="modal-header">
       <div>
-        <h3 id="modalTitulo">Detalle de aprobación</h3>
-        <p>Información de la solicitud, estado y trazabilidad.</p>
+        <h3 id="modalTitulo">Detalle de solicitud</h3>
+        <p>Información registrada por el bot en Power Automate.</p>
       </div>
       <button class="close" onclick="cerrarDetalle()">×</button>
     </div>
-
     <div class="modal-body">
       <div class="grid grid-2">
-        <div class="field">
-          <label>Solicitud</label>
-          <input type="text" id="modalSolicitud" readonly>
-        </div>
-        <div class="field">
-          <label>Estado</label>
-          <input type="text" id="modalEstado" readonly>
-        </div>
-        <div class="field">
-          <label>Tipo</label>
-          <input type="text" id="modalTipo" readonly>
-        </div>
-        <div class="field">
-          <label>Resultado</label>
-          <input type="text" value="Registrado en bitácora del proceso" readonly>
-        </div>
+        <div class="field"><label>ID Solicitud</label><input type="text" id="modalSolicitud" readonly></div>
+        <div class="field"><label>Estado</label><input type="text" id="modalEstado" readonly></div>
+        <div class="field"><label>Tipo</label><input type="text" id="modalTipo" readonly></div>
+        <div class="field"><label>Canal de aprobación</label><input type="text" value="Microsoft Teams / Approvals" readonly></div>
       </div>
-
-      <div class="field" style="margin-top:16px;">
-        <label>Comentario</label>
-        <textarea readonly>Solicitud asociada al flujo de aprobación ICP. El resultado impacta sobre el envío de reportes o notificaciones.</textarea>
+      <div class="field" style="margin-top:16px">
+        <label>Comentario registrado</label>
+        <textarea readonly>Solicitud gestionada por Power Automate Approvals. El resultado queda almacenado en la bitácora del bot y en SharePoint como evidencia del proceso.</textarea>
       </div>
-
       <div class="btn-row">
-        <button class="btn btn-primary">Ver evidencia</button>
+        <button class="btn btn-primary">Ver en SharePoint</button>
         <button class="btn btn-secondary" onclick="cerrarDetalle()">Cerrar</button>
       </div>
     </div>
@@ -463,105 +450,38 @@
 </div>
 
 <script>
-  const feedback = document.getElementById("feedback");
-  const comentario = document.getElementById("comentarioAprobacion");
-  const estadoSolicitud = document.getElementById("estadoSolicitud");
-  const btnEnviarNotif = document.getElementById("btnEnviarNotif");
-  const modalDetalle = document.getElementById("modalDetalle");
-
-  function mostrarFeedback(tipo, mensaje) {
-    feedback.className = "feedback visible " + tipo;
-    feedback.textContent = mensaje;
-    setTimeout(() => {
-      feedback.className = "feedback";
-      feedback.textContent = "";
-    }, 3500);
+  function msg(tipo, texto) {
+    const f = document.getElementById("feedback");
+    f.className = "feedback visible " + tipo;
+    f.textContent = texto;
+    setTimeout(() => f.className = "feedback", 3500);
   }
 
-  function actualizarEstado(texto, tipo) {
-    const estadoGeneral = document.getElementById("estadoGeneral");
-    const badgeSolicitud = document.getElementById("badgeSolicitud");
-
-    estadoGeneral.textContent = "● " + texto;
-    badgeSolicitud.textContent = texto;
-
-    if (tipo === "success") {
-      estadoGeneral.style.background = "#ecfdf5";
-      estadoGeneral.style.color = "#166534";
-      estadoGeneral.style.borderColor = "#bbf7d0";
-      badgeSolicitud.className = "badge green";
-    }
-
-    if (tipo === "error") {
-      estadoGeneral.style.background = "#fef2f2";
-      estadoGeneral.style.color = "#991b1b";
-      estadoGeneral.style.borderColor = "#fecaca";
-      badgeSolicitud.className = "badge red";
-    }
-
-    if (tipo === "warning") {
-      estadoGeneral.style.background = "#fffbeb";
-      estadoGeneral.style.color = "#92400e";
-      estadoGeneral.style.borderColor = "#fde68a";
-      badgeSolicitud.className = "badge yellow";
-    }
+  function reenviar(btn) {
+    btn.textContent = "✓ Solicitud reenviada";
+    btn.disabled = true;
+    msg("success", "Solicitud de aprobación reenviada al aprobador vía Microsoft Teams.");
   }
 
-  document.getElementById("btnAprobar").addEventListener("click", () => {
-    estadoSolicitud.value = "Aprobado";
-    btnEnviarNotif.disabled = false;
-    document.getElementById("kpiPendientes").textContent = "2";
-    document.getElementById("kpiAprobadas").textContent = "8";
-    actualizarEstado("Aprobado", "success");
-    mostrarFeedback("success", "Solicitud aprobada correctamente. Ya puede autorizar las notificaciones.");
-  });
+  document.getElementById("btnActualizar").onclick = () => {
+    msg("success", "Estado actualizado. Las 3 solicitudes siguen pendientes de respuesta en Teams.");
+  };
 
-  document.getElementById("btnRechazar").addEventListener("click", () => {
-    if (!comentario.value.trim()) {
-      mostrarFeedback("error", "Debe ingresar un comentario para rechazar la solicitud.");
-      return;
-    }
-
-    estadoSolicitud.value = "Rechazado";
-    btnEnviarNotif.disabled = true;
-    document.getElementById("kpiRechazadas").textContent = "2";
-    actualizarEstado("Rechazado", "error");
-    mostrarFeedback("error", "Solicitud rechazada. El flujo queda detenido hasta corrección.");
-  });
-
-  btnEnviarNotif.addEventListener("click", () => {
-    actualizarEstado("Notificaciones autorizadas", "success");
-    mostrarFeedback("success", "Notificaciones autorizadas. El robot puede continuar con el envío automático.");
-  });
-
-  document.getElementById("btnLimpiar").addEventListener("click", () => {
-    comentario.value = "";
-    estadoSolicitud.value = "Pendiente de aprobación";
-    btnEnviarNotif.disabled = true;
-    actualizarEstado("Pendiente aprobación", "warning");
-    mostrarFeedback("warning", "Formulario reiniciado.");
-  });
-
-  document.getElementById("btnActualizar").addEventListener("click", () => {
-    mostrarFeedback("success", "Bandeja actualizada correctamente.");
-  });
-
-  function abrirDetalle(solicitud, estado, tipo) {
-    document.getElementById("modalTitulo").textContent = "Detalle " + solicitud;
-    document.getElementById("modalSolicitud").value = solicitud;
+  function abrirDetalle(sol, estado, tipo) {
+    document.getElementById("modalSolicitud").value = sol;
     document.getElementById("modalEstado").value = estado;
     document.getElementById("modalTipo").value = tipo;
-    modalDetalle.classList.add("visible");
+    document.getElementById("modalTitulo").textContent = sol;
+    document.getElementById("modalDetalle").classList.add("visible");
   }
 
   function cerrarDetalle() {
-    modalDetalle.classList.remove("visible");
+    document.getElementById("modalDetalle").classList.remove("visible");
   }
 
-  modalDetalle.addEventListener("click", e => {
-    if (e.target === modalDetalle) cerrarDetalle();
+  document.getElementById("modalDetalle").addEventListener("click", e => {
+    if (e.target === document.getElementById("modalDetalle")) cerrarDetalle();
   });
 </script>
-
 </body>
 </html>

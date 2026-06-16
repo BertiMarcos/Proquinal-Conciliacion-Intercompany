@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bitácora Ejecución ICP - PROQUINAL</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Inter,Arial,sans-serif;background:#f3f6fa;color:#1f2937;min-height:100vh}
+    .app{display:grid;grid-template-columns:270px 1fr;min-height:100vh}
+    .sidebar{background:linear-gradient(180deg,#071f3f,#0b3f75);color:#fff;padding:28px 22px;display:flex;flex-direction:column;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:34px}
+    .brand-mark{width:42px;height:42px;border-radius:14px;background:#fff;color:#0b3f75;display:grid;place-items:center;font-weight:900;font-size:20px}
+    .brand strong{display:block;font-size:17px;letter-spacing:.5px}
+    .brand span{font-size:12px;color:#bfdbfe}
+    .nav{display:grid;gap:8px}
+    .nav a{color:#dbeafe;text-decoration:none;padding:13px 14px;border-radius:14px;font-size:14px;font-weight:700;transition:.2s;display:flex;gap:10px;align-items:center}
+    .nav a.active,.nav a:hover{background:rgba(255,255,255,.14);color:#fff}
+    .sidebar-footer{background:rgba(255,255,255,.1);border-radius:18px;padding:16px;color:#dbeafe;font-size:13px;line-height:1.5}
+    .main{padding:30px}
+    .topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:24px}
+    .page-title h1{color:#071f3f;font-size:30px;margin-bottom:8px}
+    .page-title p{color:#64748b;font-size:15px;line-height:1.5;max-width:900px}
+    .status-badge{background:#ecfdf5;color:#166534;border:1px solid #bbf7d0;padding:10px 14px;border-radius:999px;font-size:13px;font-weight:900;white-space:nowrap}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:24px;padding:24px;box-shadow:0 10px 30px rgba(15,23,42,.05);margin-bottom:24px}
+    .section-title{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:20px}
+    .section-title h2{color:#071f3f;font-size:21px;margin-bottom:5px}
+    .section-title p{color:#64748b;font-size:13px;line-height:1.5}
+    .layout{display:grid;grid-template-columns:1.3fr .7fr;gap:24px;align-items:start}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+    .kpi{background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:18px;box-shadow:0 10px 26px rgba(15,23,42,.045)}
+    .kpi span{display:block;font-size:12px;font-weight:900;color:#64748b;margin-bottom:8px}
+    .kpi strong{color:#071f3f;font-size:26px}
+    .badge{display:inline-flex;align-items:center;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;white-space:nowrap}
+    .badge.green{background:#ecfdf5;color:#166534}
+    .badge.yellow{background:#fffbeb;color:#92400e}
+    .badge.red{background:#fef2f2;color:#991b1b}
+    .badge.blue{background:#e8f2ff;color:#0b4f8a}
+    .badge.gray{background:#f1f5f9;color:#475569}
+    .badge.purple{background:#f3e8ff;color:#6b21a8}
+    .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+    .btn{border:none;border-radius:14px;height:46px;padding:0 18px;font-weight:900;cursor:pointer;transition:.2s;font-size:14px}
+    .btn:hover:not(:disabled){transform:translateY(-1px)}
+    .btn-primary{background:linear-gradient(135deg,#0b4f8a,#0d6fb8);color:#fff;box-shadow:0 10px 22px rgba(11,79,138,.18)}
+    .btn-secondary{background:#eef2f7;color:#334155}
+    .btn-outline{background:#fff;color:#0b4f8a;border:1px solid #bfdbfe}
+    .field label{display:block;font-size:13px;font-weight:900;color:#374151;margin-bottom:8px}
+    .field input,.field select{width:100%;border:1px solid #d1d5db;border-radius:14px;padding:0 14px;height:46px;outline:none;font-size:14px;background:#fff;color:#1f2937;transition:.2s}
+    .field input:focus,.field select:focus{border-color:#0b4f8a;box-shadow:0 0 0 4px rgba(11,79,138,.1)}
+    .table-wrap{overflow-x:auto}
+    table{width:100%;min-width:900px;border-collapse:collapse}
+    th{text-align:left;background:#f8fafc;color:#64748b;padding:13px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #e5e7eb}
+    td{padding:13px;border-bottom:1px solid #edf2f7;color:#374151;font-size:13px;vertical-align:middle}
+    td strong{color:#111827}
+    .mini-btn{border:1px solid #dbeafe;background:#fff;color:#0b4f8a;border-radius:10px;padding:7px 10px;font-size:12px;font-weight:900;cursor:pointer}
+    .log-line{display:grid;grid-template-columns:160px 90px 1fr auto;gap:14px;align-items:start;padding:12px 14px;border-bottom:1px solid #f1f5f9;font-size:13px}
+    .log-line:last-child{border-bottom:none}
+    .log-line:hover{background:#f8fafc;border-radius:10px}
+    .log-time{color:#64748b;font-family:monospace;font-size:12px;white-space:nowrap}
+    .log-level{font-weight:900;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+    .log-level.info{color:#0b4f8a}
+    .log-level.ok{color:#166534}
+    .log-level.warn{color:#92400e}
+    .log-level.error{color:#991b1b}
+    .log-msg{color:#334155;line-height:1.4}
+    .log-msg strong{color:#111827}
+    .stat-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-radius:13px;background:#f8fafc;border:1px solid #e5e7eb;margin-bottom:8px}
+    .stat-row span{font-size:13px;color:#64748b;font-weight:700}
+    .stat-row strong{font-size:13px;color:#111827}
+    .feedback{display:none;border-radius:16px;padding:14px 16px;font-size:14px;font-weight:800;margin-bottom:18px}
+    .feedback.visible{display:block}
+    .feedback.success{background:#ecfdf5;color:#166534;border:1px solid #bbf7d0}
+    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{display:none}.layout{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:760px){.main{padding:18px}.topbar,.section-title{flex-direction:column}.grid-2,.grid-3,.kpis{grid-template-columns:1fr}.btn-row{flex-direction:column}.btn{width:100%}.log-line{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div>
+      <div class="brand">
+        <div class="brand-mark">P</div>
+        <div><strong>PROQUINAL</strong><span>Agente Intercompany</span></div>
+      </div>
+      <nav class="nav">
+        <a href="dashboard_intercompany.html">▣ Dashboard</a>
+        <a href="envio_plantilla_icp.html">📤 Envío plantilla</a>
+        <a href="recepcion_plantillas_icp.html">▤ Recepción ICP</a>
+        <a href="validacion_archivo_icp.html">▧ Validación archivo</a>
+        <a href="parametros_tipo_cambio.html">▨ Tipo de cambio</a>
+        <a href="conciliacion_automatica.html">▦ Conciliación</a>
+        <a href="gestion_diferencias_icp.html">⚠ Diferencias</a>
+        <a href="reporte_final_icp.html">▤ Reporte final</a>
+        <a href="aprobacion_conciliacion_icp.html">✓ Aprobaciones</a>
+        <a href="notificaciones_automaticas_icp.html">✉ Notificaciones</a>
+        <a href="repositorio_historico_icp.html">▥ Repositorio</a>
+        <a href="segundo_envio_icp.html">↩ Segundo envío</a>
+        <a href="bitacora_ejecucion_icp.html" class="active">☰ Bitácora</a>
+      </nav>
+      <style>
+        .nav-docs-divider{border:none;border-top:1px solid rgba(255,255,255,0.15);margin:16px 0 12px}
+        .nav-docs-label{font-size:11px;font-weight:700;letter-spacing:.08em;color:rgba(255,255,255,0.45);text-transform:uppercase;margin-bottom:8px;padding:0 4px;display:block}
+        .nav-docs a{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;color:#93c5fd;text-decoration:none;font-size:13px;font-weight:500;transition:.15s;margin-bottom:2px}
+        .nav-docs a::before{content:"📄";font-size:13px;flex-shrink:0}
+        .nav-docs a:hover{background:rgba(147,197,253,0.15);color:#fff}
+      </style>
+      <div class="nav-docs">
+        <hr class="nav-docs-divider">
+        <span class="nav-docs-label">Documentación</span>
+        <a href="https://any2cloud-team-njnib2r4.atlassian.net/wiki/spaces/DP/pages/30343169/Conciliacion+Intercompany" target="_blank" rel="noopener">Conciliación Intercompany</a>
+      </div>
+    </div>
+    <div class="sidebar-footer">Registro detallado de cada ejecución del bot: archivos procesados, validaciones, errores técnicos, aprobaciones y reportes generados.</div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="page-title">
+        <h1>Bitácora de Ejecución ICP</h1>
+        <p>Registro completo de cada ejecución del agente: estado del proceso, archivos procesados, errores técnicos, aprobaciones, correos enviados y resultado de cada etapa. Permite auditoría y control interno del proceso mensual.</p>
+      </div>
+      <div class="status-badge">● Proceso completado</div>
+    </header>
+
+    <section class="kpis">
+      <div class="kpi"><span>Ejecuciones este mes</span><strong>14</strong></div>
+      <div class="kpi"><span>Etapas completadas</span><strong>52</strong></div>
+      <div class="kpi"><span>Errores técnicos</span><strong>2</strong></div>
+      <div class="kpi"><span>Último proceso</span><strong>Hoy</strong></div>
+    </section>
+
+    <div id="feedback" class="feedback"></div>
+
+    <section class="layout">
+      <div>
+        <!-- Filtros -->
+        <div class="card">
+          <div class="section-title">
+            <div><h2>Filtrar registros</h2><p>Buscar por período, etapa o tipo de evento.</p></div>
+          </div>
+          <div class="grid-3">
+            <div class="field"><label>Período</label>
+              <select id="filtroPeriodo">
+                <option>Mayo 2026</option><option>Abril 2026</option><option>Marzo 2026</option>
+              </select>
+            </div>
+            <div class="field"><label>Etapa del proceso</label>
+              <select id="filtroEtapa">
+                <option>Todas las etapas</option>
+                <option>Recepción</option><option>Validación</option><option>Conciliación</option>
+                <option>Diferencias</option><option>Aprobación</option><option>Notificaciones</option>
+                <option>Reporte final</option>
+              </select>
+            </div>
+            <div class="field"><label>Nivel</label>
+              <select id="filtroNivel">
+                <option>Todos</option><option>INFO</option><option>OK</option><option>WARN</option><option>ERROR</option>
+              </select>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-primary" id="btnFiltrar">Aplicar filtros</button>
+            <button class="btn btn-outline" id="btnExportar">Exportar bitácora</button>
+          </div>
+        </div>
+
+        <!-- Log en tiempo real -->
+        <div class="card">
+          <div class="section-title">
+            <div><h2>Registro de eventos — Mayo 2026</h2><p>Ejecución del bot: 12/06/2026</p></div>
+            <span class="badge green">Completado</span>
+          </div>
+          <div style="background:#0d1117;border-radius:16px;padding:20px;overflow-x:auto">
+            <div class="log-line" style="border-color:#21262d">
+              <span class="log-time" style="color:#8b949e">12/06/2026 08:00:01</span>
+              <span class="log-level info" style="color:#58a6ff">INFO</span>
+              <span class="log-msg" style="color:#c9d1d9">Bot ICP iniciado. Período: <strong style="color:#fff">Mayo 2026</strong>.</span>
+              <span></span>
+            </div>
+            <div class="log-line" style="border-color:#21262d">
+              <span class="log-time" style="color:#8b949e">12/06/2026 08:00:04</span>
+              <span class="log-level info" style="color:#58a6ff">INFO</span>
+              <span class="log-msg" style="color:#c9d1d9">Accediendo a buzón Outlook: <strong style="color:#fff">bot.icp@proquinal.com</strong>.</span>
+              <span></span>
+            </div>
+            <div class="log-line" style="border-color:#21262d">
+              <span class="log-time" style="color:#8b949e">12/06/2026 08:00:12</span>
+              <span class="log-level ok" style="color:#3fb950">OK</span>
+              <span class="log-msg" style="color:#c9d1d9">3 archivos ICP detectados. Clasificados por compañía y versión.</span>
+              <span></span>
+            </div>
+            <div class="log-line" style="border-color:#21262d">
+              <span class="log-time" style="color:#8b949e">12/06/2026 08:00:18</span>
+              <span class="log-level ok" style="color:#3fb950">OK</span>
+              <span class="log-msg" style="color:#c9d1d9">Archivos descargados y copiados en SharePoint: <strong style="color:#fff">ICP/2026/Mayo/Recibidos/</strong></span>
+              <span></span>
+            </div>
+            <div class="log-line" style="border-color:#21262d">
+              <span class="log-time" style="color:#8b949e">12/06/2026 08:01:05</span>
+              <span class="log-level ok" style="color:#3fb950">OK</span>
+              <span class="log-msg" style="color:#c9d1d9">Validación estructura: <strong style="color:#fff">ICP_Proquinal_CR_2026_05.xlsx</strong> → Sin errores críticos.</span>
+              <span></span>
+            </div>
+            <div class="log-line" style="border-color:#21262d">
+              <span class="log-time" style="color:#8b949e">12/06/2026 08:01:22</span>
+              <span class="log-level warn" style="color:#d29922">WARN</span>
+              <span class="log-msg" style="color:#c9d1d9">Fechas en formato texto detectadas en <strong style="color:#fff">Spradling_2026_05.xlsx</strong>. Normalizadas a dd/MM/yyyy.</span>
+              <span></span>
+            </div>
+            <div class="log-line" style="border-color:#21262d">
+              <span class="log-time" style="color:#8b949e">12/06/2026 08:01:45</span>
+              <span class="log-level warn" style="color:#d29922">WARN</span>
+              <span class="log-msg" style="color:#c9d1d9">Cuentas vacías en <strong style="color:#fff">Calipso_2026_05.xlsx</strong>: 3 registros. Notificación enviada al remitente.</span>
+              <span></span>
+            </div>
+            <div class="log-line" style="border-color:#21262d">
+              <span class="log-time" style="color:#8b949e">12/06/2026 08:03:10</span>
+              <span class="log-level info" style="color:#58a6ff">INFO</span>
+              <span class="log-msg" style="color:#c9d1d9">Tasa de cambio Mayo 2026 cargada: <strong style="color:#fff">USD/CRC 521.4 · USD/COP 4,112</strong>.</span>
+              <span></span>
+            </div>
+            <div class="log-line" style="border-color:#21262d">
+              <span class="log-time" style="color:#8b949e">12/06/2026 08:05:44</span>
+              <span class="log-level ok" style="color:#3fb950">OK</span>
+              <span class="log-msg" style="color:#c9d1d9">Conciliación ejecutada. <strong style="color:#fff">142 operaciones conciliadas.</strong> 18 diferencias identificadas.</span>
+              <span></span>
+            </div>
+            <div class="log-line" style="border-color:#21262d">
+              <span class="log-time" style="color:#8b949e">12/06/2026 08:06:01</span>
+              <span class="log-level info" style="color:#58a6ff">INFO</span>
+              <span class="log-msg" style="color:#c9d1d9">Solicitud de aprobación enviada vía <strong style="color:#fff">Microsoft Approvals</strong> a: Gerencia Financiera.</span>
+              <span></span>
+            </div>
+            <div class="log-line" style="border-color:#21262d">
+              <span class="log-time" style="color:#8b949e">12/06/2026 09:14:33</span>
+              <span class="log-level ok" style="color:#3fb950">OK</span>
+              <span class="log-msg" style="color:#c9d1d9">Aprobación recibida en Teams. Aprobador: <strong style="color:#fff">Gerencia Financiera</strong>. Comentario: "Conforme."</span>
+              <span></span>
+            </div>
+            <div class="log-line" style="border-color:#21262d">
+              <span class="log-time" style="color:#8b949e">12/06/2026 09:14:40</span>
+              <span class="log-level ok" style="color:#3fb950">OK</span>
+              <span class="log-msg" style="color:#c9d1d9">Notificación de diferencias enviada a <strong style="color:#fff">Spradling Group</strong>. Adjunto: Diferencias_Mayo_2026.xlsx</span>
+              <span></span>
+            </div>
+            <div class="log-line" style="border-color:#21262d">
+              <span class="log-time" style="color:#8b949e">12/06/2026 09:15:02</span>
+              <span class="log-level ok" style="color:#3fb950">OK</span>
+              <span class="log-msg" style="color:#c9d1d9">Reporte final generado: <strong style="color:#fff">Reporte_ICP_Mayo_2026.xlsx</strong>. Guardado en SharePoint.</span>
+              <span></span>
+            </div>
+            <div class="log-line" style="border-color:#21262d">
+              <span class="log-time" style="color:#8b949e">12/06/2026 09:15:18</span>
+              <span class="log-level ok" style="color:#3fb950">OK</span>
+              <span class="log-msg" style="color:#c9d1d9"><strong style="color:#fff">Proceso Mayo 2026 completado.</strong> Duración total: 1h 15min.</span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Historial de ejecuciones -->
+        <div class="card">
+          <div class="section-title">
+            <div><h2>Historial de ejecuciones</h2><p>Resumen de ejecuciones anteriores del bot.</p></div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Ejecución</th><th>Período</th><th>Archivos</th><th>Conciliadas</th><th>Diferencias</th><th>Errores</th><th>Duración</th><th>Resultado</th><th>Log</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>EJC-2026-014</strong></td><td>Mayo 2026</td><td>3</td><td>142</td><td>18</td><td>0</td><td>1h 15m</td>
+                  <td><span class="badge green">Completado</span></td>
+                  <td><button class="mini-btn">Ver</button></td>
+                </tr>
+                <tr>
+                  <td><strong>EJC-2026-013</strong></td><td>Mayo 2026</td><td>3</td><td>0</td><td>0</td><td>1</td><td>4m</td>
+                  <td><span class="badge yellow">Interrumpido</span></td>
+                  <td><button class="mini-btn">Ver</button></td>
+                </tr>
+                <tr>
+                  <td><strong>EJC-2026-010</strong></td><td>Abril 2026</td><td>3</td><td>138</td><td>9</td><td>0</td><td>1h 02m</td>
+                  <td><span class="badge green">Completado</span></td>
+                  <td><button class="mini-btn">Ver</button></td>
+                </tr>
+                <tr>
+                  <td><strong>EJC-2026-007</strong></td><td>Marzo 2026</td><td>3</td><td>151</td><td>5</td><td>1</td><td>1h 28m</td>
+                  <td><span class="badge green">Completado</span></td>
+                  <td><button class="mini-btn">Ver</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <aside>
+        <div class="card">
+          <div class="section-title"><div><h2>Última ejecución</h2><p>Resumen EJC-2026-014</p></div></div>
+          <div class="stat-row"><span>Inicio</span><strong>12/06/2026 08:00</strong></div>
+          <div class="stat-row"><span>Fin</span><strong>12/06/2026 09:15</strong></div>
+          <div class="stat-row"><span>Duración</span><strong>1h 15min</strong></div>
+          <div class="stat-row"><span>Archivos procesados</span><strong>3</strong></div>
+          <div class="stat-row"><span>Etapas ejecutadas</span><strong>8 / 8</strong></div>
+          <div class="stat-row"><span>Errores técnicos</span><strong>0</strong></div>
+          <div class="stat-row"><span>Advertencias</span><strong>2</strong></div>
+          <div class="stat-row"><span>Resultado</span><strong style="color:#166534">✓ Completado</strong></div>
+        </div>
+
+        <div class="card">
+          <div class="section-title"><div><h2>Etapas del proceso</h2><p>Estado de cada fase en la última ejecución.</p></div></div>
+          <div style="display:grid;gap:8px">
+            <div class="stat-row"><span>📥 Recepción</span><span class="badge green">OK</span></div>
+            <div class="stat-row"><span>▧ Validación</span><span class="badge yellow">Con advertencias</span></div>
+            <div class="stat-row"><span>▨ Tipo de cambio</span><span class="badge green">OK</span></div>
+            <div class="stat-row"><span>▦ Conciliación</span><span class="badge green">OK</span></div>
+            <div class="stat-row"><span>⚠ Diferencias</span><span class="badge blue">18 detectadas</span></div>
+            <div class="stat-row"><span>✓ Aprobación</span><span class="badge green">Aprobado Teams</span></div>
+            <div class="stat-row"><span>✉ Notificaciones</span><span class="badge green">Enviadas</span></div>
+            <div class="stat-row"><span>▤ Reporte final</span><span class="badge green">Generado</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title"><div><h2>Evidencias en SharePoint</h2><p>Archivos generados por la ejecución.</p></div></div>
+          <div style="display:grid;gap:8px">
+            <button class="btn btn-outline" style="height:40px;font-size:13px;text-align:left;padding:0 14px" onclick="msg('success','Abriendo carpeta en SharePoint...')">📁 ICP/2026/Mayo/</button>
+            <button class="btn btn-outline" style="height:40px;font-size:13px;text-align:left;padding:0 14px" onclick="msg('success','Descargando log completo...')">📄 Log_EJC-2026-014.txt</button>
+            <button class="btn btn-outline" style="height:40px;font-size:13px;text-align:left;padding:0 14px" onclick="msg('success','Descargando reporte...')">📊 Reporte_ICP_Mayo_2026.xlsx</button>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+
+<script>
+  function msg(tipo, texto) {
+    const f = document.getElementById("feedback");
+    f.className = "feedback visible " + (tipo === "success" ? "success" : "success");
+    f.textContent = texto;
+    setTimeout(() => f.className = "feedback", 3000);
+  }
+  document.getElementById("btnFiltrar").onclick = () => msg("success","Filtros aplicados. Mostrando registros de Mayo 2026.");
+  document.getElementById("btnExportar").onclick = () => msg("success","Bitácora exportada: Bitacora_ICP_Mayo_2026.xlsx guardado en SharePoint.");
+</script>
+</body>
+</html>

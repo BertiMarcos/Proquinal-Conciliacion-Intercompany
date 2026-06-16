@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Segundo Envío ICP - PROQUINAL</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Inter,Arial,sans-serif;background:#f3f6fa;color:#1f2937;min-height:100vh}
+    .app{display:grid;grid-template-columns:270px 1fr;min-height:100vh}
+    .sidebar{background:linear-gradient(180deg,#071f3f,#0b3f75);color:#fff;padding:28px 22px;display:flex;flex-direction:column;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:34px}
+    .brand-mark{width:42px;height:42px;border-radius:14px;background:#fff;color:#0b3f75;display:grid;place-items:center;font-weight:900;font-size:20px}
+    .brand strong{display:block;font-size:17px;letter-spacing:.5px}
+    .brand span{font-size:12px;color:#bfdbfe}
+    .nav{display:grid;gap:8px}
+    .nav a{color:#dbeafe;text-decoration:none;padding:13px 14px;border-radius:14px;font-size:14px;font-weight:700;transition:.2s;display:flex;gap:10px;align-items:center}
+    .nav a.active,.nav a:hover{background:rgba(255,255,255,.14);color:#fff}
+    .sidebar-footer{background:rgba(255,255,255,.1);border-radius:18px;padding:16px;color:#dbeafe;font-size:13px;line-height:1.5}
+    .main{padding:30px}
+    .topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:24px}
+    .page-title h1{color:#071f3f;font-size:30px;margin-bottom:8px}
+    .page-title p{color:#64748b;font-size:15px;line-height:1.5;max-width:900px}
+    .status-badge{background:#fffbeb;color:#92400e;border:1px solid #fde68a;padding:10px 14px;border-radius:999px;font-size:13px;font-weight:900;white-space:nowrap}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:24px;padding:24px;box-shadow:0 10px 30px rgba(15,23,42,.05);margin-bottom:24px}
+    .section-title{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:20px}
+    .section-title h2{color:#071f3f;font-size:21px;margin-bottom:5px}
+    .section-title p{color:#64748b;font-size:13px;line-height:1.5}
+    .layout{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:start}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+    .kpi{background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:18px;box-shadow:0 10px 26px rgba(15,23,42,.045)}
+    .kpi span{display:block;font-size:12px;font-weight:900;color:#64748b;margin-bottom:8px}
+    .kpi strong{color:#071f3f;font-size:26px}
+    .badge{display:inline-flex;align-items:center;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900;white-space:nowrap}
+    .badge.green{background:#ecfdf5;color:#166534}
+    .badge.yellow{background:#fffbeb;color:#92400e}
+    .badge.red{background:#fef2f2;color:#991b1b}
+    .badge.blue{background:#e8f2ff;color:#0b4f8a}
+    .badge.gray{background:#f1f5f9;color:#475569}
+    .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+    .btn{border:none;border-radius:14px;height:46px;padding:0 18px;font-weight:900;cursor:pointer;transition:.2s;font-size:14px}
+    .btn:hover:not(:disabled){transform:translateY(-1px)}
+    .btn:disabled{cursor:not-allowed;opacity:.55}
+    .btn-primary{background:linear-gradient(135deg,#0b4f8a,#0d6fb8);color:#fff;box-shadow:0 10px 22px rgba(11,79,138,.18)}
+    .btn-secondary{background:#eef2f7;color:#334155}
+    .btn-success{background:#16a34a;color:#fff}
+    .btn-outline{background:#fff;color:#0b4f8a;border:1px solid #bfdbfe}
+    .field label{display:block;font-size:13px;font-weight:900;color:#374151;margin-bottom:8px}
+    .field input,.field select,.field textarea{width:100%;border:1px solid #d1d5db;border-radius:14px;padding:0 14px;height:46px;outline:none;font-size:14px;background:#fff;color:#1f2937;transition:.2s}
+    .field textarea{height:86px;padding-top:12px;resize:vertical}
+    .field input:focus,.field select:focus{border-color:#0b4f8a;box-shadow:0 0 0 4px rgba(11,79,138,.1)}
+    .table-wrap{overflow-x:auto}
+    table{width:100%;min-width:800px;border-collapse:collapse}
+    th{text-align:left;background:#f8fafc;color:#64748b;padding:13px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #e5e7eb}
+    td{padding:13px;border-bottom:1px solid #edf2f7;color:#374151;font-size:13px;vertical-align:middle}
+    td strong{color:#111827}
+    .mini-btn{border:1px solid #dbeafe;background:#fff;color:#0b4f8a;border-radius:10px;padding:7px 10px;font-size:12px;font-weight:900;cursor:pointer}
+    .comparison-row{display:grid;grid-template-columns:1fr 24px 1fr;gap:10px;align-items:center;padding:12px;border:1px solid #e5e7eb;border-radius:14px;margin-bottom:10px;background:#f8fafc}
+    .comparison-row.changed{border-color:#fde68a;background:#fffbeb}
+    .comparison-row.ok{border-color:#bbf7d0;background:#f0fdf4}
+    .comparison-row.new{border-color:#bfdbfe;background:#f0f7ff}
+    .comp-label{font-size:11px;font-weight:900;color:#64748b;text-transform:uppercase;margin-bottom:4px}
+    .comp-val{font-size:13px;color:#111827;font-weight:700}
+    .comp-arrow{text-align:center;font-size:16px;color:#94a3b8}
+    .stat-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-radius:13px;background:#f8fafc;border:1px solid #e5e7eb;margin-bottom:8px}
+    .stat-row span{font-size:13px;color:#64748b;font-weight:700}
+    .stat-row strong{font-size:13px;color:#111827}
+    .rule-list{display:grid;gap:12px}
+    .rule{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:flex-start;border:1px solid #e5e7eb;border-radius:17px;padding:14px;background:#fff}
+    .rule-icon{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;font-weight:900}
+    .rule.green .rule-icon{background:#dcfce7;color:#166534}
+    .rule.yellow .rule-icon{background:#fef3c7;color:#92400e}
+    .rule.red .rule-icon{background:#fee2e2;color:#991b1b}
+    .rule.blue .rule-icon{background:#e8f2ff;color:#0b4f8a}
+    .rule strong{display:block;color:#111827;font-size:14px;margin-bottom:4px}
+    .rule span{color:#64748b;font-size:13px;line-height:1.5}
+    .feedback{display:none;border-radius:16px;padding:14px 16px;font-size:14px;font-weight:800;margin-bottom:18px}
+    .feedback.visible{display:block}
+    .feedback.success{background:#ecfdf5;color:#166534;border:1px solid #bbf7d0}
+    .feedback.warning{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+    .feedback.error{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+    @media(max-width:1100px){.app{grid-template-columns:1fr}.sidebar{display:none}.layout{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:760px){.main{padding:18px}.topbar,.section-title{flex-direction:column}.grid-2,.grid-3,.kpis{grid-template-columns:1fr}.btn-row{flex-direction:column}.btn{width:100%}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div>
+      <div class="brand">
+        <div class="brand-mark">P</div>
+        <div><strong>PROQUINAL</strong><span>Agente Intercompany</span></div>
+      </div>
+      <nav class="nav">
+        <a href="dashboard_intercompany.html">▣ Dashboard</a>
+        <a href="envio_plantilla_icp.html">📤 Envío plantilla</a>
+        <a href="recepcion_plantillas_icp.html">▤ Recepción ICP</a>
+        <a href="validacion_archivo_icp.html">▧ Validación archivo</a>
+        <a href="parametros_tipo_cambio.html">▨ Tipo de cambio</a>
+        <a href="conciliacion_automatica.html">▦ Conciliación</a>
+        <a href="gestion_diferencias_icp.html">⚠ Diferencias</a>
+        <a href="reporte_final_icp.html">▤ Reporte final</a>
+        <a href="aprobacion_conciliacion_icp.html">✓ Aprobaciones</a>
+        <a href="notificaciones_automaticas_icp.html">✉ Notificaciones</a>
+        <a href="repositorio_historico_icp.html">▥ Repositorio</a>
+        <a href="segundo_envio_icp.html" class="active">↩ Segundo envío</a>
+        <a href="bitacora_ejecucion_icp.html">☰ Bitácora</a>
+      </nav>
+      <style>
+        .nav-docs-divider{border:none;border-top:1px solid rgba(255,255,255,0.15);margin:16px 0 12px}
+        .nav-docs-label{font-size:11px;font-weight:700;letter-spacing:.08em;color:rgba(255,255,255,0.45);text-transform:uppercase;margin-bottom:8px;padding:0 4px;display:block}
+        .nav-docs a{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;color:#93c5fd;text-decoration:none;font-size:13px;font-weight:500;transition:.15s;margin-bottom:2px}
+        .nav-docs a::before{content:"📄";font-size:13px;flex-shrink:0}
+        .nav-docs a:hover{background:rgba(147,197,253,0.15);color:#fff}
+      </style>
+      <div class="nav-docs">
+        <hr class="nav-docs-divider">
+        <span class="nav-docs-label">Documentación</span>
+        <a href="https://any2cloud-team-njnib2r4.atlassian.net/wiki/spaces/DP/pages/30343169/Conciliacion+Intercompany" target="_blank" rel="noopener">Conciliación Intercompany</a>
+      </div>
+    </div>
+    <div class="sidebar-footer">El bot valida archivos corregidos o el segundo envío con Financial Statement, verificando que no se alteren registros ya conciliados.</div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="page-title">
+        <h1>Segundo Envío y Correcciones ICP</h1>
+        <p>Cuando una compañía corrige su archivo o envía el segundo envío con la hoja Financial Statement, el bot valida los cambios, verifica que los registros conciliados no hayan sido alterados y re-ejecuta la conciliación sobre la información actualizada.</p>
+      </div>
+      <div class="status-badge" id="estadoGeneral">● Aguardando correcciones</div>
+    </header>
+
+    <section class="kpis">
+      <div class="kpi"><span>Archivos corregidos recibidos</span><strong>2</strong></div>
+      <div class="kpi"><span>Con Financial Statement</span><strong>1</strong></div>
+      <div class="kpi"><span>Re-conciliaciones ejecutadas</span><strong>2</strong></div>
+      <div class="kpi"><span>Diferencias resueltas</span><strong id="kpiResueltas">0</strong></div>
+    </section>
+
+    <div id="feedback" class="feedback"></div>
+
+    <section class="layout">
+      <div>
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2>Archivos de corrección recibidos</h2>
+              <p>El bot detecta automáticamente en el buzón Outlook si una compañía reenvió su archivo con correcciones.</p>
+            </div>
+            <button class="btn btn-outline" style="height:38px;font-size:13px" id="btnVerificar">Verificar buzón</button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Compañía</th><th>Archivo</th><th>Tipo envío</th><th>Recibido</th><th>Financial Statement</th><th>Estado</th><th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Spradling Group</strong></td>
+                  <td>ICP_Spradling_2026_05_V2.xlsx</td>
+                  <td><span class="badge yellow">Archivo corregido</span></td>
+                  <td>13/06/2026 10:22</td>
+                  <td><span class="badge gray">No incluida</span></td>
+                  <td><span class="badge green">Re-conciliado</span></td>
+                  <td><button class="mini-btn" onclick="verComparacion('Spradling')">Ver cambios</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Calipso S.A.</strong></td>
+                  <td>ICP_Calipso_2026_05_V2.xlsx</td>
+                  <td><span class="badge blue">Segundo envío</span></td>
+                  <td>13/06/2026 14:05</td>
+                  <td><span class="badge green">Incluida</span></td>
+                  <td><span class="badge green">Re-conciliado</span></td>
+                  <td><button class="mini-btn" onclick="verComparacion('Calipso')">Ver cambios</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card" id="cardComparacion" style="display:none">
+          <div class="section-title">
+            <div><h2 id="tituloComparacion">Comparación de versiones</h2><p>El bot verifica que los registros ya conciliados no hayan sido alterados y muestra los cambios realizados.</p></div>
+            <span class="badge blue" id="badgeVersion">V1 → V2</span>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+            <div style="padding:10px 14px;border-radius:12px;background:#f8fafc;border:1px solid #e5e7eb;font-size:13px">
+              <div style="font-weight:900;color:#64748b;font-size:11px;text-transform:uppercase;margin-bottom:4px">Versión original (V1)</div>
+              <div style="color:#111827;font-weight:700">Enviada: 10/06/2026 · 156 registros</div>
+            </div>
+            <div style="padding:10px 14px;border-radius:12px;background:#f0f7ff;border:1px solid #bfdbfe;font-size:13px">
+              <div style="font-weight:900;color:#0b4f8a;font-size:11px;text-transform:uppercase;margin-bottom:4px">Versión corregida (V2)</div>
+              <div style="color:#111827;font-weight:700">Enviada: 13/06/2026 · 156 registros</div>
+            </div>
+          </div>
+
+          <div id="listaComparacion">
+            <div class="comparison-row ok">
+              <div><div class="comp-label">Cuenta 21050001 — Factura F-2026-0441</div><div class="comp-val">USD 12,500.00 ✓ Sin cambios</div></div>
+              <div class="comp-arrow">→</div>
+              <div><div class="comp-label">Versión V2</div><div class="comp-val" style="color:#166534">USD 12,500.00 ✓ Idéntico</div></div>
+            </div>
+            <div class="comparison-row ok">
+              <div><div class="comp-label">Cuenta 21050001 — Factura F-2026-0442</div><div class="comp-val">USD 8,200.00 ✓ Sin cambios</div></div>
+              <div class="comp-arrow">→</div>
+              <div><div class="comp-label">Versión V2</div><div class="comp-val" style="color:#166534">USD 8,200.00 ✓ Idéntico</div></div>
+            </div>
+            <div class="comparison-row changed">
+              <div><div class="comp-label">Cuenta 41010005 — Factura F-2026-0501</div><div class="comp-val">USD 3,100.00 ⚠ Diferencia anterior</div></div>
+              <div class="comp-arrow" style="color:#92400e">→</div>
+              <div><div class="comp-label">Versión V2 (corregido)</div><div class="comp-val" style="color:#92400e">USD 3,000.00 ✓ Corregido por compañía</div></div>
+            </div>
+            <div class="comparison-row new">
+              <div><div class="comp-label">Financial Statement — Hoja FS</div><div class="comp-val">No incluida en V1</div></div>
+              <div class="comp-arrow" style="color:#0b4f8a">→</div>
+              <div><div class="comp-label">Versión V2 (nuevo)</div><div class="comp-val" style="color:#0b4f8a">✓ Hoja FS incluida y validada</div></div>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-success" id="btnReconciliar">Re-ejecutar conciliación</button>
+            <button class="btn btn-secondary" onclick="document.getElementById('cardComparacion').style.display='none'">Cerrar comparación</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">
+            <div><h2>Resultado de re-conciliaciones</h2><p>Comparación del resultado antes y después de las correcciones.</p></div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Compañía</th><th>Diferencias V1</th><th>Diferencias V2</th><th>Resueltas</th><th>Persisten</th><th>Reporte</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Spradling Group</strong></td>
+                  <td><span class="badge red">11</span></td>
+                  <td><span class="badge yellow">4</span></td>
+                  <td><span class="badge green">7 resueltas</span></td>
+                  <td>4</td>
+                  <td><button class="mini-btn">Ver</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Calipso S.A.</strong></td>
+                  <td><span class="badge red">7</span></td>
+                  <td><span class="badge yellow">2</span></td>
+                  <td><span class="badge green">5 resueltas</span></td>
+                  <td>2</td>
+                  <td><button class="mini-btn">Ver</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <aside>
+        <div class="card">
+          <div class="section-title"><div><h2>¿Cuándo aplica?</h2><p>Escenarios que activan este proceso.</p></div></div>
+          <div class="rule-list">
+            <div class="rule yellow">
+              <div class="rule-icon" style="background:#fef3c7;color:#92400e">↩</div>
+              <div>
+                <strong>Archivo corregido</strong>
+                <span>La compañía reenvía el mismo archivo con correcciones luego de recibir la notificación de diferencias.</span>
+              </div>
+            </div>
+            <div class="rule blue">
+              <div class="rule-icon" style="background:#e8f2ff;color:#0b4f8a">2</div>
+              <div>
+                <strong>Segundo envío</strong>
+                <span>La compañía envía un segundo archivo que incluye la hoja Financial Statement con información complementaria.</span>
+              </div>
+            </div>
+            <div class="rule green">
+              <div class="rule-icon" style="background:#dcfce7;color:#166534">✓</div>
+              <div>
+                <strong>Integridad garantizada</strong>
+                <span>El bot verifica que los registros ya conciliados no hayan sido modificados indebidamente.</span>
+              </div>
+            </div>
+            <div class="rule red">
+              <div class="rule-icon" style="background:#fee2e2;color:#991b1b">×</div>
+              <div>
+                <strong>Alteración detectada</strong>
+                <span>Si se detectan cambios en registros conciliados, el bot alerta y requiere aprobación del responsable.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title"><div><h2>Hojas validadas en V2</h2><p>Verificación de estructura del segundo envío.</p></div></div>
+          <div class="stat-row"><span>Sales and Cost Detail</span><span class="badge green">✓ OK</span></div>
+          <div class="stat-row"><span>Accounts Receivable</span><span class="badge green">✓ OK</span></div>
+          <div class="stat-row"><span>Accounts Payable</span><span class="badge green">✓ OK</span></div>
+          <div class="stat-row"><span>Purchases Detail</span><span class="badge green">✓ OK</span></div>
+          <div class="stat-row"><span>Expenses Detail</span><span class="badge green">✓ OK</span></div>
+          <div class="stat-row"><span>Interest on Loans</span><span class="badge gray">No aplica</span></div>
+          <div class="stat-row"><span>IFRS 16</span><span class="badge gray">No aplica</span></div>
+          <div class="stat-row"><span>Financial Statement</span><span class="badge blue">✓ Incluida V2</span></div>
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+
+<script>
+  function msg(tipo, texto) {
+    const f = document.getElementById("feedback");
+    f.className = "feedback visible " + tipo;
+    f.textContent = texto;
+    setTimeout(() => f.className = "feedback", 3500);
+  }
+
+  function verComparacion(empresa) {
+    document.getElementById("cardComparacion").style.display = "block";
+    document.getElementById("tituloComparacion").textContent = "Comparación versiones — " + empresa;
+    document.getElementById("cardComparacion").scrollIntoView({behavior:"smooth"});
+  }
+
+  document.getElementById("btnVerificar").onclick = () => {
+    msg("success", "Buzón verificado. 2 archivos de corrección detectados para el período Mayo 2026.");
+  };
+
+  document.getElementById("btnReconciliar").onclick = () => {
+    document.getElementById("kpiResueltas").textContent = "12";
+    document.getElementById("estadoGeneral").textContent = "● Re-conciliación completada";
+    document.getElementById("estadoGeneral").style.background = "#ecfdf5";
+    document.getElementById("estadoGeneral").style.color = "#166534";
+    document.getElementById("estadoGeneral").style.borderColor = "#bbf7d0";
+    msg("success", "Re-conciliación ejecutada sobre archivo corregido. 7 diferencias resueltas. Trazabilidad actualizada en SharePoint.");
+  };
+</script>
+</body>
+</html>
